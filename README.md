@@ -9,18 +9,18 @@ It comes with:
 - automated GitHub Actions builds on three major platforms
 
 This repository actually creates two robot modules:
-- `NewRobotModule` is a C++ robot module in the [src](src) folder
-- `NewRobotModuleYAML` is a YAML robot module in the [yaml](yaml) folder
+- `KinovaRobotModule` is a C++ robot module in the [src](src) folder
+- `KinovaRobotModuleYAML` is a YAML robot module in the [yaml](yaml) folder
 
 They both re-create the JVRC1 robot module shipped with [mc_rtc]
 
 Quick start
 --
 
-1. Renaming the robot module from `NewRobotModule` to `MyRobotModule`. In a shell (Git Bash on Windows, replace sed with gsed on macOS):
+1. Renaming the robot module from `KinovaRobotModule` to `MyRobotModule`. In a shell (Git Bash on Windows, replace sed with gsed on macOS):
 
 ```bash
-sed -i -e's/NewRobotModule/MyRobotModule/g' `find . -type f`
+sed -i -e's/KinovaRobotModule/MyRobotModule/g' `find . -type f`
 ```
 
 2. If you choose to build a C++ robot module
@@ -28,8 +28,8 @@ sed -i -e's/NewRobotModule/MyRobotModule/g' `find . -type f`
 ```bash
 git rm -rf yaml
 sed -i -e's/add_subdirectory(yaml)//' CMakeLists.txt
-git mv src/NewRobotModule.in.cpp src/MyRobotModule.in.cpp
-git mv src/NewRobotModule.h src/MyRobotModule.h
+git mv src/KinovaRobotModule.in.cpp src/MyRobotModule.in.cpp
+git mv src/KinovaRobotModule.h src/MyRobotModule.h
 ```
 
 3. If you choose to build a YAML robot module
