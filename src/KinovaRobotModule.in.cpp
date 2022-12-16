@@ -44,8 +44,20 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   }
 
   // Define some force sensors
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "EndEffector_Link", sva::PTransformd::Identity()));
+  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "end_effector_link", sva::PTransformd::Identity()));
 
+  // Define additional joint limits
+  // using bound_t = mc_rbdyn::RobotModule::accelerationBounds_t::value_type;
+  // bound_t accelerationBoundsUpper;
+  // bound_t accelerationBoundsLower;
+  // accelerationBoundsLower = {{"joint_1", {-5.2}}, {"joint_2", {-5.2}}, {"joint_3", {-5.2}},
+  //                            {"joint_4", {-5.2}}, {"joint_5", {-10}},  {"joint_6", {-10}},
+  //                            {"joint_7", {-10}}};
+  // accelerationBoundsUpper = {{"joint_1", {5.2}}, {"joint_2", {5.2}}, {"joint_3", {5.2}},
+  //                            {"joint_4", {5.2}}, {"joint_5", {10}},  {"joint_6", {10}},
+  //                            {"joint_7", {10}}};
+  // _accelerationBounds.push_back(accelerationBoundsLower);
+  // _accelerationBounds.push_back(accelerationBoundsUpper);
   // Clear body sensors
   _bodySensors.clear();
 
@@ -80,15 +92,15 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
 
   // Default joint configuration, if a joint is omitted the configuration is 0 or the middle point of the limit range if
   // 0 is not a valid configuration
-  _stance["Actuator1"] = {-1.57};
-  _stance["Actuator2"] = {-0.35};
-  _stance["Actuator3"] = {3.14};
-  _stance["Actuator4"] = {-2.0};
-  _stance["Actuator5"] = {0.0};
-  _stance["Actuator6"] = {-1.0};
-  _stance["Actuator7"] = {1.57};
+  _stance["joint_1"] = {0.0};
+  _stance["joint_2"] = {0.2618};
+  _stance["joint_3"] = {3.14};
+  _stance["joint_4"] = {-2.269};
+  _stance["joint_5"] = {0.0};
+  _stance["joint_6"] = {0.959878729};
+  _stance["joint_7"] = {1.57};
 
-  mc_rtc::log::success("PandaRobotModule uses urdf_path {}", urdf_path);
+  mc_rtc::log::success("KinovaRobotModule uses urdf_path {}", urdf_path);
 }
 
 } // namespace mc_robots
