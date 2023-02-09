@@ -10,6 +10,7 @@ namespace
 
 // This is set by CMake, see CMakeLists.txt
 static const std::string KINOVA_DESCRIPTION_PATH = "@KORTEX_DESCRIPTION_PATH@";
+static const std::string KINOVA_URDF_PATH = "@KINOVA_URDF_PATH@";
 
 } // namespace
 
@@ -19,13 +20,13 @@ namespace mc_robots
 KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, "kinova")
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
-  urdf_path = path + "/arms/gen3/7dof/urdf/GEN3_URDF_V12.urdf";
+  urdf_path = KINOVA_URDF_PATH;
   _real_urdf = urdf_path;
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
   // Automatically load the convex hulls associated to each body
-  std::string convexPath = "@PROJECT_SOURCE_DIR@/convex/" + name + "/";
+  std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
   bfs::path p(convexPath);
   if(bfs::exists(p) && bfs::is_directory(p))
   {
@@ -65,20 +66,18 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   const double s = 0.015;
   const double d = 0.;
   // Define a minimal set of self-collisions
-  _minimalSelfCollisions = {
-      {"base_link", "spherical_wrist_1_link", i, s, d},
-      {"shoulder_link", "spherical_wrist_1_link", i, s, d},
-      {"half_arm_1_link", "spherical_wrist_1_link", i, s, d},
-      {"half_arm_2_link", "spherical_wrist_1_link", i, s, d},
-      {"base_link", "spherical_wrist_2_link", i, s, d},
-      {"shoulder_link", "spherical_wrist_2_link", i, s, d},
-      {"half_arm_1_link", "spherical_wrist_2_link", i, s, d},
-      {"half_arm_2_link", "spherical_wrist_2_link", i, s, d},
-      {"base_link", "bracelet_link", i, s, d},
-      {"shoulder_link", "bracelet_link", i, s, d},
-      {"half_arm_1_link", "bracelet_link", i, s, d},
-      {"half_arm_2_link", "bracelet_link", i, s, d}
-  };
+  _minimalSelfCollisions = {{"base_link", "spherical_wrist_1_link", i, s, d},
+                            {"shoulder_link", "spherical_wrist_1_link", i, s, d},
+                            {"half_arm_1_link", "spherical_wrist_1_link", i, s, d},
+                            {"half_arm_2_link", "spherical_wrist_1_link", i, s, d},
+                            {"base_link", "spherical_wrist_2_link", i, s, d},
+                            {"shoulder_link", "spherical_wrist_2_link", i, s, d},
+                            {"half_arm_1_link", "spherical_wrist_2_link", i, s, d},
+                            {"half_arm_2_link", "spherical_wrist_2_link", i, s, d},
+                            {"base_link", "bracelet_link", i, s, d},
+                            {"shoulder_link", "bracelet_link", i, s, d},
+                            {"half_arm_1_link", "bracelet_link", i, s, d},
+                            {"half_arm_2_link", "bracelet_link", i, s, d}};
 
   /* Additional self collisions */
 
