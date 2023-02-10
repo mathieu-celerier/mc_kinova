@@ -25,6 +25,35 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
+  // Override velocity and effort bounds
+  auto update_velocity_limit = [this](const std::string & name, double limit) {
+    assert(limit > 0);
+    assert(_bounds[2].at(name).size() == 1);
+    _bounds[2].at(name)[0] = -limit;
+    _bounds[3].at(name)[0] = limit;
+  };
+  update_velocity_limit("joint_1", 2.0944);
+  update_velocity_limit("joint_2", 2.0944);
+  update_velocity_limit("joint_3", 2.0944);
+  update_velocity_limit("joint_3", 2.0944);
+  update_velocity_limit("joint_4", 2.0944);
+  update_velocity_limit("joint_5", 3.049);
+  update_velocity_limit("joint_6", 3.049);
+  update_velocity_limit("joint_7", 3.049);
+  auto update_torque_limit = [this](const std::string & name, double limit) {
+    assert(limit > 0);
+    assert(_bounds[2].at(name).size() == 1);
+    _bounds[4].at(name)[0] = -limit;
+    _bounds[5].at(name)[0] = limit;
+  };
+  update_torque_limit("joint_1", 55);
+  update_torque_limit("joint_2", 55);
+  update_torque_limit("joint_3", 55);
+  update_torque_limit("joint_4", 55);
+  update_torque_limit("joint_5", 26);
+  update_torque_limit("joint_6", 26);
+  update_torque_limit("joint_7", 26);
+
   // Automatically load the convex hulls associated to each body
   std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
   bfs::path p(convexPath);
