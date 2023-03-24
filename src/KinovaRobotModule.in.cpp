@@ -1,6 +1,8 @@
 #include "KinovaRobotModule.h"
 
 #include <RBDyn/parsers/urdf.h>
+#include <RBDyn/Joint.h>
+#include <RBDyn/MultiBody.h>
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
@@ -25,7 +27,17 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  // Override velocity and effort bounds
+  // Override position, velocity and effort bounds
+  auto update_joint_limit = [this](const std::string & name, double limit_low, double limit_up) {
+    assert(limit_up > 0);
+    assert(limit_low < 0);
+    assert(_bounds[0].at(name).size() == 1);
+    _bounds[0].at(name)[0] = limit_low;
+    _bounds[1].at(name)[0] = limit_up;
+  };
+  update_joint_limit("joint_2", -2.15, 2.15);
+  update_joint_limit("joint_4", -2.45, 2.45);
+  update_joint_limit("joint_6", -2.0, 2.0);
   auto update_velocity_limit = [this](const std::string & name, double limit) {
     assert(limit > 0);
     assert(_bounds[2].at(name).size() == 1);
@@ -42,7 +54,7 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   update_velocity_limit("joint_7", 3.049);
   auto update_torque_limit = [this](const std::string & name, double limit) {
     assert(limit > 0);
-    assert(_bounds[2].at(name).size() == 1);
+    assert(_bounds[4].at(name).size() == 1);
     _bounds[4].at(name)[0] = -limit;
     _bounds[5].at(name)[0] = limit;
   };
@@ -53,6 +65,34 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   update_torque_limit("joint_5", 26);
   update_torque_limit("joint_6", 26);
   update_torque_limit("joint_7", 26);
+
+  auto set_gear_ratio = [this](const std::string & name, double gr) {
+    assert(gr > 0);
+    mb.setJointGearRatio(mb.jointIndexByName(name), gr);
+  };
+
+  set_gear_ratio("joint_1", 100);
+  set_gear_ratio("joint_2", 100);
+  set_gear_ratio("joint_3", 100);
+  set_gear_ratio("joint_4", 100);
+  set_gear_ratio("joint_5", 100);
+  set_gear_ratio("joint_6", 100);
+  set_gear_ratio("joint_7", 100);
+
+  auto set_rotor_inertia = [this](const std::string & name, double ir) {
+    assert(gr > 0);
+    mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
+  }; 
+
+  double power = pow(10,-7);
+
+  set_rotor_inertia("joint_1", (double)15*power);
+  set_rotor_inertia("joint_2", (double)15*power);
+  set_rotor_inertia("joint_3", (double)15*power);
+  set_rotor_inertia("joint_4", (double)15*power);
+  set_rotor_inertia("joint_5", (double)19.28*power);
+  set_rotor_inertia("joint_6", (double)19.28*power);
+  set_rotor_inertia("joint_7", (double)19.28*power);
 
   // Automatically load the convex hulls associated to each body
   std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
@@ -73,21 +113,13 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     }
   }
 
-  // Define some force sensors
+  // Define a force sensor
   _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "end_effector_link", sva::PTransformd::Identity()));
 
-  // Define additional joint limits
-  // using bound_t = mc_rbdyn::RobotModule::accelerationBounds_t::value_type;
-  // bound_t accelerationBoundsUpper;
-  // bound_t accelerationBoundsLower;
-  // accelerationBoundsLower = {{"joint_1", {-5.2}}, {"joint_2", {-5.2}}, {"joint_3", {-5.2}},
-  //                            {"joint_4", {-5.2}}, {"joint_5", {-10}},  {"joint_6", {-10}},
-  //                            {"joint_7", {-10}}};
-  // accelerationBoundsUpper = {{"joint_1", {5.2}}, {"joint_2", {5.2}}, {"joint_3", {5.2}},
-  //                            {"joint_4", {5.2}}, {"joint_5", {10}},  {"joint_6", {10}},
-  //                            {"joint_7", {10}}};
-  // _accelerationBounds.push_back(accelerationBoundsLower);
-  // _accelerationBounds.push_back(accelerationBoundsUpper);
+  // Define a device sensor for external torque measurment
+  _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
+  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("virtualTorqueSensor", 7).clone());
+
   // Clear body sensors
   _bodySensors.clear();
 

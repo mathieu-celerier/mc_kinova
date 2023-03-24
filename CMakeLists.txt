@@ -33,7 +33,7 @@ file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
 set(GENERATED_URDF "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_novision_sim.urdf")
 set(KINOVA_URDF_DIR "${CMAKE_INSTALL_FULL_DATADIR}/mc_kinova/urdf")
 set(KINOVA_URDF_PATH "${KINOVA_URDF_DIR}/gen3_7dof_novision_sim.urdf")
-add_custom_command(OUTPUT ${GENERATED_URDF} COMMAND ${XACRO} -o ${GENERATED_URDF} -i ${KORTEX_DESCRIPTION_PATH}/robots/gen3.xacro dof:=7 vision:=false sim:=true DEPENDS ${KINOVA_XACRO_FILES})
+add_custom_command(OUTPUT ${GENERATED_URDF} COMMAND ${XACRO} -o ${GENERATED_URDF} -i ${CMAKE_SOURCE_DIR}/xacro/gen3_w_FT_sensor.xacro dof:=7 vision:=false sim:=true DEPENDS ${KINOVA_XACRO_FILES})
 add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF})
 
 add_subdirectory(src)
