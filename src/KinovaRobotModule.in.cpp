@@ -59,11 +59,11 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     _bounds[5].at(name)[0] = limit;
   };
   update_torque_limit("joint_1", 55);
-  update_torque_limit("joint_2", 55);
+  update_torque_limit("joint_2", 80);
   update_torque_limit("joint_3", 55);
-  update_torque_limit("joint_4", 55);
+  update_torque_limit("joint_4", 80);
   update_torque_limit("joint_5", 26);
-  update_torque_limit("joint_6", 26);
+  update_torque_limit("joint_6", 45);
   update_torque_limit("joint_7", 26);
 
   auto set_gear_ratio = [this](const std::string & name, double gr) {
