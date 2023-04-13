@@ -66,34 +66,6 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   update_torque_limit("joint_6", 26);
   update_torque_limit("joint_7", 26);
 
-  auto set_gear_ratio = [this](const std::string & name, double gr) {
-    assert(gr > 0);
-    mb.setJointGearRatio(mb.jointIndexByName(name), gr);
-  };
-
-  set_gear_ratio("joint_1", 100);
-  set_gear_ratio("joint_2", 100);
-  set_gear_ratio("joint_3", 100);
-  set_gear_ratio("joint_4", 100);
-  set_gear_ratio("joint_5", 100);
-  set_gear_ratio("joint_6", 100);
-  set_gear_ratio("joint_7", 100);
-
-  auto set_rotor_inertia = [this](const std::string & name, double ir) {
-    assert(gr > 0);
-    mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
-  }; 
-
-  double power = pow(10,-7);
-
-  set_rotor_inertia("joint_1", (double)15*power);
-  set_rotor_inertia("joint_2", (double)15*power);
-  set_rotor_inertia("joint_3", (double)15*power);
-  set_rotor_inertia("joint_4", (double)15*power);
-  set_rotor_inertia("joint_5", (double)19.28*power);
-  set_rotor_inertia("joint_6", (double)19.28*power);
-  set_rotor_inertia("joint_7", (double)19.28*power);
-
   // Automatically load the convex hulls associated to each body
   std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
   bfs::path p(convexPath);
@@ -114,7 +86,7 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   }
 
   // Define a force sensor
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "end_effector_link", sva::PTransformd::Identity()));
+  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));
 
   // Define a device sensor for external torque measurment
 
