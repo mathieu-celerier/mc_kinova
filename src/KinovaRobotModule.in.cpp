@@ -3,6 +3,8 @@
 #include <RBDyn/parsers/urdf.h>
 #include <RBDyn/Joint.h>
 #include <RBDyn/MultiBody.h>
+#include <mc_rbdyn/ExternalTorqueSensor.h>
+#include <mc_rbdyn/VirtualTorqueSensor.h>
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
@@ -114,9 +116,11 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   }
 
   // Define a force sensor
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "end_effector_link", sva::PTransformd::Identity()));
+  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));
 
   // Define a device sensor for external torque measurment
+  _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
+  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("virtualTorqueSensor", 7).clone());
 
   // Clear body sensors
   _bodySensors.clear();
