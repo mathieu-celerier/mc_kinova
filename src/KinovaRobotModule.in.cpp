@@ -114,7 +114,7 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   }
 
   // Define a force sensor
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "end_effector_link", sva::PTransformd::Identity()));
+  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_frame", sva::PTransformd::Identity()));
 
   // Define a device sensor for external torque measurment
   _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
