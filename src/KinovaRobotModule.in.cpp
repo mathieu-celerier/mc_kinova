@@ -58,10 +58,10 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     _bounds[4].at(name)[0] = -limit;
     _bounds[5].at(name)[0] = limit;
   };
-  update_torque_limit("joint_1", 55);
-  update_torque_limit("joint_2", 80);
-  update_torque_limit("joint_3", 55);
-  update_torque_limit("joint_4", 80);
+  update_torque_limit("joint_1", 95);
+  update_torque_limit("joint_2", 95);
+  update_torque_limit("joint_3", 95);
+  update_torque_limit("joint_4", 95);
   update_torque_limit("joint_5", 26);
   update_torque_limit("joint_6", 45);
   update_torque_limit("joint_7", 26);
@@ -80,7 +80,7 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   set_gear_ratio("joint_7", 100);
 
   auto set_rotor_inertia = [this](const std::string & name, double ir) {
-    assert(gr > 0);
+    assert(ir > 0);
     mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
   }; 
 
