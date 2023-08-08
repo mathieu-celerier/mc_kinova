@@ -60,13 +60,13 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     _bounds[4].at(name)[0] = -limit;
     _bounds[5].at(name)[0] = limit;
   };
-  update_torque_limit("joint_1", 55);
-  update_torque_limit("joint_2", 55);
-  update_torque_limit("joint_3", 55);
-  update_torque_limit("joint_4", 55);
-  update_torque_limit("joint_5", 26);
-  update_torque_limit("joint_6", 26);
-  update_torque_limit("joint_7", 26);
+  update_torque_limit("joint_1", 95);
+  update_torque_limit("joint_2", 95);
+  update_torque_limit("joint_3", 95);
+  update_torque_limit("joint_4", 95);
+  update_torque_limit("joint_5", 45);
+  update_torque_limit("joint_6", 45);
+  update_torque_limit("joint_7", 45);
 
   auto set_gear_ratio = [this](const std::string & name, double gr) {
     assert(gr > 0);
@@ -88,13 +88,13 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
 
   double power = pow(10,-7);
 
-  set_rotor_inertia("joint_1", (double)15*power);
-  set_rotor_inertia("joint_2", (double)15*power);
-  set_rotor_inertia("joint_3", (double)15*power);
-  set_rotor_inertia("joint_4", (double)15*power);
-  set_rotor_inertia("joint_5", (double)19.28*power);
-  set_rotor_inertia("joint_6", (double)19.28*power);
-  set_rotor_inertia("joint_7", (double)19.28*power);
+  set_rotor_inertia("joint_1", (double)19.28*power);
+  set_rotor_inertia("joint_2", (double)19.28*power);
+  set_rotor_inertia("joint_3", (double)19.28*power);
+  set_rotor_inertia("joint_4", (double)19.28*power);
+  set_rotor_inertia("joint_5", (double)15*power);
+  set_rotor_inertia("joint_6", (double)15*power);
+  set_rotor_inertia("joint_7", (double)15*power);
 
   // Automatically load the convex hulls associated to each body
   std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
