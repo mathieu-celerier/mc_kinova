@@ -1,8 +1,8 @@
 #include "KinovaRobotModule.h"
 
-#include <RBDyn/parsers/urdf.h>
 #include <RBDyn/Joint.h>
 #include <RBDyn/MultiBody.h>
+#include <RBDyn/parsers/urdf.h>
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
@@ -82,17 +82,17 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   auto set_rotor_inertia = [this](const std::string & name, double ir) {
     assert(ir > 0);
     mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
-  }; 
+  };
 
-  double power = pow(10,-7);
+  double power = pow(10, -7);
 
-  set_rotor_inertia("joint_1", (double)19.28*power);
-  set_rotor_inertia("joint_2", (double)19.28*power);
-  set_rotor_inertia("joint_3", (double)19.28*power);
-  set_rotor_inertia("joint_4", (double)19.28*power);
-  set_rotor_inertia("joint_5", (double)15*power);
-  set_rotor_inertia("joint_6", (double)15*power);
-  set_rotor_inertia("joint_7", (double)15*power);
+  set_rotor_inertia("joint_1", (double)19.28 * power);
+  set_rotor_inertia("joint_2", (double)19.28 * power);
+  set_rotor_inertia("joint_3", (double)19.28 * power);
+  set_rotor_inertia("joint_4", (double)19.28 * power);
+  set_rotor_inertia("joint_5", (double)15 * power);
+  set_rotor_inertia("joint_6", (double)15 * power);
+  set_rotor_inertia("joint_7", (double)15 * power);
 
   // Automatically load the convex hulls associated to each body
   std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
@@ -114,7 +114,7 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   }
 
   // Define a force sensor
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_frame", sva::PTransformd::Identity()));
+  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
 
   // Define a device sensor for external torque measurment
   _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
