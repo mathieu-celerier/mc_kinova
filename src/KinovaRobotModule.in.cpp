@@ -28,7 +28,8 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
   // Override position, velocity and effort bounds
-  auto update_joint_limit = [this](const std::string & name, double limit_low, double limit_up) {
+  auto update_joint_limit = [this](const std::string & name, double limit_low, double limit_up)
+  {
     assert(limit_up > 0);
     assert(limit_low < 0);
     assert(_bounds[0].at(name).size() == 1);
@@ -38,7 +39,8 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   update_joint_limit("joint_2", -2.15, 2.15);
   update_joint_limit("joint_4", -2.45, 2.45);
   update_joint_limit("joint_6", -2.0, 2.0);
-  auto update_velocity_limit = [this](const std::string & name, double limit) {
+  auto update_velocity_limit = [this](const std::string & name, double limit)
+  {
     assert(limit > 0);
     assert(_bounds[2].at(name).size() == 1);
     _bounds[2].at(name)[0] = -limit;
@@ -52,7 +54,8 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   update_velocity_limit("joint_5", 3.049);
   update_velocity_limit("joint_6", 3.049);
   update_velocity_limit("joint_7", 3.049);
-  auto update_torque_limit = [this](const std::string & name, double limit) {
+  auto update_torque_limit = [this](const std::string & name, double limit)
+  {
     assert(limit > 0);
     assert(_bounds[4].at(name).size() == 1);
     _bounds[4].at(name)[0] = -limit;
@@ -66,7 +69,8 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   update_torque_limit("joint_6", 45);
   update_torque_limit("joint_7", 26);
 
-  auto set_gear_ratio = [this](const std::string & name, double gr) {
+  auto set_gear_ratio = [this](const std::string & name, double gr)
+  {
     assert(gr > 0);
     mb.setJointGearRatio(mb.jointIndexByName(name), gr);
   };
@@ -79,7 +83,8 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   set_gear_ratio("joint_6", 100);
   set_gear_ratio("joint_7", 100);
 
-  auto set_rotor_inertia = [this](const std::string & name, double ir) {
+  auto set_rotor_inertia = [this](const std::string & name, double ir)
+  {
     assert(ir > 0);
     mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
   };
@@ -138,7 +143,15 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
                             {"base_link", "bracelet_link", i, s, d},
                             {"shoulder_link", "bracelet_link", i, s, d},
                             {"half_arm_1_link", "bracelet_link", i, s, d},
-                            {"half_arm_2_link", "bracelet_link", i, s, d}};
+                            {"half_arm_2_link", "bracelet_link", i, s, d},
+                            {"base_link", "FT_adapter", i, s, d},
+                            {"shoulder_link", "FT_adapter", i, s, d},
+                            {"half_arm_1_link", "FT_adapter", i, s, d},
+                            {"half_arm_2_link", "FT_adapter", i, s, d},
+                            {"base_link", "FT_sensor_mounting", i, s, d},
+                            {"shoulder_link", "FT_sensor_mounting", i, s, d},
+                            {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
+                            {"half_arm_2_link", "FT_sensor_mounting", i, s, d}};
 
   /* Additional self collisions */
 
