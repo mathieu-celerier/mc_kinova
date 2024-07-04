@@ -89,15 +89,15 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
   };
 
-  double power = pow(10, -7);
+  double power = pow(10, -6);
 
-  set_rotor_inertia("joint_1", (double)19.28 * power);
-  set_rotor_inertia("joint_2", (double)19.28 * power);
-  set_rotor_inertia("joint_3", (double)19.28 * power);
-  set_rotor_inertia("joint_4", (double)19.28 * power);
-  set_rotor_inertia("joint_5", (double)15 * power);
-  set_rotor_inertia("joint_6", (double)15 * power);
-  set_rotor_inertia("joint_7", (double)15 * power);
+  set_rotor_inertia("joint_1", (double)1.0 * power);
+  set_rotor_inertia("joint_2", (double)1.0 * power);
+  set_rotor_inertia("joint_3", (double)1.0 * power);
+  set_rotor_inertia("joint_4", (double)1.0 * power);
+  set_rotor_inertia("joint_5", (double)0.7 * power);
+  set_rotor_inertia("joint_6", (double)0.7 * power);
+  set_rotor_inertia("joint_7", (double)0.7 * power);
 
   // Automatically load the convex hulls associated to each body
   std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
@@ -115,6 +115,15 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
         name.replace(off, 7, "");
         _convexHull[name] = std::pair<std::string, std::string>(name, file.string());
       }
+    }
+  }
+
+  // Add JointSensors for temperature/current logging
+  for(size_t i = 0; i < _ref_joint_order.size(); ++i)
+  {
+    if(mb.jointIndexByName().count(_ref_joint_order[i]) != 0)
+    {
+      _jointSensors.push_back(mc_rbdyn::JointSensor(_ref_joint_order[i]));
     }
   }
 
