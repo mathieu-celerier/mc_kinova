@@ -91,10 +91,10 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
 
   double power = pow(10, -5);
 
-  set_rotor_inertia("joint_1", (double)0.1 * power);
-  set_rotor_inertia("joint_2", (double)0.1 * power);
-  set_rotor_inertia("joint_3", (double)0.1 * power);
-  set_rotor_inertia("joint_4", (double)0.1 * power);
+  set_rotor_inertia("joint_1", (double)0.3 * power);
+  set_rotor_inertia("joint_2", (double)0.3 * power);
+  set_rotor_inertia("joint_3", (double)0.3 * power);
+  set_rotor_inertia("joint_4", (double)0.3 * power);
   set_rotor_inertia("joint_5", (double)0.3 * power);
   set_rotor_inertia("joint_6", (double)0.3 * power);
   set_rotor_inertia("joint_7", (double)0.3 * power);
