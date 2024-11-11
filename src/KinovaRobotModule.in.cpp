@@ -36,6 +36,11 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     _bounds[0].at(name)[0] = limit_low;
     _bounds[1].at(name)[0] = limit_up;
   };
+  // update_joint_limit("joint_2", -2.15, 2.15);
+  // update_joint_limit("joint_4", -2.45, 0.45);
+  // update_joint_limit("joint_5", -3.14, 3.14);
+  // update_joint_limit("joint_6", -2.0, 2.0);
+  // update_joint_limit("joint_7", -3.14, 3.14);
   update_joint_limit("joint_2", -2.15, 2.15);
   update_joint_limit("joint_4", -2.45, 2.45);
   update_joint_limit("joint_6", -2.0, 2.0);

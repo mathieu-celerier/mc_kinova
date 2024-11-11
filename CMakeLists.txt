@@ -48,3 +48,5 @@ install(DIRECTORY convex DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+install(FILES etc/ForceSensorCalibration/kinova.yaml DESTINATION ${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/ForceSensorCalibration/)
