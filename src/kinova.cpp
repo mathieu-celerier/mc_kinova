@@ -1,4 +1,6 @@
-#include "KinovaRobotModule.h"
+#include "kinova.h"
+
+#include "config.h"
 
 #include <RBDyn/Joint.h>
 #include <RBDyn/MultiBody.h>
@@ -7,19 +9,27 @@
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
 
-namespace
-{
-
-// This is set by CMake, see CMakeLists.txt
-static const std::string KINOVA_DESCRIPTION_PATH = "@KORTEX_DESCRIPTION_PATH@";
-static const std::string KINOVA_URDF_PATH = "@KINOVA_URDF_PATH@";
-
-} // namespace
-
 namespace mc_robots
 {
 
-KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, "kinova")
+inline static std::string kinovaVariant(bool callib)
+{
+  if(callib)
+  {
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_callib'");
+    return "kinova_callib";
+  }
+  if(not callib)
+  {
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_callib'");
+    return "kinova_default";
+  }
+  mc_rtc::log::error_and_throw("KinovaRobotModule does not provide this kinova variant ...");
+  return "";
+}
+
+KinovaRobotModule::KinovaRobotModule(bool callib)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
   urdf_path = KINOVA_URDF_PATH;
@@ -36,14 +46,22 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
     _bounds[0].at(name)[0] = limit_low;
     _bounds[1].at(name)[0] = limit_up;
   };
-  // update_joint_limit("joint_2", -2.15, 2.15);
-  // update_joint_limit("joint_4", -2.45, 0.45);
-  // update_joint_limit("joint_5", -3.14, 3.14);
-  // update_joint_limit("joint_6", -2.0, 2.0);
-  // update_joint_limit("joint_7", -3.14, 3.14);
-  update_joint_limit("joint_2", -2.15, 2.15);
-  update_joint_limit("joint_4", -2.45, 2.45);
-  update_joint_limit("joint_6", -2.0, 2.0);
+
+  if(callib)
+  {
+    update_joint_limit("joint_2", -2.15, 2.15);
+    update_joint_limit("joint_4", -2.45, 0.45);
+    update_joint_limit("joint_5", -3.14, 3.14);
+    update_joint_limit("joint_6", -2.0, 2.0);
+    update_joint_limit("joint_7", -3.14, 3.14);
+  }
+  else
+  {
+    update_joint_limit("joint_2", -2.15, 2.15);
+    update_joint_limit("joint_4", -2.45, 2.45);
+    update_joint_limit("joint_6", -2.0, 2.0);
+  }
+
   auto update_velocity_limit = [this](const std::string & name, double limit)
   {
     assert(limit > 0);
@@ -105,7 +123,7 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
   set_rotor_inertia("joint_7", (double)0.3 * power);
 
   // Automatically load the convex hulls associated to each body
-  std::string convexPath = "@CMAKE_INSTALL_FULL_DATADIR@/mc_kinova/convex/" + name + "/";
+  std::string convexPath = INSTALL_DIR + "/mc_kinova/convex/" + name + "/";
   bfs::path p(convexPath);
   if(bfs::exists(p) && bfs::is_directory(p))
   {
@@ -191,7 +209,3 @@ KinovaRobotModule::KinovaRobotModule() : mc_rbdyn::RobotModule(KINOVA_DESCRIPTIO
 }
 
 } // namespace mc_robots
-
-#include <mc_rbdyn/RobotModuleMacros.h>
-
-ROBOT_MODULE_DEFAULT_CONSTRUCTOR("kinova", mc_robots::KinovaRobotModule)

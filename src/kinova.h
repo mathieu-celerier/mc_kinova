@@ -11,7 +11,7 @@ namespace mc_robots
 
 struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
 {
-  KinovaRobotModule();
+  KinovaRobotModule(bool callib);
 };
 
 } // namespace mc_robots

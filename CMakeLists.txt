@@ -40,10 +40,10 @@ configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3_w_bota_FT_sensor.in.xacro ${KINOVA
 add_custom_command(OUTPUT ${GENERATED_URDF} COMMAND ${XACRO} -o ${GENERATED_URDF} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false sim:=true DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
 add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF})
 
-add_subdirectory(src)
-
 install(FILES ${GENERATED_URDF} DESTINATION ${KINOVA_URDF_DIR})
 install(DIRECTORY convex DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
+
+add_subdirectory(src)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
