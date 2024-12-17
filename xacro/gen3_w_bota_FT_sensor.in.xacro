@@ -53,9 +53,9 @@
     </inertial>
 
     <visual name="ds4">
-      <origin xyz="0.01 0.01 0.025" rpy="0 0 0" />
+      <origin xyz="0.0 0.0 0.03" rpy="0 0 0" />
       <geometry>
-        <box size="0.02 0.02 0.2" />
+        <box size="0.02 0.02 0.03" />
       </geometry>
       <material name="">
         <color rgba="0.6902 0.61176 0.52941 1" />
@@ -68,6 +68,8 @@
       </geometry>
     </collision>
   </link>
+
+  <link name="DS4_tool"></link>
 
   <joint name="kinova_to_adapter" type="fixed">
     <parent link="end_effector_link" />
@@ -85,5 +87,11 @@
     <parent link="FT_sensor_wrench" />
     <child link="DS4" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="DS4_to_tool" type="fixed">
+    <parent link="DS4" />
+    <child link="DS4_tool" />
+    <origin xyz="0.0 0.0 0.06" rpy="0.0 0.0 0.0" />
   </joint>
 </robot>

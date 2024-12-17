@@ -21,7 +21,7 @@ inline static std::string kinovaVariant(bool callib)
   }
   if(not callib)
   {
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_callib'");
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_default'");
     return "kinova_default";
   }
   mc_rtc::log::error_and_throw("KinovaRobotModule does not provide this kinova variant ...");
@@ -36,6 +36,9 @@ KinovaRobotModule::KinovaRobotModule(bool callib)
   _real_urdf = urdf_path;
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
+
+  rsdf_dir = KINOVA_RSDF_DIR + "/" + kinovaVariant(callib) + "/";
+  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   // Override position, velocity and effort bounds
   auto update_joint_limit = [this](const std::string & name, double limit_low, double limit_up)

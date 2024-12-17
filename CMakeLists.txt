@@ -34,6 +34,7 @@ file(GLOB_RECURSE BOTA_XACRO_FILES "${BOTA_DESCRIPTION_PATH}/*.xacro")
 # Generate the URDF
 set(GENERATED_URDF "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_novision_sim.urdf")
 set(KINOVA_URDF_DIR "${CMAKE_INSTALL_FULL_DATADIR}/mc_kinova/urdf")
+set(KINOVA_RSDF_DIR "${CMAKE_INSTALL_FULL_DATADIR}/mc_kinova/rsdf")
 set(KINOVA_URDF_PATH "${KINOVA_URDF_DIR}/gen3_7dof_novision_sim.urdf")
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3_w_bota_FT_sensor.xacro")
 configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3_w_bota_FT_sensor.in.xacro ${KINOVA_XACRO_PATH})
@@ -42,6 +43,7 @@ add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF})
 
 install(FILES ${GENERATED_URDF} DESTINATION ${KINOVA_URDF_DIR})
 install(DIRECTORY convex DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
+install(DIRECTORY rsdf DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
 
 add_subdirectory(src)
 
