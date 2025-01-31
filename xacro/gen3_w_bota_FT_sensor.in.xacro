@@ -44,18 +44,18 @@
     </collision>
   </link>
 
-  <link name="DS4">
+  <link name="DS4_adapter">
     <inertial>
-      <origin xyz="0.0 0.0 0.04" rpy="0 0 0" />
-      <mass value="0.35" />
+      <origin xyz="-0.0001681638469675113 -0.0024779164507503317 0.059811455964133025" rpy="0 0 0" />
+      <mass value="0.0698" />
       <inertia ixx="5.40350E-05" ixy="8.13203E-08" ixz="1.70226E-06" iyy="5.69809E-05"
         iyz="1.05961E-06" izz="8.81951E-05" />
     </inertial>
 
-    <visual name="ds4">
-      <origin xyz="0.0 0.0 0.03" rpy="0 0 0" />
+    <visual name="ds4_adapter">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       <geometry>
-        <box size="0.02 0.02 0.03" />
+        <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/DS4_adapter.STL" scale="0.001 0.001 0.001" />
       </geometry>
       <material name="">
         <color rgba="0.6902 0.61176 0.52941 1" />
@@ -65,6 +65,31 @@
       <origin xyz="0 0 0.015" rpy="0 0 0" />
       <geometry>
         <cylinder radius="0.0075" length="0.03" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="DS4">
+    <inertial>
+      <origin xyz="0.0 0.0 0.045" rpy="0 0 0" />
+      <mass value="0.2162" />
+      <inertia ixx="5.40350E-05" ixy="8.13203E-08" ixz="1.70226E-06" iyy="5.69809E-05"
+        iyz="1.05961E-06" izz="8.81951E-05" />
+    </inertial>
+
+    <visual name="ds4">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.14 0.03 0.06" />
+      </geometry>
+      <material name="">
+        <color rgba="0.6902 0.61176 0.52941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.03" rpy="0 1.57 0" />
+      <geometry>
+        <cylinder radius="0.0075" length="0.14" />
       </geometry>
     </collision>
   </link>
@@ -83,15 +108,21 @@
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 
-  <joint name="DS4_to_FT" type="fixed">
+  <joint name="FT_to_DS4_adapter" type="fixed">
     <parent link="FT_sensor_wrench" />
-    <child link="DS4" />
+    <child link="DS4_adapter" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="DS4_adapter_to_DS4" type="fixed">
+    <parent link="DS4_adapter" />
+    <child link="DS4" />
+    <origin xyz="0.0 0.0 0.08" rpy="0.0 0.0 0.0" />
   </joint>
 
   <joint name="DS4_to_tool" type="fixed">
     <parent link="DS4" />
     <child link="DS4_tool" />
-    <origin xyz="0.0 0.0 0.06" rpy="0.0 0.0 0.0" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 </robot>

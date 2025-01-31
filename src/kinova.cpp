@@ -115,15 +115,15 @@ KinovaRobotModule::KinovaRobotModule(bool callib)
     mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
   };
 
-  double power = pow(10, -5);
+  double power = pow(10, -4);
 
-  set_rotor_inertia("joint_1", (double)0.3 * power);
-  set_rotor_inertia("joint_2", (double)0.3 * power);
-  set_rotor_inertia("joint_3", (double)0.3 * power);
-  set_rotor_inertia("joint_4", (double)0.3 * power);
-  set_rotor_inertia("joint_5", (double)0.3 * power);
-  set_rotor_inertia("joint_6", (double)0.3 * power);
-  set_rotor_inertia("joint_7", (double)0.3 * power);
+  set_rotor_inertia("joint_1", (double)0.15 * power);
+  set_rotor_inertia("joint_2", (double)0.15 * power);
+  set_rotor_inertia("joint_3", (double)0.15 * power);
+  set_rotor_inertia("joint_4", (double)0.15 * power);
+  set_rotor_inertia("joint_5", (double)0.10 * power);
+  set_rotor_inertia("joint_6", (double)0.10 * power);
+  set_rotor_inertia("joint_7", (double)0.10 * power);
 
   // Automatically load the convex hulls associated to each body
   std::string convexPath = INSTALL_DIR + "/mc_kinova/convex/" + name + "/";
