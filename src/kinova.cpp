@@ -12,32 +12,47 @@ namespace bfs = boost::filesystem;
 namespace mc_robots
 {
 
-inline static std::string kinovaVariant(bool callib)
+inline static std::string kinovaVariant(bool callib, bool use_bota)
 {
   if(callib)
   {
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_callib'");
     return "kinova_callib";
   }
-  if(not callib)
+  else if(not callib)
   {
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_default'");
-    return "kinova_default";
+    if(use_bota)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota");
+      return "kinova_bota";
+    }
+    else
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_default'");
+      return "kinova_default";
+    }
   }
   mc_rtc::log::error_and_throw("KinovaRobotModule does not provide this kinova variant ...");
   return "";
 }
 
-KinovaRobotModule::KinovaRobotModule(bool callib)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib))
+KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
-  urdf_path = KINOVA_URDF_PATH;
+  if(use_bota)
+  {
+    urdf_path = KINOVA_URDF_PATH_BOTA;
+  }
+  else
+  {
+    urdf_path = KINOVA_URDF_PATH;
+  }
   _real_urdf = urdf_path;
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = KINOVA_RSDF_DIR + "/" + kinovaVariant(callib) + "/";
+  rsdf_dir = KINOVA_RSDF_DIR + "/" + kinovaVariant(callib, use_bota) + "/";
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   // Override position, velocity and effort bounds
@@ -91,9 +106,9 @@ KinovaRobotModule::KinovaRobotModule(bool callib)
   update_torque_limit("joint_2", 95);
   update_torque_limit("joint_3", 95);
   update_torque_limit("joint_4", 95);
-  update_torque_limit("joint_5", 26);
+  update_torque_limit("joint_5", 45);
   update_torque_limit("joint_6", 45);
-  update_torque_limit("joint_7", 26);
+  update_torque_limit("joint_7", 45);
 
   auto set_gear_ratio = [this](const std::string & name, double gr)
   {
@@ -117,13 +132,13 @@ KinovaRobotModule::KinovaRobotModule(bool callib)
 
   double power = pow(10, -4);
 
-  set_rotor_inertia("joint_1", (double)0.15 * power);
-  set_rotor_inertia("joint_2", (double)0.15 * power);
-  set_rotor_inertia("joint_3", (double)0.15 * power);
-  set_rotor_inertia("joint_4", (double)0.15 * power);
-  set_rotor_inertia("joint_5", (double)0.10 * power);
-  set_rotor_inertia("joint_6", (double)0.10 * power);
-  set_rotor_inertia("joint_7", (double)0.10 * power);
+  set_rotor_inertia("joint_1", (double)0.40 * power);
+  set_rotor_inertia("joint_2", (double)0.40 * power);
+  set_rotor_inertia("joint_3", (double)0.40 * power);
+  set_rotor_inertia("joint_4", (double)0.40 * power);
+  set_rotor_inertia("joint_5", (double)0.22 * power);
+  set_rotor_inertia("joint_6", (double)0.22 * power);
+  set_rotor_inertia("joint_7", (double)0.22 * power);
 
   // Automatically load the convex hulls associated to each body
   std::string convexPath = INSTALL_DIR + "/mc_kinova/convex/" + name + "/";
