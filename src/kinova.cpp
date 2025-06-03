@@ -141,7 +141,8 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
   set_rotor_inertia("joint_7", (double)0.22 * power);
 
   // Automatically load the convex hulls associated to each body
-  std::string convexPath = INSTALL_DIR + "/mc_kinova/convex/" + name + "/";
+  std::string convexPath = KINOVA_CONVEX_DIR + "/kinova/";
+  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath);
   bfs::path p(convexPath);
   if(bfs::exists(p) && bfs::is_directory(p))
   {
