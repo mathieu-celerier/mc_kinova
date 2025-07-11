@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mc_rbdyn/ExternalTorqueSensor.h>
 #include <mc_rbdyn/RobotModule.h>
 #include <mc_rbdyn/VirtualTorqueSensor.h>
 

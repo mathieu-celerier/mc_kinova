@@ -173,8 +173,9 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
   _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
 
   // Define a device sensor for external torque measurment
-  _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
-  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("virtualTorqueSensor", 7).clone());
+  // _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
+  // _devices.push_back(mc_rbdyn::VirtualTorqueSensor("virtualTorqueSensor", 7).clone());
+  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", 7).clone());
 
   // Clear body sensors
   _bodySensors.clear();
