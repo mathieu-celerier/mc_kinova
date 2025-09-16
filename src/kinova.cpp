@@ -110,35 +110,35 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
   update_torque_limit("joint_6", 45);
   update_torque_limit("joint_7", 45);
 
-  // auto set_gear_ratio = [this](const std::string & name, double gr)
-  // {
-  //   assert(gr > 0);
-  //   mb.setJointGearRatio(mb.jointIndexByName(name), gr);
-  // };
+  auto set_gear_ratio = [this](const std::string & name, double gr)
+  {
+    assert(gr > 0);
+    mb.setJointGearRatio(mb.jointIndexByName(name), gr);
+  };
 
-  // set_gear_ratio("joint_1", 100);
-  // set_gear_ratio("joint_2", 100);
-  // set_gear_ratio("joint_3", 100);
-  // set_gear_ratio("joint_4", 100);
-  // set_gear_ratio("joint_5", 100);
-  // set_gear_ratio("joint_6", 100);
-  // set_gear_ratio("joint_7", 100);
+  set_gear_ratio("joint_1", 100);
+  set_gear_ratio("joint_2", 100);
+  set_gear_ratio("joint_3", 100);
+  set_gear_ratio("joint_4", 100);
+  set_gear_ratio("joint_5", 100);
+  set_gear_ratio("joint_6", 100);
+  set_gear_ratio("joint_7", 100);
 
-  // auto set_rotor_inertia = [this](const std::string & name, double ir)
-  // {
-  //   assert(ir > 0);
-  //   mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
-  // };
+  auto set_rotor_inertia = [this](const std::string & name, double ir)
+  {
+    assert(ir > 0);
+    mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
+  };
 
-  // double power = pow(10, -4);
+  double power = pow(10, -4);
 
-  // set_rotor_inertia("joint_1", (double)0.40 * power);
-  // set_rotor_inertia("joint_2", (double)0.40 * power);
-  // set_rotor_inertia("joint_3", (double)0.40 * power);
-  // set_rotor_inertia("joint_4", (double)0.40 * power);
-  // set_rotor_inertia("joint_5", (double)0.22 * power);
-  // set_rotor_inertia("joint_6", (double)0.22 * power);
-  // set_rotor_inertia("joint_7", (double)0.22 * power);
+  set_rotor_inertia("joint_1", (double)0.40 * power);
+  set_rotor_inertia("joint_2", (double)0.40 * power);
+  set_rotor_inertia("joint_3", (double)0.40 * power);
+  set_rotor_inertia("joint_4", (double)0.40 * power);
+  set_rotor_inertia("joint_5", (double)0.22 * power);
+  set_rotor_inertia("joint_6", (double)0.22 * power);
+  set_rotor_inertia("joint_7", (double)0.22 * power);
 
   // Automatically load the convex hulls associated to each body
   fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";

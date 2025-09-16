@@ -1,7 +1,7 @@
 #pragma once
 
 #include <mc_rbdyn/RobotModule.h>
-// #include <mc_rbdyn/VirtualTorqueSensor.h>
+#include <mc_rbdyn/VirtualTorqueSensor.h>
 
 #include <mc_robots/api.h>
 
