@@ -29,3 +29,8 @@ add_robot(kinova module.cpp "")
 target_link_libraries(kinova PRIVATE mc_kinova::kinova)
 
 add_dependencies(kinova generate-kinova-urdf)
+
+if(WITH_BOTA_SENSOR)
+  add_dependencies(kinova generate-kinova-bota-ds4-urdf)
+  add_dependencies(kinova generate-kinova-bota-urdf)
+endif()

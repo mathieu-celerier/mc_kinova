@@ -24,6 +24,10 @@ extern "C"
     {
       return new mc_robots::KinovaRobotModule(false, true);
     }
+    else if(n == "KinovaBotaDS4")
+    {
+      return new mc_robots::KinovaRobotModule(false, true, true);
+    }
     else if(n == "KinovaCallib")
     {
       return new mc_robots::KinovaRobotModule(true, false);
