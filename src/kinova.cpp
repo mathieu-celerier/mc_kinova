@@ -6,13 +6,13 @@
 #include <RBDyn/MultiBody.h>
 #include <RBDyn/parsers/urdf.h>
 
-#include <boost/filesystem.hpp>
-namespace bfs = boost::filesystem;
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace mc_robots
 {
 
-inline static std::string kinovaVariant(bool callib, bool use_bota)
+inline static std::string kinovaVariant(bool callib, bool use_bota, bool use_ds4)
 {
   if(callib)
   {
@@ -21,10 +21,15 @@ inline static std::string kinovaVariant(bool callib, bool use_bota)
   }
   else if(not callib)
   {
-    if(use_bota)
+    if(use_bota && !use_ds4)
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota");
       return "kinova_bota";
+    }
+    else if(use_ds4)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4");
+      return "kinova_bota_ds4";
     }
     else
     {
@@ -36,23 +41,18 @@ inline static std::string kinovaVariant(bool callib, bool use_bota)
   return "";
 }
 
-KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota))
+KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, use_ds4))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
-  if(use_bota)
-  {
-    urdf_path = KINOVA_URDF_PATH_BOTA;
-  }
-  else
-  {
-    urdf_path = KINOVA_URDF_PATH;
-  }
+  
+  urdf_path = fs::path(KINOVA_URDF_DIR) / (name + ".urdf");
+
   _real_urdf = urdf_path;
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = KINOVA_RSDF_DIR + "/" + kinovaVariant(callib, use_bota) + "/";
+  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(callib, use_bota, use_ds4);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   // Override position, velocity and effort bounds
@@ -110,53 +110,46 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
   update_torque_limit("joint_6", 45);
   update_torque_limit("joint_7", 45);
 
-  auto set_gear_ratio = [this](const std::string & name, double gr)
-  {
-    assert(gr > 0);
-    mb.setJointGearRatio(mb.jointIndexByName(name), gr);
-  };
+  // auto set_gear_ratio = [this](const std::string & name, double gr)
+  // {
+  //   assert(gr > 0);
+  //   mb.setJointGearRatio(mb.jointIndexByName(name), gr);
+  // };
 
-  set_gear_ratio("joint_1", 100);
-  set_gear_ratio("joint_2", 100);
-  set_gear_ratio("joint_3", 100);
-  set_gear_ratio("joint_4", 100);
-  set_gear_ratio("joint_5", 100);
-  set_gear_ratio("joint_6", 100);
-  set_gear_ratio("joint_7", 100);
+  // set_gear_ratio("joint_1", 100);
+  // set_gear_ratio("joint_2", 100);
+  // set_gear_ratio("joint_3", 100);
+  // set_gear_ratio("joint_4", 100);
+  // set_gear_ratio("joint_5", 100);
+  // set_gear_ratio("joint_6", 100);
+  // set_gear_ratio("joint_7", 100);
 
-  auto set_rotor_inertia = [this](const std::string & name, double ir)
-  {
-    assert(ir > 0);
-    mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
-  };
+  // auto set_rotor_inertia = [this](const std::string & name, double ir)
+  // {
+  //   assert(ir > 0);
+  //   mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
+  // };
 
-  double power = pow(10, -4);
+  // double power = pow(10, -4);
 
-  set_rotor_inertia("joint_1", (double)0.40 * power);
-  set_rotor_inertia("joint_2", (double)0.40 * power);
-  set_rotor_inertia("joint_3", (double)0.40 * power);
-  set_rotor_inertia("joint_4", (double)0.40 * power);
-  set_rotor_inertia("joint_5", (double)0.22 * power);
-  set_rotor_inertia("joint_6", (double)0.22 * power);
-  set_rotor_inertia("joint_7", (double)0.22 * power);
+  // set_rotor_inertia("joint_1", (double)0.40 * power);
+  // set_rotor_inertia("joint_2", (double)0.40 * power);
+  // set_rotor_inertia("joint_3", (double)0.40 * power);
+  // set_rotor_inertia("joint_4", (double)0.40 * power);
+  // set_rotor_inertia("joint_5", (double)0.22 * power);
+  // set_rotor_inertia("joint_6", (double)0.22 * power);
+  // set_rotor_inertia("joint_7", (double)0.22 * power);
 
   // Automatically load the convex hulls associated to each body
-  std::string convexPath = KINOVA_CONVEX_DIR + "/kinova/";
+  fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath);
-  bfs::path p(convexPath);
-  if(bfs::exists(p) && bfs::is_directory(p))
+
+  for(const auto & b : mb.bodies())
   {
-    std::vector<bfs::path> files;
-    std::copy(bfs::directory_iterator(p), bfs::directory_iterator(), std::back_inserter(files));
-    for(const bfs::path & file : files)
+    auto ch = convexPath / (b.name() + "-ch.txt");
+    if(fs::exists(ch))
     {
-      size_t off = file.filename().string().rfind("-ch.txt");
-      if(off != std::string::npos)
-      {
-        std::string name = file.filename().string();
-        name.replace(off, 7, "");
-        _convexHull[name] = std::pair<std::string, std::string>(name, file.string());
-      }
+      _convexHull[b.name()] = {b.name(), ch.string()};
     }
   }
 
@@ -170,10 +163,13 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
   }
 
   // Define a force sensor
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
+  if(use_bota)
+    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
+  else
+    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));;
 
   // Define a device sensor for external torque measurment
-  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", 7).clone());
+  // _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", 7).clone());
 
   // Clear body sensors
   _bodySensors.clear();
@@ -193,15 +189,22 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
                             {"base_link", "bracelet_link", i, s, d},
                             {"shoulder_link", "bracelet_link", i, s, d},
                             {"half_arm_1_link", "bracelet_link", i, s, d},
-                            {"half_arm_2_link", "bracelet_link", i, s, d},
-                            {"base_link", "FT_adapter", i, s, d},
-                            {"shoulder_link", "FT_adapter", i, s, d},
-                            {"half_arm_1_link", "FT_adapter", i, s, d},
-                            {"half_arm_2_link", "FT_adapter", i, s, d},
-                            {"base_link", "FT_sensor_mounting", i, s, d},
-                            {"shoulder_link", "FT_sensor_mounting", i, s, d},
-                            {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
-                            {"half_arm_2_link", "FT_sensor_mounting", i, s, d}};
+                            {"half_arm_2_link", "bracelet_link", i, s, d}};
+  
+  if(use_bota)
+  {
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {
+        {"base_link", "FT_adapter", i, s, d},
+        {"shoulder_link", "FT_adapter", i, s, d},
+        {"half_arm_1_link", "FT_adapter", i, s, d},
+        {"half_arm_2_link", "FT_adapter", i, s, d},
+        {"base_link", "FT_sensor_mounting", i, s, d},
+        {"shoulder_link", "FT_sensor_mounting", i, s, d},
+        {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
+        {"half_arm_2_link", "FT_sensor_mounting", i, s, d}
+      });
+  }
+                            
 
   /* Additional self collisions */
 

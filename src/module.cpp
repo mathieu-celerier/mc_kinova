@@ -7,7 +7,7 @@ extern "C"
 {
   ROBOT_MODULE_API void MC_RTC_ROBOT_MODULE(std::vector<std::string> & names)
   {
-    names = {"Kinova", "KinovaDefault", "KinovaCallib", "KinovaBota"};
+    names = {"Kinova", "KinovaDefault", "KinovaCallib", "KinovaBota", "KinovaBotaDS4"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
   {
@@ -23,6 +23,10 @@ extern "C"
     else if(n == "KinovaBota")
     {
       return new mc_robots::KinovaRobotModule(false, true);
+    }
+    else if(n == "KinovaBotaDS4")
+    {
+      return new mc_robots::KinovaRobotModule(false, true, true);
     }
     else if(n == "KinovaCallib")
     {
