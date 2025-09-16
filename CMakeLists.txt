@@ -9,7 +9,10 @@ set(PROJECT_URL "")
 
 include(GNUInstallDirs)
 
-project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.0.0)
+project(
+  ${PROJECT_NAME}
+  LANGUAGES CXX
+  VERSION 1.0.0)
 include(CTest)
 enable_testing()
 
@@ -18,7 +21,9 @@ option(WITH_BOTA_SENSOR "Enable Bota (Rokubimini) sensor integration" OFF)
 
 if(MSVC AND _VCPKG_INSTALLED_DIR)
   set(VCPKG_INSTALL_PREFIX "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_PREFIX}")
-  set(CMAKE_MSVCIDE_RUN_PATH "${VCPKG_INSTALL_PREFIX}/\$(Configuration)/bin;${VCPKG_INSTALL_PREFIX}/bin;${CMAKE_MSVCIDE_RUN_PATH}")
+  set(CMAKE_MSVCIDE_RUN_PATH
+      "${VCPKG_INSTALL_PREFIX}/\$(Configuration)/bin;${VCPKG_INSTALL_PREFIX}/bin;${CMAKE_MSVCIDE_RUN_PATH}"
+  )
 endif()
 
 find_package(mc_rtc REQUIRED)
@@ -31,11 +36,12 @@ find_program(XACRO xacro REQUIRED)
 # Glob XACRO files for dependency tracking
 file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
 
-# Bota sensor integration 
+# Bota sensor integration
 if(WITH_BOTA_SENSOR)
   message(STATUS "Bota sensor support ENABLED")
   find_description_package(rokubimini_description)
-  file(GLOB_RECURSE BOTA_XACRO_FILES "${rokubimini_description_DIR}/../urdf/*.xacro")
+  file(GLOB_RECURSE BOTA_XACRO_FILES
+       "${rokubimini_description_DIR}/../urdf/*.xacro")
 else()
   message(STATUS "Bota sensor support DISABLED")
 endif()
@@ -51,9 +57,10 @@ configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 set(GENERATED_KINOVA_URDF "${CMAKE_BINARY_DIR}/urdf/kinova_default.urdf")
 add_custom_command(
   OUTPUT ${GENERATED_KINOVA_URDF}
-  COMMAND ${XACRO} -o ${GENERATED_KINOVA_URDF} -i ${KORTEX_DESCRIPTION_PATH}/robots/gen3.xacro dof:=7 vision:=false sim:=true
-  DEPENDS ${KINOVA_XACRO_FILES} 
-)
+  COMMAND
+    ${XACRO} -o ${GENERATED_KINOVA_URDF} -i
+    ${KORTEX_DESCRIPTION_PATH}/robots/gen3.xacro dof:=7 vision:=false sim:=true
+  DEPENDS ${KINOVA_XACRO_FILES})
 
 set(GENERATED_URDF_CAMERA "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera.urdf")
 add_custom_command(

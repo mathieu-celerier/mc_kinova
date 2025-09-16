@@ -216,7 +216,6 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
                                                                  {"shoulder_link", "FT_adapter", i, s, d},
                                                                  {"half_arm_1_link", "FT_adapter", i, s, d},
                                                                  {"half_arm_2_link", "FT_adapter", i, s, d},
-
                                                                  {"base_link", "FT_sensor_mounting", i, s, d},
                                                                  {"shoulder_link", "FT_sensor_mounting", i, s, d},
                                                                  {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
