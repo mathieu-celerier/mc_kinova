@@ -45,7 +45,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
 : mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, use_ds4))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
-  
+
   urdf_path = fs::path(KINOVA_URDF_DIR) / (name + ".urdf");
 
   _real_urdf = urdf_path;
@@ -166,7 +166,8 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
   if(use_bota)
     _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
   else
-    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));;
+    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));
+  ;
 
   // Define a device sensor for external torque measurment
   // _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", 7).clone());
@@ -190,21 +191,18 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
                             {"shoulder_link", "bracelet_link", i, s, d},
                             {"half_arm_1_link", "bracelet_link", i, s, d},
                             {"half_arm_2_link", "bracelet_link", i, s, d}};
-  
+
   if(use_bota)
   {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {
-        {"base_link", "FT_adapter", i, s, d},
-        {"shoulder_link", "FT_adapter", i, s, d},
-        {"half_arm_1_link", "FT_adapter", i, s, d},
-        {"half_arm_2_link", "FT_adapter", i, s, d},
-        {"base_link", "FT_sensor_mounting", i, s, d},
-        {"shoulder_link", "FT_sensor_mounting", i, s, d},
-        {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
-        {"half_arm_2_link", "FT_sensor_mounting", i, s, d}
-      });
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "FT_adapter", i, s, d},
+                                                                 {"shoulder_link", "FT_adapter", i, s, d},
+                                                                 {"half_arm_1_link", "FT_adapter", i, s, d},
+                                                                 {"half_arm_2_link", "FT_adapter", i, s, d},
+                                                                 {"base_link", "FT_sensor_mounting", i, s, d},
+                                                                 {"shoulder_link", "FT_sensor_mounting", i, s, d},
+                                                                 {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
+                                                                 {"half_arm_2_link", "FT_sensor_mounting", i, s, d}});
   }
-                            
 
   /* Additional self collisions */
 

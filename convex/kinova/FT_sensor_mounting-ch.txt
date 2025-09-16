@@ -1,193 +1,193 @@
 3
 64 124 186
-     0  0.035      0 
-     0  0.035  0.038 
-0.0068281614 0.034327485      0 
-0.0068281614 0.034327485  0.038 
-0.013393921 0.032335784      0 
-0.013393921 0.032335784  0.038 
-0.01944496 0.029101435      0 
-0.01944496 0.029101435  0.038 
-0.024748737 0.024748737      0 
-0.024748737 0.024748737  0.038 
-0.029101435 0.01944496      0 
-0.029101435 0.01944496  0.038 
-0.032335784 0.013393921      0 
-0.032335784 0.013393921  0.038 
-0.034327485 0.0068281614      0 
-0.034327485 0.0068281614  0.038 
- 0.035      0      0 
- 0.035      0  0.038 
-0.034327485 -0.0068281614      0 
-0.034327485 -0.0068281614  0.038 
-0.032335784 -0.013393921      0 
-0.032335784 -0.013393921  0.038 
-0.029101435 -0.01944496      0 
-0.029101435 -0.01944496  0.038 
-0.024748737 -0.024748737      0 
-0.024748737 -0.024748737  0.038 
-0.01944496 -0.029101435      0 
-0.01944496 -0.029101435  0.038 
-0.013393921 -0.032335784      0 
-0.013393921 -0.032335784  0.038 
-0.0068281614 -0.034327485      0 
-0.0068281614 -0.034327485  0.038 
-     0 -0.035      0 
-     0 -0.035  0.038 
--0.0068281614 -0.034327485      0 
--0.0068281614 -0.034327485  0.038 
--0.013393921 -0.032335784      0 
--0.013393921 -0.032335784  0.038 
--0.01944496 -0.029101435      0 
--0.01944496 -0.029101435  0.038 
--0.024748737 -0.024748737      0 
--0.024748737 -0.024748737  0.038 
--0.029101435 -0.01944496      0 
--0.029101435 -0.01944496  0.038 
--0.032335784 -0.013393921      0 
--0.032335784 -0.013393921  0.038 
--0.034327485 -0.0068281614      0 
--0.034327485 -0.0068281614  0.038 
--0.035      0      0 
--0.035      0  0.038 
--0.034327485 0.0068281614      0 
--0.034327485 0.0068281614  0.038 
--0.032335784 0.013393921      0 
--0.032335784 0.013393921  0.038 
--0.029101435 0.01944496      0 
--0.029101435 0.01944496  0.038 
--0.024748737 0.024748737      0 
--0.024748737 0.024748737  0.038 
--0.01944496 0.029101435      0 
--0.01944496 0.029101435  0.038 
--0.013393921 0.032335784      0 
--0.013393921 0.032335784  0.038 
--0.0068281614 0.034327485      0 
--0.0068281614 0.034327485  0.038 
-3 61 58 60 
-3 58 61 59 
-3 6 5 4 
-3 5 6 7 
-3 54 55 52 
-3 52 55 53 
-3 50 51 49 
-3 50 49 48 
-3 51 50 53 
-3 50 52 53 
-3 63 62 0 
-3 1 63 0 
-3 62 63 60 
-3 63 61 60 
-3 39 38 41 
-3 41 38 40 
-3 38 37 36 
-3 37 38 39 
-3 42 43 41 
-3 42 41 40 
-3 45 42 44 
-3 42 45 43 
-3 11 10 12 
-3 11 12 13 
-3 15 14 17 
-3 17 14 16 
-3 14 15 13 
-3 12 14 13 
-3 2 3 0 
-3 3 1 0 
-3 3 2 4 
-3 5 3 4 
-3 26 27 25 
-3 26 25 24 
-3 29 26 28 
-3 26 29 27 
-3 26 22 28 
-3 22 54 52 
-3 2 22 4 
-3 22 38 36 
-3 10 22 12 
-3 22 46 44 
-3 22 62 60 
-3 50 22 52 
-3 22 14 12 
-3 62 22 0 
-3 22 2 0 
-3 18 22 20 
-3 58 22 60 
-3 34 22 36 
-3 42 22 44 
-3 22 6 4 
-3 22 30 28 
-3 54 22 56 
-3 22 58 56 
-3 22 34 32 
-3 46 22 48 
-3 22 10 8 
-3 6 22 8 
-3 30 22 32 
-3 22 18 16 
-3 22 50 48 
-3 38 22 40 
-3 22 42 40 
-3 14 22 16 
-3 22 26 24 
-3 23 22 25 
-3 25 22 24 
-3 22 21 20 
-3 21 22 23 
-3 58 57 56 
-3 57 58 59 
-3 57 54 56 
-3 57 55 54 
-3 34 35 32 
-3 32 35 33 
-3 35 34 36 
-3 37 35 36 
-3 47 46 48 
-3 49 47 48 
-3 46 47 44 
-3 47 45 44 
-3 9 6 8 
-3 6 9 7 
-3 10 9 8 
-3 11 9 10 
-3 31 30 32 
-3 31 32 33 
-3 30 31 28 
-3 31 29 28 
-3 19 23 25 
-3 45 19 43 
-3 27 19 25 
-3 43 19 41 
-3 19 39 41 
-3 19 51 53 
-3 61 19 59 
-3 15 19 13 
-3 19 5 7 
-3 51 19 49 
-3 19 21 23 
-3 63 19 61 
-3 19 37 39 
-3 19 15 17 
-3 47 19 45 
-3 19 3 5 
-3 29 19 27 
-3 55 19 53 
-3 19 63 1 
-3 57 19 55 
-3 19 35 37 
-3 19 11 13 
-3 3 19 1 
-3 19 9 11 
-3 31 19 29 
-3 19 57 59 
-3 35 19 33 
-3 19 47 49 
-3 9 19 7 
-3 19 31 33 
-3 18 19 16 
-3 19 17 16 
-3 19 18 20 
-3 21 19 20 
+     0  0.035      0
+     0  0.035  0.038
+0.0068281614 0.034327485      0
+0.0068281614 0.034327485  0.038
+0.013393921 0.032335784      0
+0.013393921 0.032335784  0.038
+0.01944496 0.029101435      0
+0.01944496 0.029101435  0.038
+0.024748737 0.024748737      0
+0.024748737 0.024748737  0.038
+0.029101435 0.01944496      0
+0.029101435 0.01944496  0.038
+0.032335784 0.013393921      0
+0.032335784 0.013393921  0.038
+0.034327485 0.0068281614      0
+0.034327485 0.0068281614  0.038
+ 0.035      0      0
+ 0.035      0  0.038
+0.034327485 -0.0068281614      0
+0.034327485 -0.0068281614  0.038
+0.032335784 -0.013393921      0
+0.032335784 -0.013393921  0.038
+0.029101435 -0.01944496      0
+0.029101435 -0.01944496  0.038
+0.024748737 -0.024748737      0
+0.024748737 -0.024748737  0.038
+0.01944496 -0.029101435      0
+0.01944496 -0.029101435  0.038
+0.013393921 -0.032335784      0
+0.013393921 -0.032335784  0.038
+0.0068281614 -0.034327485      0
+0.0068281614 -0.034327485  0.038
+     0 -0.035      0
+     0 -0.035  0.038
+-0.0068281614 -0.034327485      0
+-0.0068281614 -0.034327485  0.038
+-0.013393921 -0.032335784      0
+-0.013393921 -0.032335784  0.038
+-0.01944496 -0.029101435      0
+-0.01944496 -0.029101435  0.038
+-0.024748737 -0.024748737      0
+-0.024748737 -0.024748737  0.038
+-0.029101435 -0.01944496      0
+-0.029101435 -0.01944496  0.038
+-0.032335784 -0.013393921      0
+-0.032335784 -0.013393921  0.038
+-0.034327485 -0.0068281614      0
+-0.034327485 -0.0068281614  0.038
+-0.035      0      0
+-0.035      0  0.038
+-0.034327485 0.0068281614      0
+-0.034327485 0.0068281614  0.038
+-0.032335784 0.013393921      0
+-0.032335784 0.013393921  0.038
+-0.029101435 0.01944496      0
+-0.029101435 0.01944496  0.038
+-0.024748737 0.024748737      0
+-0.024748737 0.024748737  0.038
+-0.01944496 0.029101435      0
+-0.01944496 0.029101435  0.038
+-0.013393921 0.032335784      0
+-0.013393921 0.032335784  0.038
+-0.0068281614 0.034327485      0
+-0.0068281614 0.034327485  0.038
+3 61 58 60
+3 58 61 59
+3 6 5 4
+3 5 6 7
+3 54 55 52
+3 52 55 53
+3 50 51 49
+3 50 49 48
+3 51 50 53
+3 50 52 53
+3 63 62 0
+3 1 63 0
+3 62 63 60
+3 63 61 60
+3 39 38 41
+3 41 38 40
+3 38 37 36
+3 37 38 39
+3 42 43 41
+3 42 41 40
+3 45 42 44
+3 42 45 43
+3 11 10 12
+3 11 12 13
+3 15 14 17
+3 17 14 16
+3 14 15 13
+3 12 14 13
+3 2 3 0
+3 3 1 0
+3 3 2 4
+3 5 3 4
+3 26 27 25
+3 26 25 24
+3 29 26 28
+3 26 29 27
+3 26 22 28
+3 22 54 52
+3 2 22 4
+3 22 38 36
+3 10 22 12
+3 22 46 44
+3 22 62 60
+3 50 22 52
+3 22 14 12
+3 62 22 0
+3 22 2 0
+3 18 22 20
+3 58 22 60
+3 34 22 36
+3 42 22 44
+3 22 6 4
+3 22 30 28
+3 54 22 56
+3 22 58 56
+3 22 34 32
+3 46 22 48
+3 22 10 8
+3 6 22 8
+3 30 22 32
+3 22 18 16
+3 22 50 48
+3 38 22 40
+3 22 42 40
+3 14 22 16
+3 22 26 24
+3 23 22 25
+3 25 22 24
+3 22 21 20
+3 21 22 23
+3 58 57 56
+3 57 58 59
+3 57 54 56
+3 57 55 54
+3 34 35 32
+3 32 35 33
+3 35 34 36
+3 37 35 36
+3 47 46 48
+3 49 47 48
+3 46 47 44
+3 47 45 44
+3 9 6 8
+3 6 9 7
+3 10 9 8
+3 11 9 10
+3 31 30 32
+3 31 32 33
+3 30 31 28
+3 31 29 28
+3 19 23 25
+3 45 19 43
+3 27 19 25
+3 43 19 41
+3 19 39 41
+3 19 51 53
+3 61 19 59
+3 15 19 13
+3 19 5 7
+3 51 19 49
+3 19 21 23
+3 63 19 61
+3 19 37 39
+3 19 15 17
+3 47 19 45
+3 19 3 5
+3 29 19 27
+3 55 19 53
+3 19 63 1
+3 57 19 55
+3 19 35 37
+3 19 11 13
+3 3 19 1
+3 19 9 11
+3 31 19 29
+3 19 57 59
+3 35 19 33
+3 19 47 49
+3 9 19 7
+3 19 31 33
+3 18 19 16
+3 19 17 16
+3 19 18 20
+3 21 19 20
 Vertices and facets:
 - p61(v32): -0.013 0.032 0.038
   neighbors: f215 f217 f240 f373 f378
@@ -322,7 +322,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f215
     - normal:   -0.4714   0.8819       -0
     - offset: -0.03483147
-    - center: -0.0164194405 0.0307186095  0.019 
+    - center: -0.0164194405 0.0307186095  0.019
     - vertices: p61(v32) p58(v31) p60(v11)
     - neighboring facets: f299 f240 f217
 - f217
@@ -330,7 +330,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f215
     - normal:   -0.4714   0.8819       -0
     - offset: -0.03483147
-    - center: -0.0164194405 0.0307186095  0.019 
+    - center: -0.0164194405 0.0307186095  0.019
     - vertices: p61(v32) p58(v31) p59(v20)
     - neighboring facets: f328 f373 f215
 - f219
@@ -338,7 +338,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f219
     - normal:    0.4714   0.8819       -0
     - offset: -0.03483147
-    - center: 0.0164194405 0.0307186095  0.019 
+    - center: 0.0164194405 0.0307186095  0.019
     - vertices: p5(v40) p6(v39) p4(v12)
     - neighboring facets: f302 f276 f221
 - f221
@@ -346,7 +346,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f219
     - normal:    0.4714   0.8819       -0
     - offset: -0.03483147
-    - center: 0.0164194405 0.0307186095  0.019 
+    - center: 0.0164194405 0.0307186095  0.019
     - vertices: p5(v40) p6(v39) p7(v25)
     - neighboring facets: f352 f375 f219
 - f223
@@ -354,7 +354,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f223
     - normal:   -0.8819   0.4714       -0
     - offset: -0.03483147
-    - center: -0.0307186095 0.0164194405  0.019 
+    - center: -0.0307186095 0.0164194405  0.019
     - vertices: p55(v45) p54(v29) p52(v19)
     - neighboring facets: f288 f225 f332
 - f225
@@ -362,7 +362,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f223
     - normal:   -0.8819   0.4714       -0
     - offset: -0.03483147
-    - center: -0.0307186095 0.0164194405  0.019 
+    - center: -0.0307186095 0.0164194405  0.019
     - vertices: p55(v45) p52(v19) p53(v13)
     - neighboring facets: f232 f384 f223
 - f227
@@ -370,7 +370,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f227
     - normal:   -0.9952  0.09802        0
     - offset: -0.03483147
-    - center: -0.0346637425 0.0034140807  0.019 
+    - center: -0.0346637425 0.0034140807  0.019
     - vertices: p50(v46) p51(v30) p49(v9)
     - neighboring facets: f376 f229 f231
 - f229
@@ -378,7 +378,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f227
     - normal:   -0.9952  0.09802        0
     - offset: -0.03483147
-    - center: -0.0346637425 0.0034140807  0.019 
+    - center: -0.0346637425 0.0034140807  0.019
     - vertices: p50(v46) p49(v9) p48(v0)
     - neighboring facets: f344 f312 f227
 - f231
@@ -386,7 +386,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f231
     - normal:   -0.9569   0.2903        0
     - offset: -0.03483147
-    - center: -0.0333316345 0.0101110412  0.019 
+    - center: -0.0333316345 0.0101110412  0.019
     - vertices: p50(v46) p51(v30) p53(v13)
     - neighboring facets: f372 f232 f227
 - f232
@@ -394,7 +394,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f231
     - normal:   -0.9569   0.2903        0
     - offset: -0.03483147
-    - center: -0.0333316345 0.0101110412  0.019 
+    - center: -0.0333316345 0.0101110412  0.019
     - vertices: p50(v46) p52(v19) p53(v13)
     - neighboring facets: f225 f231 f294
 - f235
@@ -402,7 +402,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f235
     - normal:  -0.09802   0.9952       -0
     - offset: -0.03483147
-    - center: -0.0034140807 0.0346637425  0.019 
+    - center: -0.0034140807 0.0346637425  0.019
     - vertices: p63(v47) p62(v17) p0(v2)
     - neighboring facets: f296 f237 f239
 - f237
@@ -410,7 +410,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f235
     - normal:  -0.09802   0.9952       -0
     - offset: -0.03483147
-    - center: -0.0034140807 0.0346637425  0.019 
+    - center: -0.0034140807 0.0346637425  0.019
     - vertices: p63(v47) p1(v3) p0(v2)
     - neighboring facets: f272 f235 f385
 - f239
@@ -418,7 +418,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f239
     - normal:   -0.2903   0.9569       -0
     - offset: -0.03483147
-    - center: -0.0101110412 0.03333163450000001  0.019 
+    - center: -0.0101110412 0.03333163450000001  0.019
     - vertices: p63(v47) p62(v17) p60(v11)
     - neighboring facets: f293 f240 f235
 - f240
@@ -426,7 +426,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f239
     - normal:   -0.2903   0.9569       -0
     - offset: -0.03483147
-    - center: -0.0101110412 0.03333163450000001  0.019 
+    - center: -0.0101110412 0.03333163450000001  0.019
     - vertices: p63(v47) p61(v32) p60(v11)
     - neighboring facets: f215 f239 f378
 - f243
@@ -434,7 +434,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f243
     - normal:   -0.6344   -0.773       -0
     - offset: -0.03483147
-    - center: -0.0220968485 -0.02692508599999999  0.019 
+    - center: -0.0220968485 -0.02692508599999999  0.019
     - vertices: p38(v48) p39(v35) p41(v23)
     - neighboring facets: f371 f245 f248
 - f245
@@ -442,7 +442,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f243
     - normal:   -0.6344   -0.773       -0
     - offset: -0.03483147
-    - center: -0.0220968485 -0.02692508599999999  0.019 
+    - center: -0.0220968485 -0.02692508599999999  0.019
     - vertices: p38(v48) p41(v23) p40(v14)
     - neighboring facets: f252 f313 f243
 - f247
@@ -450,7 +450,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f247
     - normal:   -0.4714  -0.8819        0
     - offset: -0.03483147
-    - center: -0.0164194405 -0.0307186095  0.019 
+    - center: -0.0164194405 -0.0307186095  0.019
     - vertices: p37(v49) p38(v48) p36(v21)
     - neighboring facets: f290 f340 f248
 - f248
@@ -458,7 +458,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f247
     - normal:   -0.4714  -0.8819        0
     - offset: -0.03483147
-    - center: -0.0164194405 -0.0307186095  0.019 
+    - center: -0.0164194405 -0.0307186095  0.019
     - vertices: p37(v49) p38(v48) p39(v35)
     - neighboring facets: f243 f379 f247
 - f251
@@ -466,7 +466,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f251
     - normal:    -0.773  -0.6344        0
     - offset: -0.03483147
-    - center: -0.026925086 -0.0220968485  0.019 
+    - center: -0.026925086 -0.0220968485  0.019
     - vertices: p42(v50) p43(v36) p41(v23)
     - neighboring facets: f370 f252 f256
 - f252
@@ -474,7 +474,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f251
     - normal:    -0.773  -0.6344        0
     - offset: -0.03483147
-    - center: -0.026925086 -0.0220968485  0.019 
+    - center: -0.026925086 -0.0220968485  0.019
     - vertices: p42(v50) p41(v23) p40(v14)
     - neighboring facets: f245 f314 f251
 - f255
@@ -482,7 +482,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f255
     - normal:   -0.8819  -0.4714        0
     - offset: -0.03483147
-    - center: -0.0307186095 -0.0164194405  0.019 
+    - center: -0.0307186095 -0.0164194405  0.019
     - vertices: p45(v51) p42(v50) p44(v22)
     - neighboring facets: f301 f348 f256
 - f256
@@ -490,7 +490,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f255
     - normal:   -0.8819  -0.4714        0
     - offset: -0.03483147
-    - center: -0.0307186095 -0.0164194405  0.019 
+    - center: -0.0307186095 -0.0164194405  0.019
     - vertices: p45(v51) p42(v50) p43(v36)
     - neighboring facets: f251 f368 f255
 - f259
@@ -498,7 +498,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f259
     - normal:    0.8819   0.4714        0
     - offset: -0.03483147
-    - center: 0.0307186095 0.0164194405  0.019 
+    - center: 0.0307186095 0.0164194405  0.019
     - vertices: p11(v52) p10(v37) p12(v24)
     - neighboring facets: f291 f261 f356
 - f261
@@ -506,7 +506,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f259
     - normal:    0.8819   0.4714        0
     - offset: -0.03483147
-    - center: 0.0307186095 0.0164194405  0.019 
+    - center: 0.0307186095 0.0164194405  0.019
     - vertices: p11(v52) p12(v24) p13(v15)
     - neighboring facets: f268 f388 f259
 - f263
@@ -514,7 +514,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f263
     - normal:    0.9952  0.09802       -0
     - offset: -0.03483147
-    - center: 0.0346637425 0.0034140807  0.019 
+    - center: 0.0346637425 0.0034140807  0.019
     - vertices: p14(v53) p15(v38) p17(v10)
     - neighboring facets: f380 f265 f267
 - f265
@@ -522,7 +522,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f263
     - normal:    0.9952  0.09802       -0
     - offset: -0.03483147
-    - center: 0.0346637425 0.0034140807  0.019 
+    - center: 0.0346637425 0.0034140807  0.019
     - vertices: p14(v53) p17(v10) p16(v1)
     - neighboring facets: f400 f315 f263
 - f267
@@ -530,7 +530,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f267
     - normal:    0.9569   0.2903       -0
     - offset: -0.03483147
-    - center: 0.0333316345 0.0101110412  0.019 
+    - center: 0.0333316345 0.0101110412  0.019
     - vertices: p14(v53) p15(v38) p13(v15)
     - neighboring facets: f374 f268 f263
 - f268
@@ -538,7 +538,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f267
     - normal:    0.9569   0.2903       -0
     - offset: -0.03483147
-    - center: 0.0333316345 0.0101110412  0.019 
+    - center: 0.0333316345 0.0101110412  0.019
     - vertices: p14(v53) p12(v24) p13(v15)
     - neighboring facets: f261 f267 f295
 - f271
@@ -546,7 +546,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f271
     - normal:   0.09802   0.9952        0
     - offset: -0.03483147
-    - center: 0.0034140807 0.0346637425  0.019 
+    - center: 0.0034140807 0.0346637425  0.019
     - vertices: p3(v54) p2(v18) p0(v2)
     - neighboring facets: f297 f272 f275
 - f272
@@ -554,7 +554,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f271
     - normal:   0.09802   0.9952        0
     - offset: -0.03483147
-    - center: 0.0034140807 0.0346637425  0.019 
+    - center: 0.0034140807 0.0346637425  0.019
     - vertices: p3(v54) p1(v3) p0(v2)
     - neighboring facets: f237 f271 f389
 - f275
@@ -562,7 +562,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f275
     - normal:    0.2903   0.9569        0
     - offset: -0.03483147
-    - center: 0.0101110412 0.03333163450000001  0.019 
+    - center: 0.0101110412 0.03333163450000001  0.019
     - vertices: p3(v54) p2(v18) p4(v12)
     - neighboring facets: f289 f276 f271
 - f276
@@ -570,7 +570,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f275
     - normal:    0.2903   0.9569        0
     - offset: -0.03483147
-    - center: 0.0101110412 0.03333163450000001  0.019 
+    - center: 0.0101110412 0.03333163450000001  0.019
     - vertices: p3(v54) p5(v40) p4(v12)
     - neighboring facets: f219 f275 f382
 - f279
@@ -578,7 +578,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f279
     - normal:    0.6344   -0.773        0
     - offset: -0.03483147
-    - center: 0.0220968485 -0.02692508599999999  0.019 
+    - center: 0.0220968485 -0.02692508599999999  0.019
     - vertices: p26(v55) p27(v43) p25(v28)
     - neighboring facets: f369 f281 f284
 - f281
@@ -586,7 +586,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f279
     - normal:    0.6344   -0.773        0
     - offset: -0.03483147
-    - center: 0.0220968485 -0.02692508599999999  0.019 
+    - center: 0.0220968485 -0.02692508599999999  0.019
     - vertices: p26(v55) p25(v28) p24(v16)
     - neighboring facets: f320 f316 f279
 - f283
@@ -594,7 +594,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f283
     - normal:    0.4714  -0.8819       -0
     - offset: -0.03483147
-    - center: 0.0164194405 -0.0307186095  0.019 
+    - center: 0.0164194405 -0.0307186095  0.019
     - vertices: p29(v56) p26(v55) p28(v26)
     - neighboring facets: f287 f364 f284
 - f284
@@ -602,7 +602,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f283
     - normal:    0.4714  -0.8819       -0
     - offset: -0.03483147
-    - center: 0.0164194405 -0.0307186095  0.019 
+    - center: 0.0164194405 -0.0307186095  0.019
     - vertices: p29(v56) p26(v55) p27(v43)
     - neighboring facets: f279 f383 f283
 - f287
@@ -610,7 +610,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p26(v55) p28(v26)
     - neighboring facets: f283 f303 f316
 - f288
@@ -618,7 +618,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p54(v29) p52(v19)
     - neighboring facets: f223 f294 f304
 - f289
@@ -626,7 +626,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p2(v18) p4(v12)
     - neighboring facets: f275 f302 f297
 - f290
@@ -634,7 +634,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p38(v48) p36(v21)
     - neighboring facets: f247 f300 f313
 - f291
@@ -642,7 +642,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p10(v37) p12(v24)
     - neighboring facets: f259 f295 f308
 - f292
@@ -650,7 +650,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p46(v34) p44(v22)
     - neighboring facets: f347 f301 f307
 - f293
@@ -658,7 +658,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p62(v17) p60(v11)
     - neighboring facets: f239 f299 f296
 - f294
@@ -666,7 +666,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p50(v46) p52(v19)
     - neighboring facets: f232 f288 f312
 - f295
@@ -674,7 +674,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p14(v53) p12(v24)
     - neighboring facets: f268 f291 f315
 - f296
@@ -682,7 +682,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p62(v17) p0(v2)
     - neighboring facets: f235 f297 f293
 - f297
@@ -690,7 +690,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p2(v18) p0(v2)
     - neighboring facets: f271 f296 f289
 - f298
@@ -698,7 +698,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p18(v42) p20(v27)
     - neighboring facets: f403 f323 f311
 - f299
@@ -706,7 +706,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p58(v31) p60(v11)
     - neighboring facets: f215 f293 f305
 - f300
@@ -714,7 +714,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p34(v33) p36(v21)
     - neighboring facets: f339 f290 f306
 - f301
@@ -722,7 +722,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p42(v50) p44(v22)
     - neighboring facets: f255 f292 f314
 - f302
@@ -730,7 +730,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p6(v39) p4(v12)
     - neighboring facets: f219 f289 f309
 - f303
@@ -738,7 +738,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p30(v41) p28(v26)
     - neighboring facets: f363 f287 f310
 - f304
@@ -746,7 +746,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p54(v29) p56(v6)
     - neighboring facets: f331 f305 f288
 - f305
@@ -754,7 +754,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p58(v31) p56(v6)
     - neighboring facets: f327 f304 f299
 - f306
@@ -762,7 +762,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p34(v33) p32(v8)
     - neighboring facets: f335 f310 f300
 - f307
@@ -770,7 +770,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p46(v34) p48(v0)
     - neighboring facets: f343 f312 f292
 - f308
@@ -778,7 +778,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p10(v37) p8(v7)
     - neighboring facets: f355 f309 f291
 - f309
@@ -786,7 +786,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p6(v39) p8(v7)
     - neighboring facets: f351 f308 f302
 - f310
@@ -794,7 +794,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p30(v41) p32(v8)
     - neighboring facets: f359 f306 f303
 - f311
@@ -802,7 +802,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p18(v42) p16(v1)
     - neighboring facets: f399 f315 f298
 - f312
@@ -810,7 +810,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p50(v46) p48(v0)
     - neighboring facets: f229 f307 f294
 - f313
@@ -818,7 +818,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p38(v48) p40(v14)
     - neighboring facets: f245 f314 f290
 - f314
@@ -826,7 +826,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p42(v50) p40(v14)
     - neighboring facets: f252 f313 f301
 - f315
@@ -834,7 +834,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p14(v53) p16(v1)
     - neighboring facets: f265 f311 f295
 - f316
@@ -842,7 +842,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f287
     - normal:        -0       -0       -1
     - offset:          0
-    - center: -0.002749859666666667 0.009935589444444445      0 
+    - center: -0.002749859666666667 0.009935589444444445      0
     - vertices: p22(v57) p26(v55) p24(v16)
     - neighboring facets: f281 f320 f287
 - f319
@@ -850,7 +850,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f319
     - normal:     0.773  -0.6344       -0
     - offset: -0.03483147
-    - center: 0.026925086 -0.0220968485  0.019 
+    - center: 0.026925086 -0.0220968485  0.019
     - vertices: p22(v57) p23(v44) p25(v28)
     - neighboring facets: f367 f320 f324
 - f320
@@ -858,7 +858,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f319
     - normal:     0.773  -0.6344       -0
     - offset: -0.03483147
-    - center: 0.026925086 -0.0220968485  0.019 
+    - center: 0.026925086 -0.0220968485  0.019
     - vertices: p22(v57) p25(v28) p24(v16)
     - neighboring facets: f281 f316 f319
 - f323
@@ -866,7 +866,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f323
     - normal:    0.8819  -0.4714        0
     - offset: -0.03483147
-    - center: 0.0307186095 -0.0164194405  0.019 
+    - center: 0.0307186095 -0.0164194405  0.019
     - vertices: p21(v58) p22(v57) p20(v27)
     - neighboring facets: f298 f404 f324
 - f324
@@ -874,7 +874,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f323
     - normal:    0.8819  -0.4714        0
     - offset: -0.03483147
-    - center: 0.0307186095 -0.0164194405  0.019 
+    - center: 0.0307186095 -0.0164194405  0.019
     - vertices: p21(v58) p22(v57) p23(v44)
     - neighboring facets: f319 f377 f323
 - f327
@@ -882,7 +882,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f327
     - normal:   -0.6344    0.773        0
     - offset: -0.03483147
-    - center: -0.0220968485 0.02692508599999999  0.019 
+    - center: -0.0220968485 0.02692508599999999  0.019
     - vertices: p57(v59) p58(v31) p56(v6)
     - neighboring facets: f305 f331 f328
 - f328
@@ -890,7 +890,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f327
     - normal:   -0.6344    0.773        0
     - offset: -0.03483147
-    - center: -0.0220968485 0.02692508599999999  0.019 
+    - center: -0.0220968485 0.02692508599999999  0.019
     - vertices: p57(v59) p58(v31) p59(v20)
     - neighboring facets: f217 f392 f327
 - f331
@@ -898,7 +898,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f331
     - normal:    -0.773   0.6344        0
     - offset: -0.03483147
-    - center: -0.026925086 0.0220968485  0.019 
+    - center: -0.026925086 0.0220968485  0.019
     - vertices: p57(v59) p54(v29) p56(v6)
     - neighboring facets: f304 f327 f332
 - f332
@@ -906,7 +906,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f331
     - normal:    -0.773   0.6344        0
     - offset: -0.03483147
-    - center: -0.026925086 0.0220968485  0.019 
+    - center: -0.026925086 0.0220968485  0.019
     - vertices: p57(v59) p55(v45) p54(v29)
     - neighboring facets: f223 f331 f386
 - f335
@@ -914,7 +914,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f335
     - normal:  -0.09802  -0.9952       -0
     - offset: -0.03483147
-    - center: -0.0034140807 -0.0346637425  0.019 
+    - center: -0.0034140807 -0.0346637425  0.019
     - vertices: p35(v60) p34(v33) p32(v8)
     - neighboring facets: f306 f337 f339
 - f337
@@ -922,7 +922,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f335
     - normal:  -0.09802  -0.9952       -0
     - offset: -0.03483147
-    - center: -0.0034140807 -0.0346637425  0.019 
+    - center: -0.0034140807 -0.0346637425  0.019
     - vertices: p35(v60) p32(v8) p33(v5)
     - neighboring facets: f360 f393 f335
 - f339
@@ -930,7 +930,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f339
     - normal:   -0.2903  -0.9569       -0
     - offset: -0.03483147
-    - center: -0.0101110412 -0.03333163450000001  0.019 
+    - center: -0.0101110412 -0.03333163450000001  0.019
     - vertices: p35(v60) p34(v33) p36(v21)
     - neighboring facets: f300 f340 f335
 - f340
@@ -938,7 +938,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f339
     - normal:   -0.2903  -0.9569       -0
     - offset: -0.03483147
-    - center: -0.0101110412 -0.03333163450000001  0.019 
+    - center: -0.0101110412 -0.03333163450000001  0.019
     - vertices: p35(v60) p37(v49) p36(v21)
     - neighboring facets: f247 f339 f387
 - f343
@@ -946,7 +946,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f343
     - normal:   -0.9952 -0.09802       -0
     - offset: -0.03483147
-    - center: -0.0346637425 -0.0034140807  0.019 
+    - center: -0.0346637425 -0.0034140807  0.019
     - vertices: p47(v61) p46(v34) p48(v0)
     - neighboring facets: f307 f344 f347
 - f344
@@ -954,7 +954,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f343
     - normal:   -0.9952 -0.09802       -0
     - offset: -0.03483147
-    - center: -0.0346637425 -0.0034140807  0.019 
+    - center: -0.0346637425 -0.0034140807  0.019
     - vertices: p47(v61) p49(v9) p48(v0)
     - neighboring facets: f229 f343 f394
 - f347
@@ -962,7 +962,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f347
     - normal:   -0.9569  -0.2903       -0
     - offset: -0.03483147
-    - center: -0.03333163450000001 -0.0101110412  0.019 
+    - center: -0.03333163450000001 -0.0101110412  0.019
     - vertices: p47(v61) p46(v34) p44(v22)
     - neighboring facets: f292 f348 f343
 - f348
@@ -970,7 +970,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f347
     - normal:   -0.9569  -0.2903       -0
     - offset: -0.03483147
-    - center: -0.03333163450000001 -0.0101110412  0.019 
+    - center: -0.03333163450000001 -0.0101110412  0.019
     - vertices: p47(v61) p45(v51) p44(v22)
     - neighboring facets: f255 f347 f381
 - f351
@@ -978,7 +978,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f351
     - normal:    0.6344    0.773       -0
     - offset: -0.03483147
-    - center: 0.0220968485 0.02692508599999999  0.019 
+    - center: 0.0220968485 0.02692508599999999  0.019
     - vertices: p9(v62) p6(v39) p8(v7)
     - neighboring facets: f309 f355 f352
 - f352
@@ -986,7 +986,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f351
     - normal:    0.6344    0.773       -0
     - offset: -0.03483147
-    - center: 0.0220968485 0.02692508599999999  0.019 
+    - center: 0.0220968485 0.02692508599999999  0.019
     - vertices: p9(v62) p6(v39) p7(v25)
     - neighboring facets: f221 f395 f351
 - f355
@@ -994,7 +994,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f355
     - normal:     0.773   0.6344        0
     - offset: -0.03483147
-    - center: 0.026925086 0.0220968485  0.019 
+    - center: 0.026925086 0.0220968485  0.019
     - vertices: p9(v62) p10(v37) p8(v7)
     - neighboring facets: f308 f351 f356
 - f356
@@ -1002,7 +1002,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f355
     - normal:     0.773   0.6344        0
     - offset: -0.03483147
-    - center: 0.026925086 0.0220968485  0.019 
+    - center: 0.026925086 0.0220968485  0.019
     - vertices: p9(v62) p11(v52) p10(v37)
     - neighboring facets: f259 f355 f390
 - f359
@@ -1010,7 +1010,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f359
     - normal:   0.09802  -0.9952        0
     - offset: -0.03483147
-    - center: 0.0034140807 -0.0346637425  0.019 
+    - center: 0.0034140807 -0.0346637425  0.019
     - vertices: p31(v63) p30(v41) p32(v8)
     - neighboring facets: f310 f360 f363
 - f360
@@ -1018,7 +1018,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f359
     - normal:   0.09802  -0.9952        0
     - offset: -0.03483147
-    - center: 0.0034140807 -0.0346637425  0.019 
+    - center: 0.0034140807 -0.0346637425  0.019
     - vertices: p31(v63) p32(v8) p33(v5)
     - neighboring facets: f337 f396 f359
 - f363
@@ -1026,7 +1026,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f363
     - normal:    0.2903  -0.9569       -0
     - offset: -0.03483147
-    - center: 0.0101110412 -0.03333163450000001  0.019 
+    - center: 0.0101110412 -0.03333163450000001  0.019
     - vertices: p31(v63) p30(v41) p28(v26)
     - neighboring facets: f303 f364 f359
 - f364
@@ -1034,7 +1034,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f363
     - normal:    0.2903  -0.9569       -0
     - offset: -0.03483147
-    - center: 0.0101110412 -0.03333163450000001  0.019 
+    - center: 0.0101110412 -0.03333163450000001  0.019
     - vertices: p31(v63) p29(v56) p28(v26)
     - neighboring facets: f283 f363 f391
 - f367
@@ -1042,7 +1042,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p23(v44) p25(v28)
     - neighboring facets: f319 f369 f377
 - f368
@@ -1050,7 +1050,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p45(v51) p43(v36)
     - neighboring facets: f256 f370 f381
 - f369
@@ -1058,7 +1058,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p27(v43) p25(v28)
     - neighboring facets: f279 f367 f383
 - f370
@@ -1066,7 +1066,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p43(v36) p41(v23)
     - neighboring facets: f251 f371 f368
 - f371
@@ -1074,7 +1074,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p39(v35) p41(v23)
     - neighboring facets: f243 f370 f379
 - f372
@@ -1082,7 +1082,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p51(v30) p53(v13)
     - neighboring facets: f231 f384 f376
 - f373
@@ -1090,7 +1090,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p61(v32) p59(v20)
     - neighboring facets: f217 f392 f378
 - f374
@@ -1098,7 +1098,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p15(v38) p13(v15)
     - neighboring facets: f267 f388 f380
 - f375
@@ -1106,7 +1106,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p5(v40) p7(v25)
     - neighboring facets: f221 f395 f382
 - f376
@@ -1114,7 +1114,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p51(v30) p49(v9)
     - neighboring facets: f227 f394 f372
 - f377
@@ -1122,7 +1122,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p21(v58) p23(v44)
     - neighboring facets: f324 f367 f404
 - f378
@@ -1130,7 +1130,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p63(v47) p61(v32)
     - neighboring facets: f240 f373 f385
 - f379
@@ -1138,7 +1138,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p37(v49) p39(v35)
     - neighboring facets: f248 f371 f387
 - f380
@@ -1146,7 +1146,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p15(v38) p17(v10)
     - neighboring facets: f263 f400 f374
 - f381
@@ -1154,7 +1154,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p47(v61) p45(v51)
     - neighboring facets: f348 f368 f394
 - f382
@@ -1162,7 +1162,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p3(v54) p5(v40)
     - neighboring facets: f276 f375 f389
 - f383
@@ -1170,7 +1170,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p29(v56) p27(v43)
     - neighboring facets: f284 f369 f391
 - f384
@@ -1178,7 +1178,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p55(v45) p53(v13)
     - neighboring facets: f225 f372 f386
 - f385
@@ -1186,7 +1186,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p63(v47) p1(v3)
     - neighboring facets: f237 f389 f378
 - f386
@@ -1194,7 +1194,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p57(v59) p55(v45)
     - neighboring facets: f332 f384 f392
 - f387
@@ -1202,7 +1202,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p35(v60) p37(v49)
     - neighboring facets: f340 f379 f393
 - f388
@@ -1210,7 +1210,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p11(v52) p13(v15)
     - neighboring facets: f261 f374 f390
 - f389
@@ -1218,7 +1218,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p3(v54) p1(v3)
     - neighboring facets: f272 f385 f382
 - f390
@@ -1226,7 +1226,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p9(v62) p11(v52)
     - neighboring facets: f356 f388 f395
 - f391
@@ -1234,7 +1234,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p31(v63) p29(v56)
     - neighboring facets: f364 f383 f396
 - f392
@@ -1242,7 +1242,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p57(v59) p59(v20)
     - neighboring facets: f328 f373 f386
 - f393
@@ -1250,7 +1250,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p35(v60) p33(v5)
     - neighboring facets: f337 f396 f387
 - f394
@@ -1258,7 +1258,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p47(v61) p49(v9)
     - neighboring facets: f344 f376 f381
 - f395
@@ -1266,7 +1266,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p9(v62) p7(v25)
     - neighboring facets: f352 f375 f390
 - f396
@@ -1274,7 +1274,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f367
     - normal:        -0       -0        1
     - offset:     -0.038
-    - center: -0.002749859666666667 0.006693552777777778  0.038 
+    - center: -0.002749859666666667 0.006693552777777778  0.038
     - vertices: p19(v64) p31(v63) p33(v5)
     - neighboring facets: f360 f393 f391
 - f399
@@ -1282,7 +1282,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f399
     - normal:    0.9952 -0.09802        0
     - offset: -0.03483147
-    - center: 0.0346637425 -0.0034140807  0.019 
+    - center: 0.0346637425 -0.0034140807  0.019
     - vertices: p19(v64) p18(v42) p16(v1)
     - neighboring facets: f311 f400 f403
 - f400
@@ -1290,7 +1290,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f399
     - normal:    0.9952 -0.09802        0
     - offset: -0.03483147
-    - center: 0.0346637425 -0.0034140807  0.019 
+    - center: 0.0346637425 -0.0034140807  0.019
     - vertices: p19(v64) p17(v10) p16(v1)
     - neighboring facets: f265 f399 f380
 - f403
@@ -1298,7 +1298,7 @@ Vertices and facets:
     - owner of normal & centrum is facet f403
     - normal:    0.9569  -0.2903        0
     - offset: -0.03483147
-    - center: 0.03333163450000001 -0.0101110412  0.019 
+    - center: 0.03333163450000001 -0.0101110412  0.019
     - vertices: p19(v64) p18(v42) p20(v27)
     - neighboring facets: f298 f404 f399
 - f404
@@ -1306,6 +1306,6 @@ Vertices and facets:
     - owner of normal & centrum is facet f403
     - normal:    0.9569  -0.2903        0
     - offset: -0.03483147
-    - center: 0.03333163450000001 -0.0101110412  0.019 
+    - center: 0.03333163450000001 -0.0101110412  0.019
     - vertices: p19(v64) p21(v58) p20(v27)
     - neighboring facets: f323 f403 f377
