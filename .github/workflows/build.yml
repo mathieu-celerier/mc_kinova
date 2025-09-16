@@ -12,56 +12,28 @@ on:
     - cron: '0 23 * * 0,1,4'
 
 jobs:
-
-  clang-format:
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v1
-    - name: Install clang-format-6.0
-      run: |
-        sudo apt-get -qq update
-        sudo apt-get -qq remove clang-6.0 libclang1-6.0 libclang-common-6.0-dev libllvm6.0
-        sudo apt-get -qq install clang-format-6.0 clang-format
-    - name: Run clang-format-check
-      run: |
-        ./.clang-format-check.sh
-
   build:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-22.04]
         build-type: [RelWithDebInfo]
         compiler: [gcc]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-    - name: Install dependencies
-      uses: jrl-umi3218/github-actions/install-dependencies@master
-      with:
-        compiler: ${{ matrix.compiler }}
-        build-type: ${{ matrix.build-type }}
-        ubuntu: |
-          apt: libmc-rtc-dev
-          apt-mirrors:
-            mc-rtc:
-              cloudsmith: mc-rtc/head
-        macos: |
-          brew-taps: mc-rtc/mc-rtc
-          brew: mc_rtc
-        windows: |
-          vcpkg:
-            repo: microsoft/vcpkg
-            owner: mc-rtc
-            token: "${{ secrets.GITHUB_TOKEN }}"
-            cache_id: 2
-            registries:
-            - repo: mc-rtc/vcpkg-registry
-              packages: [ spacevecalg, rbdyn, eigen-qld, sch-core, tasks, mc-rbdyn-urdf, mc-rtc-data, eigen-quadprog, state-observation, hpp-spline, mc-rtc ]
-    - name: Build and test
-      uses: jrl-umi3218/github-actions/build-cmake-project@master
-      with:
-        compiler: ${{ matrix.compiler }}
-        build-type: ${{ matrix.build-type }}
+      - name: Install mc_rtc
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install mc_rtc
+        run: |
+          set -e
+          set -x
+          curl -1sLf 'https://dl.cloudsmith.io/public/mc-rtc/head/setup.deb.sh' | sudo -E bash
+          sudo apt install -y -qq libmc-rtc-dev ros-${ROS_DISTRO}-mc-rtc-plugin
+      - name: Build and test
+        uses: jrl-umi3218/github-actions/build-cmake-project@master
+        with:
+          compiler: ${{ matrix.compiler }}
+          build-type: ${{ matrix.build-type }}
