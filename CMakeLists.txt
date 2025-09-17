@@ -16,9 +16,6 @@ project(
 include(CTest)
 enable_testing()
 
-# Build option to enable Bota sensor
-option(WITH_BOTA_SENSOR "Enable Bota (Rokubimini) sensor integration" OFF)
-
 if(MSVC AND _VCPKG_INSTALLED_DIR)
   set(VCPKG_INSTALL_PREFIX "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_PREFIX}")
   set(CMAKE_MSVCIDE_RUN_PATH
@@ -37,9 +34,10 @@ find_program(XACRO xacro REQUIRED)
 file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
 
 # Bota sensor integration
-if(WITH_BOTA_SENSOR)
+find_description_package(rokubimini_description OPTIONAL)
+if(${rokubimini_description_FOUND})
   message(STATUS "Bota sensor support ENABLED")
-  find_description_package(rokubimini_description)
+  set(WITH_BOTA_SENSOR ON)
   file(GLOB_RECURSE BOTA_XACRO_FILES
        "${rokubimini_description_DIR}/../urdf/*.xacro")
 else()
