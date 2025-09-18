@@ -23,19 +23,19 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/adapter_kinova_eegen3_robot_side.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/adapter_kinova_eegen3_robot_side.stl" />
             </geometry>
         </visual>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/adapter_kinova_eegen3_robot_side.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/adapter_kinova_eegen3_robot_side.stl" />
             </geometry>
         </collision>
     </link>
     <joint name="FT_adapter_robot" type="fixed">
-        <origin xyz="0.0 0.0 0.01003" rpy="0.0 0.0 0.0"/>
-        <parent link="bracelet_link"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="end_effector_link"/>
         <child link="FT_adapter_robot_link"/>
         <axis xyz="0.0 0.0 0.0"/>
     </joint>
@@ -49,18 +49,18 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/adapter_kinova_eegen3_FT_side_final.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/adapter_kinova_eegen3_FT_side_final.stl" />
             </geometry>
         </visual>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/adapter_kinova_eegen3_FT_side_final.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/adapter_kinova_eegen3_FT_side_final.stl" />
             </geometry>
         </collision>
     </link>
     <joint name="FT_adapter_FT" type="fixed">
-        <origin xyz="0.0 0.0 0.01994" rpy="0.0 0.0 0.0"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57"/>
         <parent link="FT_adapter_robot_link"/>
         <child link="FT_adapter_FT_link"/>
         <axis xyz="0.0 0.0 0.0"/>
@@ -75,20 +75,28 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/ATI-9105-TW-Mini58-E-X_X.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/ATI-9105-TW-Mini58-E-X_X.stl" />
             </geometry>
         </visual>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/ATI-9105-TW-Mini58-E-X_X.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/ATI-9105-TW-Mini58-E-X_X.stl" />
             </geometry>
         </collision>
     </link>
     <joint name="FT" type="fixed">
-        <origin xyz="0.0 0.0 0.03001" rpy="0.0 0.0 0.0"/>
+        <origin xyz="0.0 0.0 0.059" rpy="0.0 0.0 0.0"/>
         <parent link="FT_adapter_FT_link"/>
         <child link="FT_link"/>
+        <axis xyz="0.0 0.0 0.0"/>
+    </joint>
+
+    <link name="FT_frame"/>
+    <joint name="FT_frame_transform" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.5236"/>
+        <parent link="FT_link"/>
+        <child link="FT_frame"/>
         <axis xyz="0.0 0.0 0.0"/>
     </joint>
 
@@ -101,19 +109,19 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/Jig_modified.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/Jig_modified.stl" />
             </geometry>
         </visual>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="../meshes/force_sensor/Jig_modified.stl" />
+                <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/Jig_modified.stl" />
             </geometry>
         </collision>
     </link>
     <joint name="handle" type="fixed">
-        <origin xyz="0.0 0.0 0.01003" rpy="0.0 0.0 0.0"/>
-        <parent link="FT_link"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="FT_frame"/>
         <child link="handle_link"/>
         <axis xyz="0.0 0.0 0.0"/>
     </joint>
