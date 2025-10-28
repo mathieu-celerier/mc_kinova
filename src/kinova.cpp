@@ -144,7 +144,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
 
   // Automatically load the convex hulls associated to each body
   fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";
-  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath);
+  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath.string());
 
   for(const auto & b : mb.bodies())
   {
