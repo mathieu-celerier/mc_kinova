@@ -110,7 +110,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool use_ds4)
   update_torque_limit("joint_6", 45);
   update_torque_limit("joint_7", 45);
 
-  // TODO To be reset after VirtualTorqueSensor is added to mc_rtc
+  // TODO: To be reset after gear ration and rotor inertia is added to RBDyn
   //
   // auto set_gear_ratio = [this](const std::string & name, double gr)
   // {

@@ -34,7 +34,7 @@ find_program(XACRO xacro REQUIRED)
 file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
 
 # Bota sensor integration
-find_description_package(rokubimini_description OPTIONAL)
+find_description_package(rokubimini_description)
 if(${rokubimini_description_FOUND})
   message(STATUS "Bota sensor support ENABLED")
   set(WITH_BOTA_SENSOR ON)
