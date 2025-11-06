@@ -12,37 +12,42 @@ namespace bfs = boost::filesystem;
 namespace mc_robots
 {
 
-inline static std::string kinovaVariant(bool callib, bool use_bota)
+inline static std::string kinovaVariant(bool callib, bool use_bota, bool ds4 = false)
 {
   if(callib)
   {
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_callib'");
     return "kinova_callib";
   }
-  else if(not callib)
+  if(use_bota)
   {
-    if(use_bota)
+    if(ds4)
     {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota");
-      return "kinova_bota";
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4'");
+      return "kinova_bota_ds4";
     }
-    else
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_default'");
-      return "kinova_default";
-    }
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
+    return "kinova_bota";
   }
-  mc_rtc::log::error_and_throw("KinovaRobotModule does not provide this kinova variant ...");
-  return "";
+  mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
+  return "kinova";
 }
 
-KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota))
+
+KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
   if(use_bota)
   {
-    urdf_path = KINOVA_URDF_PATH_BOTA;
+    if(ds4)
+    {
+      urdf_path = KINOVA_URDF_PATH_BOTA_DS4;
+    }
+    else
+    {
+      urdf_path = KINOVA_URDF_PATH_BOTA;
+    }
   }
   else
   {
@@ -169,10 +174,14 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
     }
   }
 
-  // Define a force sensor
-  _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
-  // Define an IMU
-  _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
+  if(use_bota)
+  {
+    // Define a force sensor
+    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
+    // Define an IMU
+    _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
+  }
+
   // Define a device sensor for external torque measurment
   // _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
   // _devices.push_back(mc_rbdyn::VirtualTorqueSensor("virtualTorqueSensor", 7).clone());
@@ -196,15 +205,40 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota)
                             {"base_link", "bracelet_link", i, s, d},
                             {"shoulder_link", "bracelet_link", i, s, d},
                             {"half_arm_1_link", "bracelet_link", i, s, d},
-                            {"half_arm_2_link", "bracelet_link", i, s, d},
-                            {"base_link", "FT_adapter", i, s, d},
-                            {"shoulder_link", "FT_adapter", i, s, d},
-                            {"half_arm_1_link", "FT_adapter", i, s, d},
-                            {"half_arm_2_link", "FT_adapter", i, s, d},
-                            {"base_link", "FT_sensor_mounting", i, s, d},
-                            {"shoulder_link", "FT_sensor_mounting", i, s, d},
-                            {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
-                            {"half_arm_2_link", "FT_sensor_mounting", i, s, d}};
+                            {"half_arm_2_link", "bracelet_link", i, s, d}
+                           };
+
+  if (use_bota)
+  {
+    // {"base_link", "FT_adapter", i, s, d},
+    // {"shoulder_link", "FT_adapter", i, s, d},
+    // {"half_arm_1_link", "FT_adapter", i, s, d},
+    // {"half_arm_2_link", "FT_adapter", i, s, d},
+    // {"base_link", "FT_sensor_mounting", i, s, d},
+    // {"shoulder_link", "FT_sensor_mounting", i, s, d},
+    // {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
+    // {"half_arm_2_link", "FT_sensor_mounting", i, s, d}};
+    _minimalSelfCollisions.push_back({"base_link", "FT_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "FT_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "FT_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "FT_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"base_link", "FT_sensor_mounting", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "FT_sensor_mounting", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "FT_sensor_mounting", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "FT_sensor_mounting", i, s, d});
+  }
+
+  if(ds4)
+  {
+    // {"base_link", "DS4_adapter", i, s, d},
+    // {"shoulder_link", "DS4_adapter", i, s, d},
+    // {"half_arm_1_link", "DS4_adapter", i, s, d},
+    // {"half_arm_2_link", "DS4_adapter", i, s, d}};
+    _minimalSelfCollisions.push_back({"base_link", "DS4_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "DS4_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "DS4_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "DS4_adapter", i, s, d});
+  }
 
   /* Additional self collisions */
 
