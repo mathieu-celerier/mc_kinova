@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 set(CXX_DISABLE_WERROR 1)
 set(CMAKE_CXX_STANDARD 11)
@@ -40,7 +40,15 @@ configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3_w_bota_FT_sensor.in.xacro ${KINOVA
 
 set(GENERATED_URDF "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_novision_sim.urdf")
 set(KINOVA_URDF_PATH "${KINOVA_URDF_DIR}/gen3_7dof_novision_sim.urdf")
-add_custom_command(OUTPUT ${GENERATED_URDF} COMMAND ${XACRO} -o ${GENERATED_URDF} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=false DS4:=true DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
+add_custom_command(OUTPUT ${GENERATED_URDF} COMMAND ${XACRO} -o ${GENERATED_URDF} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=false DS4:=false DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
+
+set(GENERATED_URDF_CAMERA "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_vision_sim.urdf")
+set(KINOVA_URDF_PATH_CAMERA "${KINOVA_URDF_DIR}/gen3_7dof_vision_sim.urdf")
+add_custom_command(OUTPUT ${GENERATED_URDF_CAMERA} COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true bota:=false DS4:=false DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
+
+set(GENERATED_URDF_CAMERA_GRIPPER "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_vision_sim_gripper.urdf")
+set(KINOVA_URDF_PATH_CAMERA_GRIPPER "${KINOVA_URDF_DIR}/gen3_7dof_vision_sim_gripper.urdf")
+add_custom_command(OUTPUT ${GENERATED_URDF_CAMERA_GRIPPER} COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true gripper:="robotiq_2f_85" bota:=false DS4:=false DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
 
 set(GENERATED_URDF_BOTA "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_novision_sim_bota.urdf")
 set(KINOVA_URDF_PATH_BOTA "${KINOVA_URDF_DIR}/gen3_7dof_novision_sim_bota.urdf")
@@ -50,13 +58,16 @@ set(GENERATED_URDF_BOTA_DS4 "${CMAKE_CURRENT_BINARY_DIR}/urdf/gen3_7dof_novision
 set(KINOVA_URDF_PATH_BOTA_DS4 "${KINOVA_URDF_DIR}/gen3_7dof_novision_sim_bota_ds4.urdf")
 add_custom_command(OUTPUT ${GENERATED_URDF_BOTA_DS4} COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_DS4} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true DS4:=true DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
 
-add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF} ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4})
+add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF} ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4} ${GENERATED_URDF_CAMERA} ${GENERATED_URDF_CAMERA_GRIPPER})
 
 install(FILES ${GENERATED_URDF} DESTINATION ${KINOVA_URDF_DIR})
 install(FILES ${GENERATED_URDF_BOTA} DESTINATION ${KINOVA_URDF_DIR})
 install(FILES ${GENERATED_URDF_BOTA_DS4} DESTINATION ${KINOVA_URDF_DIR})
+install(FILES ${GENERATED_URDF_CAMERA} DESTINATION ${KINOVA_URDF_DIR})
+install(FILES ${GENERATED_URDF_CAMERA_GRIPPER} DESTINATION ${KINOVA_URDF_DIR})
 install(DIRECTORY convex DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
 install(DIRECTORY rsdf DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
+
 
 add_subdirectory(src)
 

@@ -12,7 +12,7 @@ namespace bfs = boost::filesystem;
 namespace mc_robots
 {
 
-inline static std::string kinovaVariant(bool callib, bool use_bota, bool ds4 = false)
+inline static std::string kinovaVariant(bool callib, bool use_bota, bool ds4 = false, bool camera = false, bool gripper = false)
 {
   if(callib)
   {
@@ -29,13 +29,23 @@ inline static std::string kinovaVariant(bool callib, bool use_bota, bool ds4 = f
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
     return "kinova_bota";
   }
+  if(camera)
+  {
+    if(gripper)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper'");
+      return "kinova_camera_gripper";
+    }
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera'");
+    return "kinova_camera";
+  }
   mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
   return "kinova";
 }
 
 
-KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4))
+KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool camera, bool gripper)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4, camera, gripper))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
   if(use_bota)
@@ -47,6 +57,17 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4)
     else
     {
       urdf_path = KINOVA_URDF_PATH_BOTA;
+    }
+  }
+  else if(camera)
+  {
+    if(gripper)
+    {
+      urdf_path = KINOVA_URDF_PATH_CAMERA_GRIPPER;
+    }
+    else
+    {
+      urdf_path = KINOVA_URDF_PATH_CAMERA;
     }
   }
   else
@@ -182,9 +203,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4)
     _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
   }
 
-  // Define a device sensor for external torque measurment
-  // _devices.push_back(mc_rbdyn::ExternalTorqueSensor("externalTorqueSensor", 7).clone());
-  // _devices.push_back(mc_rbdyn::VirtualTorqueSensor("virtualTorqueSensor", 7).clone());
+  // Define a device sensor for external torque measurement
   _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", 7).clone());
 
   // Clear body sensors

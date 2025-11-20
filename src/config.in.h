@@ -3,6 +3,8 @@
 // This is set by CMake, see CMakeLists.txt
 static const std::string KINOVA_DESCRIPTION_PATH = "@KORTEX_DESCRIPTION_PATH@";
 static const std::string KINOVA_URDF_PATH = "@KINOVA_URDF_PATH@";
+static const std::string KINOVA_URDF_PATH_CAMERA = "@KINOVA_URDF_PATH_CAMERA@";
+static const std::string KINOVA_URDF_PATH_CAMERA_GRIPPER = "@KINOVA_URDF_PATH_CAMERA_GRIPPER@";
 static const std::string KINOVA_URDF_PATH_BOTA = "@KINOVA_URDF_PATH_BOTA@";
 static const std::string KINOVA_URDF_PATH_BOTA_DS4 = "@KINOVA_URDF_PATH_BOTA_DS4@";
 static const std::string KINOVA_URDF_DIR = "@KINOVA_URDF_DIR@";
