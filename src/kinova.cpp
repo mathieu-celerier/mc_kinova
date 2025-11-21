@@ -259,6 +259,62 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
     _minimalSelfCollisions.push_back({"half_arm_2_link", "DS4_adapter", i, s, d});
   }
 
+  // if(camera)
+  // {
+  //   _minimalSelfCollisions.push_back({"base_link", "camera_link", i, s, d});
+  //   _minimalSelfCollisions.push_back({"shoulder_link", "camera_link", i, s, d});
+  //   _minimalSelfCollisions.push_back({"half_arm_1_link", "camera_link", i, s, d});
+  //   _minimalSelfCollisions.push_back({"half_arm_2_link", "camera_link", i, s, d});
+  // }
+
+  if(gripper)
+  {
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_base_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_base_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_base_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_base_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_left_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_left_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_left_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_left_knuckle_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_right_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_right_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_right_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_right_knuckle_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_left_finger_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_left_finger_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_left_finger_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_left_finger_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_right_finger_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_right_finger_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_right_finger_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_right_finger_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_left_finger_tip_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_left_finger_tip_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_left_finger_tip_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_left_finger_tip_link", i, s, d});
+
+    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_right_finger_tip_link", i, s, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_right_finger_tip_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_right_finger_tip_link", i, s, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_right_finger_tip_link", i, s, d});
+  }
+
   /* Additional self collisions */
 
   _commonSelfCollisions = _minimalSelfCollisions;

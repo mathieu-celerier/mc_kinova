@@ -85,8 +85,7 @@
       <visual name="adapter">
         <origin xyz="0 0 0.0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/force_sensor/adapter.STL"
-            scale="0.001 0.001 0.001" />
+          <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/adapter.STL" />
         </geometry>
         <material name="">
           <color rgba="0.6902 0.61176 0.52941 1" />
@@ -112,8 +111,7 @@
         <visual name="ds4_adapter">
           <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
           <geometry>
-            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/DS4_adapter.STL"
-              scale="0.001 0.001 0.001" />
+            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/DS4_adapter.STL" />
           </geometry>
           <material name="">
             <color rgba="0.6902 0.61176 0.52941 1" />
