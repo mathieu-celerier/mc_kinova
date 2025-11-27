@@ -322,6 +322,16 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
   // Define simple grippers
   // _grippers = {{"l_gripper", {"L_UTHUMB"}, true}, {"r_gripper", {"R_UTHUMB"}, false}};
 
+  if(gripper)
+  {
+    _grippers = {
+      {"l_gripper", {"robotiq_85_left_knuckle_joint"}, true},
+      {"r_gripper", {"robotiq_85_right_knuckle_joint"}, false}
+    };
+  }
+
+  
+
   // Default configuration of the floating base
   _default_attitude = {{1., 0., 0., 0., 0., 0., 0.0}};
 
