@@ -23,13 +23,13 @@ find_package(mc_rtc REQUIRED)
 
 # Here we find a typical ROS description package, this set the KORTEX_DESCRIPTION_PATH CMake variable
 find_description_package(kortex_description)
-find_description_package(rokubimini_description)
+# find_description_package(rokubimini_description)
 
 find_program(XACRO xacro REQUIRED)
 
 # Find all xacro files in the kortex_description package to use as a dependency for the urdf generation
 file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
-file(GLOB_RECURSE BOTA_XACRO_FILES "${BOTA_DESCRIPTION_PATH}/*.xacro")
+# file(GLOB_RECURSE BOTA_XACRO_FILES "${BOTA_DESCRIPTION_PATH}/*.xacro")
 
 # Generate the URDF
 set(KINOVA_URDF_DIR "${CMAKE_INSTALL_FULL_DATADIR}/mc_kinova/urdf")
