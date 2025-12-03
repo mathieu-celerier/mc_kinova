@@ -71,8 +71,8 @@
   </xacro:if>
 
   <xacro:if value="$(arg bota)">
-    <xacro:include filename="$(find rokubimini_description)/urdf/BFT_SENS_ECAT_M8.urdf.xacro" />
-    <xacro:BFT_SENS_ECAT_M8 prefix="FT_sensor" />
+    <!-- <xacro:include filename="$(find rokubimini_description)/urdf/BFT_SENS_ECAT_M8.urdf.xacro" />
+    <xacro:BFT_SENS_ECAT_M8 prefix="FT_sensor" /> -->
 
     <link name="FT_adapter">
       <inertial>
