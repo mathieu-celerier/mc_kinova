@@ -75,11 +75,22 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
     urdf_path = KINOVA_URDF_PATH;
   }
   _real_urdf = urdf_path;
+  
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
   rsdf_dir = KINOVA_RSDF_DIR + "/" + kinovaVariant(callib, use_bota) + "/";
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
+
+  _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4",
+                      "joint_5", "joint_6", "joint_7"};
+
+  if(gripper)
+  {
+    _ref_joint_order.push_back("robotiq_85_left_knuckle_joint");
+    auto gripperSafety = mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1};
+    _grippers = {{"gripper", {"robotiq_85_left_knuckle_joint"}, true, gripperSafety}};
+  }
 
   // Override position, velocity and effort bounds
   auto update_joint_limit = [this](const std::string & name, double limit_low, double limit_up)
@@ -204,7 +215,9 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
   }
 
   // Define a device sensor for external torque measurement
-  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", 7).clone());
+  mc_rtc::log::info("[mc_kinova] Adding {}-DOF virtual torque sensor for external torques measurement",
+                    _ref_joint_order.size());
+  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", mb.nrDof()).clone());
 
   // Clear body sensors
   _bodySensors.clear();
@@ -229,14 +242,6 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
 
   if (use_bota)
   {
-    // {"base_link", "FT_adapter", i, s, d},
-    // {"shoulder_link", "FT_adapter", i, s, d},
-    // {"half_arm_1_link", "FT_adapter", i, s, d},
-    // {"half_arm_2_link", "FT_adapter", i, s, d},
-    // {"base_link", "FT_sensor_mounting", i, s, d},
-    // {"shoulder_link", "FT_sensor_mounting", i, s, d},
-    // {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
-    // {"half_arm_2_link", "FT_sensor_mounting", i, s, d}};
     _minimalSelfCollisions.push_back({"base_link", "FT_adapter", i, s, d});
     _minimalSelfCollisions.push_back({"shoulder_link", "FT_adapter", i, s, d});
     _minimalSelfCollisions.push_back({"half_arm_1_link", "FT_adapter", i, s, d});
@@ -249,23 +254,11 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
 
   if(ds4)
   {
-    // {"base_link", "DS4_adapter", i, s, d},
-    // {"shoulder_link", "DS4_adapter", i, s, d},
-    // {"half_arm_1_link", "DS4_adapter", i, s, d},
-    // {"half_arm_2_link", "DS4_adapter", i, s, d}};
     _minimalSelfCollisions.push_back({"base_link", "DS4_adapter", i, s, d});
     _minimalSelfCollisions.push_back({"shoulder_link", "DS4_adapter", i, s, d});
     _minimalSelfCollisions.push_back({"half_arm_1_link", "DS4_adapter", i, s, d});
     _minimalSelfCollisions.push_back({"half_arm_2_link", "DS4_adapter", i, s, d});
   }
-
-  // if(camera)
-  // {
-  //   _minimalSelfCollisions.push_back({"base_link", "camera_link", i, s, d});
-  //   _minimalSelfCollisions.push_back({"shoulder_link", "camera_link", i, s, d});
-  //   _minimalSelfCollisions.push_back({"half_arm_1_link", "camera_link", i, s, d});
-  //   _minimalSelfCollisions.push_back({"half_arm_2_link", "camera_link", i, s, d});
-  // }
 
   if(gripper)
   {
@@ -294,16 +287,6 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
     _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_right_finger_link", i, s, d});
     _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_right_finger_link", i, s, d});
 
-    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
-    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
-    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
-    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_left_inner_knuckle_link", i, s, d});
-
-    _minimalSelfCollisions.push_back({"base_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
-    _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
-    _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
-    _minimalSelfCollisions.push_back({"half_arm_2_link", "robotiq_85_right_inner_knuckle_link", i, s, d});
-
     _minimalSelfCollisions.push_back({"base_link", "robotiq_85_left_finger_tip_link", i, s, d});
     _minimalSelfCollisions.push_back({"shoulder_link", "robotiq_85_left_finger_tip_link", i, s, d});
     _minimalSelfCollisions.push_back({"half_arm_1_link", "robotiq_85_left_finger_tip_link", i, s, d});
@@ -317,20 +300,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
 
   /* Additional self collisions */
 
-  _commonSelfCollisions = _minimalSelfCollisions;
-
-  // Define simple grippers
-  // _grippers = {{"l_gripper", {"L_UTHUMB"}, true}, {"r_gripper", {"R_UTHUMB"}, false}};
-
-  if(gripper)
-  {
-    _grippers = {
-      {"l_gripper", {"robotiq_85_left_knuckle_joint"}, true},
-      {"r_gripper", {"robotiq_85_right_knuckle_joint"}, false}
-    };
-  }
-
-  
+  _commonSelfCollisions = _minimalSelfCollisions;  
 
   // Default configuration of the floating base
   _default_attitude = {{1., 0., 0., 0., 0., 0., 0.0}};
