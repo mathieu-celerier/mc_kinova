@@ -12,7 +12,11 @@ namespace bfs = boost::filesystem;
 namespace mc_robots
 {
 
-inline static std::string kinovaVariant(bool callib, bool use_bota, bool ds4 = false, bool camera = false, bool gripper = false)
+inline static std::string kinovaVariant(bool callib,
+                                        bool use_bota,
+                                        bool ds4 = false,
+                                        bool camera = false,
+                                        bool gripper = false)
 {
   if(callib)
   {
@@ -42,7 +46,6 @@ inline static std::string kinovaVariant(bool callib, bool use_bota, bool ds4 = f
   mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
   return "kinova";
 }
-
 
 KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool camera, bool gripper)
 : mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4, camera, gripper))
@@ -75,15 +78,14 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
     urdf_path = KINOVA_URDF_PATH;
   }
   _real_urdf = urdf_path;
-  
+
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
   rsdf_dir = KINOVA_RSDF_DIR + "/" + kinovaVariant(callib, use_bota) + "/";
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
-  _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4",
-                      "joint_5", "joint_6", "joint_7"};
+  _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
 
   if(gripper)
   {
@@ -214,11 +216,6 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
     _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
   }
 
-  // Define a device sensor for external torque measurement
-  mc_rtc::log::info("[mc_kinova] Adding {}-DOF virtual torque sensor for external torques measurement",
-                    _ref_joint_order.size());
-  _devices.push_back(mc_rbdyn::VirtualTorqueSensor("ExtTorquesVirtSensor", mb.nrDof()).clone());
-
   // Clear body sensors
   _bodySensors.clear();
 
@@ -237,10 +234,9 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
                             {"base_link", "bracelet_link", i, s, d},
                             {"shoulder_link", "bracelet_link", i, s, d},
                             {"half_arm_1_link", "bracelet_link", i, s, d},
-                            {"half_arm_2_link", "bracelet_link", i, s, d}
-                           };
+                            {"half_arm_2_link", "bracelet_link", i, s, d}};
 
-  if (use_bota)
+  if(use_bota)
   {
     _minimalSelfCollisions.push_back({"base_link", "FT_adapter", i, s, d});
     _minimalSelfCollisions.push_back({"shoulder_link", "FT_adapter", i, s, d});
@@ -300,7 +296,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
 
   /* Additional self collisions */
 
-  _commonSelfCollisions = _minimalSelfCollisions;  
+  _commonSelfCollisions = _minimalSelfCollisions;
 
   // Default configuration of the floating base
   _default_attitude = {{1., 0., 0., 0., 0., 0., 0.0}};
