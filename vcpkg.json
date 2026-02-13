@@ -1,9 +1,0 @@
-{
-  "name": "mc-rtc-kinova-robot-module",
-  "version-string": "1.0.0",
-  "homepage": "",
-  "description": "KinovaRobotModule for mc_rtc",
-  "dependencies": [
-    "mc-rtc"
-  ]
-}
