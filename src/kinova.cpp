@@ -59,7 +59,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(callib, use_bota, use_ds4);
+  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(callib, use_bota, ds4, camera, gripper);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
@@ -157,7 +157,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
 
   // Automatically load the convex hulls associated to each body
   fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";
-  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath);
+  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath.string());
 
   for(const auto & b : mb.bodies())
   {
