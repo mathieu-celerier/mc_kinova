@@ -16,7 +16,8 @@ inline static std::string kinovaVariant(bool callib,
                                         bool use_bota,
                                         bool ds4 = false,
                                         bool camera = false,
-                                        bool gripper = false)
+                                        bool gripper = false,
+                                        bool plate = false)
 {
   if(callib)
   {
@@ -29,6 +30,11 @@ inline static std::string kinovaVariant(bool callib,
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4'");
       return "kinova_bota_ds4";
+    }
+    else if(plate)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_plate'");
+      return "kinova_bota_plate";
     }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
     return "kinova_bota";
@@ -47,8 +53,8 @@ inline static std::string kinovaVariant(bool callib,
   return "kinova";
 }
 
-KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool camera, bool gripper)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4, camera, gripper))
+KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool camera, bool gripper, bool plate)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4, camera, gripper, plate))
 {
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
 
@@ -59,7 +65,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(callib, use_bota, ds4, camera, gripper);
+  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(callib, use_bota, ds4, camera, gripper, plate);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
@@ -227,6 +233,14 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
                                                                  {"shoulder_link", "DS4_adapter", i, s, d},
                                                                  {"half_arm_1_link", "DS4_adapter", i, s, d},
                                                                  {"half_arm_2_link", "DS4_adapter", i, s, d}});
+  }
+
+  if(plate)
+  {
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "plate", i, s, d},
+                                                                 {"shoulder_link", "plate", i, s, d},
+                                                                 {"half_arm_1_link", "plate", i, s, d},
+                                                                 {"half_arm_2_link", "plate", i, s, d}});
   }
 
   if(gripper)

@@ -96,8 +96,15 @@ if(WITH_BOTA_SENSOR)
     COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_DS4} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true DS4:=true
     DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
   )
+  
+  set(GENERATED_URDF_BOTA_PLATE "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_plate.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_PLATE}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_PLATE} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true ds4:=false plate:=true
+    DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+  )
 
-  set(GENERATED_URDF_BOTA_FILES ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4})
+  set(GENERATED_URDF_BOTA_FILES ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4} ${GENERATED_URDF_BOTA_PLATE})
 endif()
 
 # Custom target for generating URDF(s)
@@ -125,3 +132,5 @@ install(DIRECTORY rsdf DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+install(FILES etc/ForceSensorCalibration/kinova.yaml DESTINATION ${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/ForceSensorCalibration/)
