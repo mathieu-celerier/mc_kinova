@@ -9,12 +9,19 @@ namespace mc_robots
 
 struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
 {
+  enum class EndEffector
+  {
+    None,
+    DS4,
+    Plate,
+    Screw
+  };
+
   KinovaRobotModule(bool callib,
                     bool use_bota,
-                    bool ds4 = false,
+                    EndEffector end_effector = EndEffector::None,
                     bool camera = false,
-                    bool gripper = false,
-                    bool plate = false);
+                    bool gripper = false);
 };
 
 } // namespace mc_robots

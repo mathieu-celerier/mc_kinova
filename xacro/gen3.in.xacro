@@ -25,7 +25,7 @@
   <xacro:arg name="sim_isaac" default="false" />
   <xacro:arg name="simulation_controllers"
     default="$(find kortex_description)/arm/$(arg arm)/$(arg dof)dof/config/ros2_controllers.yaml" />
-  <xacro:arg name="DS4" default="false" />
+  <xacro:arg name="end_effector" default="none" />
   <xacro:arg name="bota" default="true" />
 
   <!-- import main macro -->
@@ -99,7 +99,7 @@
       </collision>
     </link>
 
-    <xacro:if value="$(arg DS4)">
+    <xacro:if value="$(eval end_effector == 'ds4')">
       <link name="DS4_adapter">
         <inertial>
           <origin xyz="-0.0001681638469675113 -0.0024779164507503317 0.059811455964133025" rpy="0 0 0" />
@@ -165,7 +165,7 @@
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
     </joint>
 
-    <xacro:if value="$(arg DS4)">
+    <xacro:if value="$(eval end_effector == 'ds4')">
       <joint name="FT_to_DS4_adapter" type="fixed">
         <parent link="FT_sensor_wrench" />
         <child link="DS4_adapter" />

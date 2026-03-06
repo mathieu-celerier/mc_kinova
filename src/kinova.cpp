@@ -7,34 +7,38 @@
 #include <RBDyn/parsers/urdf.h>
 
 #include <filesystem>
+#include <stdexcept>
 namespace fs = std::filesystem;
 
 namespace mc_robots
 {
 
-inline static std::string kinovaVariant(bool callib,
-                                        bool use_bota,
-                                        bool ds4 = false,
-                                        bool camera = false,
-                                        bool gripper = false,
-                                        bool plate = false)
+inline static bool supportsCallib(bool use_bota, KinovaRobotModule::EndEffector end_effector)
 {
-  if(callib)
-  {
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_callib'");
-    return "kinova_callib";
-  }
+  return use_bota && end_effector != KinovaRobotModule::EndEffector::None;
+}
+
+inline static std::string kinovaVariant(bool use_bota,
+                                        KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
+                                        bool camera = false,
+                                        bool gripper = false)
+{
   if(use_bota)
   {
-    if(ds4)
+    if(end_effector == KinovaRobotModule::EndEffector::DS4)
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4'");
       return "kinova_bota_ds4";
     }
-    else if(plate)
+    else if(end_effector == KinovaRobotModule::EndEffector::Plate)
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_plate'");
       return "kinova_bota_plate";
+    }
+    else if(end_effector == KinovaRobotModule::EndEffector::Screw)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_screw'");
+      return "kinova_bota_screw";
     }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
     return "kinova_bota";
@@ -53,10 +57,23 @@ inline static std::string kinovaVariant(bool callib,
   return "kinova";
 }
 
-KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool camera, bool gripper, bool plate)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(callib, use_bota, ds4, camera, gripper, plate))
+KinovaRobotModule::KinovaRobotModule(bool callib,
+                                     bool use_bota,
+                                     EndEffector end_effector,
+                                     bool camera,
+                                     bool gripper)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(use_bota, end_effector, camera, gripper))
 {
+  if(callib && !supportsCallib(use_bota, end_effector))
+  {
+    throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant with a mounted end effector");
+  }
+
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
+  if(callib)
+  {
+    mc_rtc::log::info("KinovaRobotModule runs in callib mode for variant: '{}'", name);
+  }
 
   urdf_path = fs::path(KINOVA_URDF_DIR) / (name + ".urdf");
 
@@ -65,7 +82,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(callib, use_bota, ds4, camera, gripper, plate);
+  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(use_bota, end_effector, camera, gripper);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
@@ -227,7 +244,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
                                                                  {"half_arm_2_link", "FT_sensor_mounting", i, s, d}});
   }
 
-  if(ds4)
+  if(end_effector == EndEffector::DS4)
   {
     _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "DS4_adapter", i, s, d},
                                                                  {"shoulder_link", "DS4_adapter", i, s, d},
@@ -235,12 +252,20 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
                                                                  {"half_arm_2_link", "DS4_adapter", i, s, d}});
   }
 
-  if(plate)
+  if(end_effector == EndEffector::Plate)
   {
     _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "plate", i, s, d},
                                                                  {"shoulder_link", "plate", i, s, d},
                                                                  {"half_arm_1_link", "plate", i, s, d},
                                                                  {"half_arm_2_link", "plate", i, s, d}});
+  }
+
+  if(end_effector == EndEffector::Screw)
+  {
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "screw", i, s, d},
+                                                                 {"shoulder_link", "screw", i, s, d},
+                                                                 {"half_arm_1_link", "screw", i, s, d},
+                                                                 {"half_arm_2_link", "screw", i, s, d}});
   }
 
   if(gripper)

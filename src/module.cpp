@@ -7,8 +7,9 @@ extern "C"
 {
   ROBOT_MODULE_API void MC_RTC_ROBOT_MODULE(std::vector<std::string> & names)
   {
-    names = {"Kinova",          "KinovaCallib", "KinovaBota",         "KinovaBotaDS4",
-             "KinovaBotaPlate", "KinovaCamera", "KinovaCameraGripper"};
+    names = {"Kinova",          "KinovaBota",           "KinovaBotaDS4",       "KinovaBotaDS4Callib",
+             "KinovaBotaPlate", "KinovaBotaPlateCallib", "KinovaBotaScrew",   "KinovaBotaScrewCallib",
+             "KinovaCamera",    "KinovaCameraGripper"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
   {
@@ -27,23 +28,35 @@ extern "C"
     }
     else if(n == "KinovaBotaDS4")
     {
-      return new mc_robots::KinovaRobotModule(false, true, true);
+      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
     }
     else if(n == "KinovaBotaPlate")
     {
-      return new mc_robots::KinovaRobotModule(false, true, false, false, false, true);
+      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
     }
-    else if(n == "KinovaCallib")
+    else if(n == "KinovaBotaScrew")
     {
-      return new mc_robots::KinovaRobotModule(true, false);
+      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+    else if(n == "KinovaBotaDS4Callib")
+    {
+      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
+    }
+    else if(n == "KinovaBotaPlateCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
+    }
+    else if(n == "KinovaBotaScrewCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
     }
     else if(n == "KinovaCamera")
     {
-      return new mc_robots::KinovaRobotModule(false, false, false, true, false);
+      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true, false);
     }
     else if(n == "KinovaCameraGripper")
     {
-      return new mc_robots::KinovaRobotModule(false, false, false, true, true);
+      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true, true);
     }
     else
     {

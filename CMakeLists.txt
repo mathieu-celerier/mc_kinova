@@ -58,23 +58,23 @@ add_custom_command(
   COMMAND
     ${XACRO} -o ${GENERATED_KINOVA_URDF} -i
     ${KORTEX_DESCRIPTION_PATH}/robots/gen3.xacro dof:=7 vision:=false sim:=true
-  DEPENDS ${KINOVA_XACRO_FILES})
+  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
 
 set(GENERATED_URDF_CAMERA "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera.urdf")
 add_custom_command(
   OUTPUT ${GENERATED_URDF_CAMERA}
-  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true bota:=false DS4:=false
-  DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true bota:=false end_effector:=none
+  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
 )
 
 set(GENERATED_URDF_CAMERA_GRIPPER "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera_gripper.urdf")
 add_custom_command(
   OUTPUT ${GENERATED_URDF_CAMERA_GRIPPER}
-  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true gripper:="robotiq_2f_85" bota:=false DS4:=false
-  DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true gripper:="robotiq_2f_85" bota:=false end_effector:=none
+  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
 )
 
-set(GENERATED_URDF_FILES ${GENERATED_KINOVA_URDF} ${GENERATED_URDF_CAMERA} ${GENERATED_URDF_CAMERA})
+set(GENERATED_URDF_FILES ${GENERATED_KINOVA_URDF} ${GENERATED_URDF_CAMERA} ${GENERATED_URDF_CAMERA_GRIPPER})
 
 
 # Bota-specific URDF (only if WITH_BOTA_SENSOR)
@@ -86,25 +86,32 @@ if(WITH_BOTA_SENSOR)
   set(GENERATED_URDF_BOTA "${CMAKE_BINARY_DIR}/urdf/kinova_bota.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA}
-    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false DS4:=false
-    DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false end_effector:=none
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
   )
 
   set(GENERATED_URDF_BOTA_DS4 "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_ds4.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA_DS4}
-    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_DS4} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true DS4:=true
-    DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_DS4} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true end_effector:=ds4
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
   )
   
   set(GENERATED_URDF_BOTA_PLATE "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_plate.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA_PLATE}
-    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_PLATE} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true ds4:=false plate:=true
-    DEPENDS ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_PLATE} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true end_effector:=plate
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
   )
 
-  set(GENERATED_URDF_BOTA_FILES ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4} ${GENERATED_URDF_BOTA_PLATE})
+  set(GENERATED_URDF_BOTA_SCREW "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_screw.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_SCREW}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_SCREW} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true end_effector:=screw
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+  )
+
+  set(GENERATED_URDF_BOTA_FILES ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4} ${GENERATED_URDF_BOTA_PLATE} ${GENERATED_URDF_BOTA_SCREW})
 endif()
 
 # Custom target for generating URDF(s)
@@ -133,4 +140,5 @@ if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
-install(FILES etc/ForceSensorCalibration/kinova.yaml DESTINATION ${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/ForceSensorCalibration/)
+install(DIRECTORY etc/ForceSensorCalibration/ DESTINATION ${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/ForceSensorCalibration/
+        FILES_MATCHING PATTERN "*.yaml")
