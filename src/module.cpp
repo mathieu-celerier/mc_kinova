@@ -9,7 +9,7 @@ extern "C"
   {
     names = {"Kinova",          "KinovaBota",           "KinovaBotaDS4",       "KinovaBotaDS4Callib",
              "KinovaBotaPlate", "KinovaBotaPlateCallib", "KinovaBotaScrew",   "KinovaBotaScrewCallib",
-             "KinovaCamera",    "KinovaCameraGripper"};
+             "KinovaCamera",    "KinovaCameraGripper",  "KinovaGripper"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
   {
@@ -57,6 +57,10 @@ extern "C"
     else if(n == "KinovaCameraGripper")
     {
       return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true, true);
+    }
+    else if(n == "KinovaGripper")
+    {
+      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, false, true);
     }
     else
     {

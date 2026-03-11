@@ -53,6 +53,11 @@ inline static std::string kinovaVariant(bool use_bota,
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera'");
     return "kinova_camera";
   }
+  if(gripper)
+  {
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper'");
+    return "kinova_gripper";
+  }
   mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
   return "kinova";
 }
