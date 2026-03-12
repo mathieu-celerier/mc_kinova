@@ -49,7 +49,7 @@ set(KINOVA_URDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/urdf")
 set(KINOVA_RSDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/rsdf")
 set(KINOVA_CONVEX_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/convex")
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3.xacro")
-configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 
 # Common URDF generation (no Bota sensor)
 set(GENERATED_KINOVA_URDF "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova.urdf")
@@ -88,7 +88,7 @@ set(GENERATED_URDF_FILES ${GENERATED_KINOVA_URDF} ${GENERATED_URDF_CAMERA} ${GEN
 if(WITH_BOTA_SENSOR)
   # Configure the composite xacro file (template-based)
   set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3_bota.xacro")
-  configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3_bota.in.xacro ${KINOVA_XACRO_PATH})
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xacro/gen3_bota.in.xacro ${KINOVA_XACRO_PATH})
 
   set(GENERATED_URDF_BOTA "${CMAKE_BINARY_DIR}/urdf/kinova_bota.urdf")
   add_custom_command(
