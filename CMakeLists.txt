@@ -32,17 +32,23 @@ find_program(XACRO xacro REQUIRED)
 
 # Glob XACRO files for dependency tracking
 file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
+set(LOCAL_BOTA_XACRO_FILES
+    "${CMAKE_SOURCE_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
+set(LOCAL_BOTA_MESH_FILES
+    "${CMAKE_SOURCE_DIR}/meshes/BFT_KG3_IND2_SW/mounting.dae")
 
 # Bota sensor integration
 find_description_package(rokubimini_description OPTIONAL)
 if(${rokubimini_description_FOUND})
   message(STATUS "Bota sensor support ENABLED")
-  set(WITH_BOTA_SENSOR ON)
+  set(WITH_BOTA_SENSOR_GEN0 ON)
   file(GLOB_RECURSE BOTA_XACRO_FILES
        "${rokubimini_description_DIR}/../urdf/*.xacro")
 else()
-  message(STATUS "Bota sensor support DISABLED")
+  message(STATUS "Bota Gen0 sensor support DISABLED")
 endif()
+message(STATUS "Bota GenA sensor support ENABLED")
+set(WITH_BOTA_SENSOR_GENA ON)
 
 # Directory for generated URDF
 set(KINOVA_URDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/urdf")
@@ -85,11 +91,13 @@ set(GENERATED_URDF_FILES ${GENERATED_KINOVA_URDF} ${GENERATED_URDF_CAMERA} ${GEN
 
 
 # Bota-specific URDF (only if WITH_BOTA_SENSOR)
-if(WITH_BOTA_SENSOR)
+if(WITH_BOTA_SENSOR_GEN0 OR WITH_BOTA_SENSOR_GENA)
   # Configure the composite xacro file (template-based)
   set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3_bota.xacro")
   configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3_bota.in.xacro ${KINOVA_XACRO_PATH})
+endif()
 
+if(WITH_BOTA_SENSOR_GEN0)
   set(GENERATED_URDF_BOTA "${CMAKE_BINARY_DIR}/urdf/kinova_bota.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA}
@@ -121,9 +129,45 @@ if(WITH_BOTA_SENSOR)
   set(GENERATED_URDF_BOTA_FILES ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4} ${GENERATED_URDF_BOTA_PLATE} ${GENERATED_URDF_BOTA_SCREW})
 endif()
 
+if(WITH_BOTA_SENSOR_GENA)
+  set(GENERATED_URDF_BOTA_GENA "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_GENA}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=none
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+  )
+
+  set(GENERATED_URDF_BOTA_GENA_DS4 "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_ds4.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_GENA_DS4}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_DS4} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=ds4
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+  )
+
+  set(GENERATED_URDF_BOTA_GENA_PLATE "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_plate.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_GENA_PLATE}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_PLATE} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=plate
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+  )
+
+  set(GENERATED_URDF_BOTA_GENA_SCREW "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_screw.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_GENA_SCREW}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_SCREW} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=screw
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+  )
+
+  set(GENERATED_URDF_BOTA_GENA_FILES
+      ${GENERATED_URDF_BOTA_GENA}
+      ${GENERATED_URDF_BOTA_GENA_DS4}
+      ${GENERATED_URDF_BOTA_GENA_PLATE}
+      ${GENERATED_URDF_BOTA_GENA_SCREW})
+endif()
+
 # Custom target for generating URDF(s)
-if(WITH_BOTA_SENSOR)
-  add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF_FILES} ${GENERATED_URDF_BOTA_FILES})
+if(WITH_BOTA_SENSOR_GEN0 OR WITH_BOTA_SENSOR_GENA)
+  add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF_FILES} ${GENERATED_URDF_BOTA_FILES} ${GENERATED_URDF_BOTA_GENA_FILES})
 else()
   add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF_FILES})
 endif()
@@ -133,8 +177,11 @@ add_subdirectory(src)
 
 # Install generated URDF(s)
 install(FILES ${GENERATED_URDF_FILES} DESTINATION ${KINOVA_URDF_DIR})
-if(WITH_BOTA_SENSOR)
+if(WITH_BOTA_SENSOR_GEN0)
   install(FILES ${GENERATED_URDF_BOTA_FILES} DESTINATION ${KINOVA_URDF_DIR})
+endif()
+if(WITH_BOTA_SENSOR_GENA)
+  install(FILES ${GENERATED_URDF_BOTA_GENA_FILES} DESTINATION ${KINOVA_URDF_DIR})
 endif()
 
 # Install convex directory

@@ -9,6 +9,13 @@ namespace mc_robots
 
 struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
 {
+  enum class ForceSensor
+  {
+    None,
+    BotaGen0,
+    BotaGenA
+  };
+
   enum class EndEffector
   {
     None,
@@ -18,7 +25,7 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
   };
 
   KinovaRobotModule(bool callib,
-                    bool use_bota,
+                    ForceSensor force_sensor,
                     EndEffector end_effector = EndEffector::None,
                     bool camera = false,
                     bool gripper = false);

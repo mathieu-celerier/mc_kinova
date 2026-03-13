@@ -9,6 +9,9 @@ extern "C"
   {
     names = {"Kinova",          "KinovaBota",           "KinovaBotaDS4",       "KinovaBotaDS4Callib",
              "KinovaBotaPlate", "KinovaBotaPlateCallib", "KinovaBotaScrew",   "KinovaBotaScrewCallib",
+             "KinovaBotaGenA",  "KinovaBotaGenADS4",    "KinovaBotaGenADS4Callib",
+             "KinovaBotaGenAPlate", "KinovaBotaGenAPlateCallib", "KinovaBotaGenAScrew",
+             "KinovaBotaGenAScrewCallib",
              "KinovaCamera",    "KinovaCameraGripper",  "KinovaGripper"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
@@ -20,47 +23,90 @@ extern "C"
     ROBOT_MODULE_CHECK_VERSION("Kinova")
     if(n == "Kinova")
     {
-      return new mc_robots::KinovaRobotModule(false, false);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None);
     }
     else if(n == "KinovaBota")
     {
-      return new mc_robots::KinovaRobotModule(false, true);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0);
     }
     else if(n == "KinovaBotaDS4")
     {
-      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::DS4);
     }
     else if(n == "KinovaBotaPlate")
     {
-      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::Plate);
     }
     else if(n == "KinovaBotaScrew")
     {
-      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::Screw);
     }
     else if(n == "KinovaBotaDS4Callib")
     {
-      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::DS4);
     }
     else if(n == "KinovaBotaPlateCallib")
     {
-      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::Plate);
     }
     else if(n == "KinovaBotaScrewCallib")
     {
-      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+    else if(n == "KinovaBotaGenA")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA);
+    }
+    else if(n == "KinovaBotaGenADS4")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::DS4);
+    }
+    else if(n == "KinovaBotaGenAPlate")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::Plate);
+    }
+    else if(n == "KinovaBotaGenAScrew")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+    else if(n == "KinovaBotaGenADS4Callib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::DS4);
+    }
+    else if(n == "KinovaBotaGenAPlateCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::Plate);
+    }
+    else if(n == "KinovaBotaGenAScrewCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::Screw);
     }
     else if(n == "KinovaCamera")
     {
-      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true, false);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, true, false);
     }
     else if(n == "KinovaCameraGripper")
     {
-      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true, true);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, true, true);
     }
     else if(n == "KinovaGripper")
     {
-      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, false, true);
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false, true);
     }
     else
     {

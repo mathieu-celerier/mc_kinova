@@ -13,17 +13,22 @@ namespace fs = std::filesystem;
 namespace mc_robots
 {
 
-inline static bool supportsCallib(bool use_bota, KinovaRobotModule::EndEffector end_effector)
+inline static bool hasBota(KinovaRobotModule::ForceSensor force_sensor)
 {
-  return use_bota && end_effector != KinovaRobotModule::EndEffector::None;
+  return force_sensor != KinovaRobotModule::ForceSensor::None;
 }
 
-inline static std::string kinovaVariant(bool use_bota,
+inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor, KinovaRobotModule::EndEffector end_effector)
+{
+  return hasBota(force_sensor) && end_effector != KinovaRobotModule::EndEffector::None;
+}
+
+inline static std::string kinovaVariant(KinovaRobotModule::ForceSensor force_sensor,
                                         KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
                                         bool camera = false,
                                         bool gripper = false)
 {
-  if(use_bota)
+  if(force_sensor == KinovaRobotModule::ForceSensor::BotaGen0)
   {
     if(end_effector == KinovaRobotModule::EndEffector::DS4)
     {
@@ -42,6 +47,26 @@ inline static std::string kinovaVariant(bool use_bota,
     }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
     return "kinova_bota";
+  }
+  if(force_sensor == KinovaRobotModule::ForceSensor::BotaGenA)
+  {
+    if(end_effector == KinovaRobotModule::EndEffector::DS4)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_ds4'");
+      return "kinova_bota_gena_ds4";
+    }
+    else if(end_effector == KinovaRobotModule::EndEffector::Plate)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_plate'");
+      return "kinova_bota_gena_plate";
+    }
+    else if(end_effector == KinovaRobotModule::EndEffector::Screw)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_screw'");
+      return "kinova_bota_gena_screw";
+    }
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena'");
+    return "kinova_bota_gena";
   }
   if(camera)
   {
@@ -63,13 +88,13 @@ inline static std::string kinovaVariant(bool use_bota,
 }
 
 KinovaRobotModule::KinovaRobotModule(bool callib,
-                                     bool use_bota,
+                                     ForceSensor force_sensor,
                                      EndEffector end_effector,
                                      bool camera,
                                      bool gripper)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(use_bota, end_effector, camera, gripper))
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(force_sensor, end_effector, camera, gripper))
 {
-  if(callib && !supportsCallib(use_bota, end_effector))
+  if(callib && !supportsCallib(force_sensor, end_effector))
   {
     throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant with a mounted end effector");
   }
@@ -87,7 +112,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(use_bota, end_effector, camera, gripper);
+  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(force_sensor, end_effector, camera, gripper);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
@@ -206,7 +231,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   }
 
   // Define a force sensor
-  if(use_bota)
+  if(hasBota(force_sensor))
   {
     _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
     _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
@@ -237,7 +262,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
                             {"half_arm_1_link", "bracelet_link", i, s, d},
                             {"half_arm_2_link", "bracelet_link", i, s, d}};
 
-  if(use_bota)
+  if(hasBota(force_sensor))
   {
     _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "FT_adapter", i, s, d},
                                                                  {"shoulder_link", "FT_adapter", i, s, d},
