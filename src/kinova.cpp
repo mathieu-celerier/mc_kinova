@@ -254,10 +254,10 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, bool ds4, bool 
 
   if(ds4)
   {
-    _minimalSelfCollisions.push_back({"base_link", "DS4_adapter", i, s, d});
-    _minimalSelfCollisions.push_back({"shoulder_link", "DS4_adapter", i, s, d});
-    _minimalSelfCollisions.push_back({"half_arm_1_link", "DS4_adapter", i, s, d});
-    _minimalSelfCollisions.push_back({"half_arm_2_link", "DS4_adapter", i, s, d});
+    _minimalSelfCollisions.push_back({"base_link", "DS4_adapter", i*4, s*4, d});
+    _minimalSelfCollisions.push_back({"shoulder_link", "DS4_adapter", i*4, s*4, d});
+    _minimalSelfCollisions.push_back({"half_arm_1_link", "DS4_adapter", i*4, s*4, d});
+    _minimalSelfCollisions.push_back({"half_arm_2_link", "DS4_adapter", i*4, s*4, d});
   }
 
   if(gripper)
