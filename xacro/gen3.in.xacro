@@ -73,7 +73,7 @@
 
   <xacro:if value="$(arg bota)">
     <xacro:if value="$(eval bota_version == 'gena')">
-      <xacro:include filename="@CMAKE_SOURCE_DIR@/xacro/BFT_KG3_IND2_SW.urdf.xacro" />
+      <xacro:include filename="@KINOVA_BOTA_GENA_XACRO_PATH@" />
       <xacro:BFT_KG3_IND2_SW prefix="FT_sensor" />
     </xacro:if>
     <xacro:unless value="$(eval bota_version == 'gena')">
@@ -81,30 +81,32 @@
       <xacro:BFT_SENS_ECAT_M8 prefix="FT_sensor" />
     </xacro:unless>
 
-    <link name="FT_adapter">
-      <inertial>
-        <origin xyz="0.001329828523918 0.000509434161397 0.017297595549827" rpy="0 0 0" />
-        <mass value="0.12" />
-        <inertia ixx="5.40350E-05" ixy="8.13203E-08" ixz="1.70226E-06" iyy="5.69809E-05"
-          iyz="1.05961E-06" izz="8.81951E-05" />
-      </inertial>
+    <xacro:unless value="$(eval bota_version == 'gena')">
+      <link name="FT_adapter">
+        <inertial>
+          <origin xyz="0.001329828523918 0.000509434161397 0.017297595549827" rpy="0 0 0" />
+          <mass value="0.12" />
+          <inertia ixx="5.40350E-05" ixy="8.13203E-08" ixz="1.70226E-06" iyy="5.69809E-05"
+            iyz="1.05961E-06" izz="8.81951E-05" />
+        </inertial>
 
-      <visual name="adapter">
-        <origin xyz="0 0 0.0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/adapter.STL" />
-        </geometry>
-        <material name="">
-          <color rgba="0.6902 0.61176 0.52941 1" />
-        </material>
-      </visual>
-      <collision>
-        <origin xyz="0 0 0.015" rpy="0 0 0" />
-        <geometry>
-          <cylinder radius="0.0075" length="0.03" />
-        </geometry>
-      </collision>
-    </link>
+        <visual name="adapter">
+          <origin xyz="0 0 0.0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/adapter.STL" />
+          </geometry>
+          <material name="">
+            <color rgba="0.6902 0.61176 0.52941 1" />
+          </material>
+        </visual>
+        <collision>
+          <origin xyz="0 0 0.015" rpy="0 0 0" />
+          <geometry>
+            <cylinder radius="0.0075" length="0.03" />
+          </geometry>
+        </collision>
+      </link>
+    </xacro:unless>
 
     <xacro:if value="$(eval end_effector == 'ds4')">
       <link name="DS4_adapter">
@@ -160,17 +162,27 @@
       <link name="DS4_tool"></link>
     </xacro:if>
 
-    <joint name="kinova_to_adapter" type="fixed">
-      <parent link="end_effector_link" />
-      <child link="FT_adapter" />
-      <origin xyz="0.0 0.0 0.03" rpy="0.0 0.0 0.0" />
-    </joint>
+    <xacro:if value="$(eval bota_version == 'gena')">
+      <joint name="kinova_to_FT" type="fixed">
+        <parent link="end_effector_link" />
+        <child link="FT_sensor_mounting" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      </joint>
+    </xacro:if>
 
-    <joint name="adapter_to_FT" type="fixed">
-      <parent link="FT_adapter" />
-      <child link="FT_sensor_mounting" />
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-    </joint>
+    <xacro:unless value="$(eval bota_version == 'gena')">
+      <joint name="kinova_to_adapter" type="fixed">
+        <parent link="end_effector_link" />
+        <child link="FT_adapter" />
+        <origin xyz="0.0 0.0 0.03" rpy="0.0 0.0 0.0" />
+      </joint>
+
+      <joint name="adapter_to_FT" type="fixed">
+        <parent link="FT_adapter" />
+        <child link="FT_sensor_mounting" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      </joint>
+    </xacro:unless>
 
     <xacro:if value="$(eval end_effector == 'ds4')">
       <joint name="FT_to_DS4_adapter" type="fixed">

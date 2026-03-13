@@ -9,16 +9,16 @@
           izz="0.0001292" />
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0.014" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mc_kinova/meshes/BFT_KG3_IND2_SW/mounting.dae" scale="0.001 0.001 0.001" />
+          <cylinder radius="0.035" length="0.028" />
         </geometry>
         <material name="">
           <color rgba="0.6902 0.61176 0.52941 1" />
         </material>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0.014" rpy="0 0 0" />
         <geometry>
           <cylinder radius="0.035" length="0.028" />
         </geometry>

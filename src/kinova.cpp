@@ -262,13 +262,17 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
                             {"half_arm_1_link", "bracelet_link", i, s, d},
                             {"half_arm_2_link", "bracelet_link", i, s, d}};
 
-  if(hasBota(force_sensor))
+  if(force_sensor == ForceSensor::BotaGen0)
   {
     _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "FT_adapter", i, s, d},
                                                                  {"shoulder_link", "FT_adapter", i, s, d},
                                                                  {"half_arm_1_link", "FT_adapter", i, s, d},
-                                                                 {"half_arm_2_link", "FT_adapter", i, s, d},
-                                                                 {"base_link", "FT_sensor_mounting", i, s, d},
+                                                                 {"half_arm_2_link", "FT_adapter", i, s, d}});
+  }
+
+  if(hasBota(force_sensor))
+  {
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "FT_sensor_mounting", i, s, d},
                                                                  {"shoulder_link", "FT_sensor_mounting", i, s, d},
                                                                  {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
                                                                  {"half_arm_2_link", "FT_sensor_mounting", i, s, d}});

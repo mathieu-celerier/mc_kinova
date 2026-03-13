@@ -32,10 +32,8 @@ find_program(XACRO xacro REQUIRED)
 
 # Glob XACRO files for dependency tracking
 file(GLOB_RECURSE KINOVA_XACRO_FILES "${KORTEX_DESCRIPTION_PATH}/*.xacro")
-set(LOCAL_BOTA_XACRO_FILES
+set(LOCAL_BOTA_XACRO_TEMPLATE
     "${CMAKE_SOURCE_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
-set(LOCAL_BOTA_MESH_FILES
-    "${CMAKE_SOURCE_DIR}/meshes/BFT_KG3_IND2_SW/mounting.dae")
 
 # Bota sensor integration
 find_description_package(rokubimini_description OPTIONAL)
@@ -54,6 +52,9 @@ set(WITH_BOTA_SENSOR_GENA ON)
 set(KINOVA_URDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/urdf")
 set(KINOVA_RSDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/rsdf")
 set(KINOVA_CONVEX_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/convex")
+set(KINOVA_BOTA_GENA_XACRO_PATH
+    "${CMAKE_CURRENT_BINARY_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
+configure_file(${LOCAL_BOTA_XACRO_TEMPLATE} ${KINOVA_BOTA_GENA_XACRO_PATH} @ONLY)
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3.xacro")
 configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 
@@ -134,28 +135,28 @@ if(WITH_BOTA_SENSOR_GENA)
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA_GENA}
     COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=none
-    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
   )
 
   set(GENERATED_URDF_BOTA_GENA_DS4 "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_ds4.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA_GENA_DS4}
     COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_DS4} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=ds4
-    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
   )
 
   set(GENERATED_URDF_BOTA_GENA_PLATE "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_plate.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA_GENA_PLATE}
     COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_PLATE} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=plate
-    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
   )
 
   set(GENERATED_URDF_BOTA_GENA_SCREW "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_screw.urdf")
   add_custom_command(
     OUTPUT ${GENERATED_URDF_BOTA_GENA_SCREW}
     COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_SCREW} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=screw
-    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_FILES} ${LOCAL_BOTA_MESH_FILES}
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
   )
 
   set(GENERATED_URDF_BOTA_GENA_FILES
