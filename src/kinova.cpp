@@ -23,13 +23,67 @@ inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor, K
   return hasBota(force_sensor) && end_effector != KinovaRobotModule::EndEffector::None;
 }
 
+struct GripperSpec
+{
+  std::string actuatedJoint;
+  std::vector<std::string> collisionLinks;
+};
+
+inline static bool hasGripper(KinovaRobotModule::Gripper gripper)
+{
+  return gripper != KinovaRobotModule::Gripper::None;
+}
+
+inline static std::string gripperVariantSuffix(KinovaRobotModule::Gripper gripper)
+{
+  switch(gripper)
+  {
+    case KinovaRobotModule::Gripper::None:
+      return "";
+    case KinovaRobotModule::Gripper::Robotiq2F85:
+      return "_gripper";
+    case KinovaRobotModule::Gripper::Robotiq2F140:
+      return "_gripper_2f140";
+  }
+  throw std::invalid_argument("Unsupported gripper variant");
+}
+
+inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper)
+{
+  static const GripperSpec robotiq2F85 = {
+      "robotiq_85_left_knuckle_joint",
+      {"robotiq_85_base_link",        "robotiq_85_left_knuckle_link",  "robotiq_85_right_knuckle_link",
+       "robotiq_85_left_finger_link", "robotiq_85_right_finger_link",  "robotiq_85_left_finger_tip_link",
+       "robotiq_85_right_finger_tip_link"}};
+  static const GripperSpec robotiq2F140 = {
+      "finger_joint",
+      {"robotiq_140_base_link", "left_outer_knuckle",      "right_outer_knuckle",    "left_outer_finger",
+       "right_outer_finger",    "left_inner_knuckle",      "right_inner_knuckle",    "left_inner_finger",
+       "right_inner_finger",    "left_inner_finger_pad",   "right_inner_finger_pad"}};
+
+  switch(gripper)
+  {
+    case KinovaRobotModule::Gripper::Robotiq2F85:
+      return robotiq2F85;
+    case KinovaRobotModule::Gripper::Robotiq2F140:
+      return robotiq2F140;
+    case KinovaRobotModule::Gripper::None:
+    default:
+      throw std::invalid_argument("No gripper metadata is defined for the requested gripper variant");
+  }
+}
+
 inline static std::string kinovaVariant(KinovaRobotModule::ForceSensor force_sensor,
                                         KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
                                         bool camera = false,
-                                        bool gripper = false)
+                                        KinovaRobotModule::Gripper gripper = KinovaRobotModule::Gripper::None)
 {
   if(force_sensor == KinovaRobotModule::ForceSensor::BotaGen0)
   {
+    if(hasGripper(gripper))
+    {
+      throw std::invalid_argument("KinovaRobotModule does not provide generated Bota Gen0 variants with a gripper");
+    }
     if(end_effector == KinovaRobotModule::EndEffector::DS4)
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4'");
@@ -50,50 +104,85 @@ inline static std::string kinovaVariant(KinovaRobotModule::ForceSensor force_sen
   }
   if(force_sensor == KinovaRobotModule::ForceSensor::BotaGenA)
   {
+    if(hasGripper(gripper) && end_effector != KinovaRobotModule::EndEffector::None)
+    {
+      throw std::invalid_argument("KinovaRobotModule Bota GenA variants support either an end effector or a gripper, not both");
+    }
+    const auto gripperSuffix = gripperVariantSuffix(gripper);
     if(end_effector == KinovaRobotModule::EndEffector::DS4)
     {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_ds4'");
-      return "kinova_bota_gena_ds4";
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_ds4{}'", gripperSuffix);
+      return "kinova_bota_gena_ds4" + gripperSuffix;
     }
     else if(end_effector == KinovaRobotModule::EndEffector::Plate)
     {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_plate'");
-      return "kinova_bota_gena_plate";
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_plate{}'", gripperSuffix);
+      return "kinova_bota_gena_plate" + gripperSuffix;
     }
     else if(end_effector == KinovaRobotModule::EndEffector::Screw)
     {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_screw'");
-      return "kinova_bota_gena_screw";
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_screw{}'", gripperSuffix);
+      return "kinova_bota_gena_screw" + gripperSuffix;
     }
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena'");
-    return "kinova_bota_gena";
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena{}'", gripperSuffix);
+    return "kinova_bota_gena" + gripperSuffix;
   }
   if(camera)
   {
-    if(gripper)
+    if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper'");
       return "kinova_camera_gripper";
     }
+    if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper_2f140'");
+      return "kinova_camera_gripper_2f140";
+    }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera'");
     return "kinova_camera";
   }
-  if(gripper)
+  if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
   {
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper'");
     return "kinova_gripper";
   }
+  if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
+  {
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper_2f140'");
+    return "kinova_gripper_2f140";
+  }
   mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
   return "kinova";
+}
+
+inline static fs::path kinovaRsdfDir(const std::string & variant)
+{
+  const auto variantDir = fs::path(KINOVA_RSDF_DIR) / variant;
+  if(fs::exists(variantDir))
+  {
+    return variantDir;
+  }
+
+  const auto defaultDir = fs::path(KINOVA_RSDF_DIR) / "kinova_default";
+  if(fs::exists(defaultDir))
+  {
+    mc_rtc::log::warning("No RSDF directory exists for variant '{}', falling back to '{}'", variant, defaultDir.string());
+    return defaultDir;
+  }
+
+  return variantDir;
 }
 
 KinovaRobotModule::KinovaRobotModule(bool callib,
                                      ForceSensor force_sensor,
                                      EndEffector end_effector,
                                      bool camera,
-                                     bool gripper)
+                                     Gripper gripper)
 : mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(force_sensor, end_effector, camera, gripper))
 {
+  const auto variant = kinovaVariant(force_sensor, end_effector, camera, gripper);
+
   if(callib && !supportsCallib(force_sensor, end_effector))
   {
     throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant with a mounted end effector");
@@ -112,16 +201,17 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   // Makes all the basic initialization that can be done from an URDF file
   init(rbd::parsers::from_urdf_file(urdf_path, true));
 
-  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(force_sensor, end_effector, camera, gripper);
+  rsdf_dir = kinovaRsdfDir(variant);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
 
-  if(gripper)
+  if(hasGripper(gripper))
   {
-    _ref_joint_order.push_back("robotiq_85_left_knuckle_joint");
+    const auto & spec = gripperSpec(gripper);
+    _ref_joint_order.push_back(spec.actuatedJoint);
     auto gripperSafety = mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1};
-    _grippers = {{"gripper", {"robotiq_85_left_knuckle_joint"}, true, gripperSafety}};
+    _grippers = {{"gripper", {spec.actuatedJoint}, true, gripperSafety}};
   }
 
   // Override position, velocity and effort bounds
@@ -302,43 +392,16 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
                                                                  {"half_arm_2_link", "screw", i, s, d}});
   }
 
-  if(gripper)
+  if(hasGripper(gripper))
   {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(),
-                                  {{"base_link", "robotiq_85_base_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_base_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_base_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_base_link", i, s, d},
-
-                                   {"base_link", "robotiq_85_left_knuckle_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_left_knuckle_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_left_knuckle_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_left_knuckle_link", i, s, d},
-
-                                   {"base_link", "robotiq_85_right_knuckle_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_right_knuckle_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_right_knuckle_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_right_knuckle_link", i, s, d},
-
-                                   {"base_link", "robotiq_85_left_finger_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_left_finger_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_left_finger_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_left_finger_link", i, s, d},
-
-                                   {"base_link", "robotiq_85_right_finger_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_right_finger_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_right_finger_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_right_finger_link", i, s, d},
-
-                                   {"base_link", "robotiq_85_left_finger_tip_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_left_finger_tip_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_left_finger_tip_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_left_finger_tip_link", i, s, d},
-
-                                   {"base_link", "robotiq_85_right_finger_tip_link", i, s, d},
-                                   {"shoulder_link", "robotiq_85_right_finger_tip_link", i, s, d},
-                                   {"half_arm_1_link", "robotiq_85_right_finger_tip_link", i, s, d},
-                                   {"half_arm_2_link", "robotiq_85_right_finger_tip_link", i, s, d}});
+    for(const auto & link : gripperSpec(gripper).collisionLinks)
+    {
+      _minimalSelfCollisions.insert(_minimalSelfCollisions.end(),
+                                    {{"base_link", link, i, s, d},
+                                     {"shoulder_link", link, i, s, d},
+                                     {"half_arm_1_link", link, i, s, d},
+                                     {"half_arm_2_link", link, i, s, d}});
+    }
   }
 
   /* Additional self collisions */

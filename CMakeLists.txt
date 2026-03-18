@@ -58,37 +58,38 @@ configure_file(${LOCAL_BOTA_XACRO_TEMPLATE} ${KINOVA_BOTA_GENA_XACRO_PATH} @ONLY
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3.xacro")
 configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 
-# Common URDF generation (no Bota sensor)
-set(GENERATED_KINOVA_URDF "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova.urdf")
-add_custom_command(
-  OUTPUT ${GENERATED_KINOVA_URDF}
-  COMMAND
-    ${XACRO} -o ${GENERATED_KINOVA_URDF} -i
-    ${KORTEX_DESCRIPTION_PATH}/robots/gen3.xacro dof:=7 vision:=false sim:=true
-  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
+function(add_kinova_urdf output_name)
+  set(options)
+  set(oneValueArgs VISION GRIPPER BOTA END_EFFECTOR)
+  cmake_parse_arguments(KINOVA_URDF "${options}" "${oneValueArgs}" "" ${ARGN})
 
-set(GENERATED_URDF_CAMERA "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera.urdf")
-add_custom_command(
-  OUTPUT ${GENERATED_URDF_CAMERA}
-  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true bota:=false end_effector:=none
-  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
-)
+  set(output_path "${CMAKE_CURRENT_BINARY_DIR}/urdf/${output_name}.urdf")
+  add_custom_command(
+    OUTPUT ${output_path}
+    COMMAND ${XACRO} -o ${output_path} -i ${KINOVA_XACRO_PATH}
+            dof:=7
+            vision:=${KINOVA_URDF_VISION}
+            gripper:="${KINOVA_URDF_GRIPPER}"
+            bota:=${KINOVA_URDF_BOTA}
+            end_effector:=${KINOVA_URDF_END_EFFECTOR}
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
+  set(${output_name}_URDF ${output_path} PARENT_SCOPE)
+endfunction()
 
-set(GENERATED_URDF_CAMERA_GRIPPER "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera_gripper.urdf")
-add_custom_command(
-  OUTPUT ${GENERATED_URDF_CAMERA_GRIPPER}
-  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=true gripper:="robotiq_2f_85" bota:=false end_effector:=none
-  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
-)
+add_kinova_urdf(kinova VISION false GRIPPER "" BOTA false END_EFFECTOR none)
+add_kinova_urdf(kinova_camera VISION true GRIPPER "" BOTA false END_EFFECTOR none)
+add_kinova_urdf(kinova_camera_gripper VISION true GRIPPER "robotiq_2f_85" BOTA false END_EFFECTOR none)
+add_kinova_urdf(kinova_gripper VISION false GRIPPER "robotiq_2f_85" BOTA false END_EFFECTOR none)
+add_kinova_urdf(kinova_camera_gripper_2f140 VISION true GRIPPER "robotiq_2f_140" BOTA false END_EFFECTOR none)
+add_kinova_urdf(kinova_gripper_2f140 VISION false GRIPPER "robotiq_2f_140" BOTA false END_EFFECTOR none)
 
-set(GENERATED_URDF_GRIPPER "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_gripper.urdf")
-add_custom_command(
-  OUTPUT ${GENERATED_URDF_GRIPPER}
-  COMMAND ${XACRO} -o ${GENERATED_URDF_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false gripper:="robotiq_2f_85" bota:=false end_effector:=none
-  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
-)
-
-set(GENERATED_URDF_FILES ${GENERATED_KINOVA_URDF} ${GENERATED_URDF_CAMERA} ${GENERATED_URDF_CAMERA_GRIPPER} ${GENERATED_URDF_GRIPPER})
+set(GENERATED_URDF_FILES
+    ${kinova_URDF}
+    ${kinova_camera_URDF}
+    ${kinova_camera_gripper_URDF}
+    ${kinova_gripper_URDF}
+    ${kinova_camera_gripper_2f140_URDF}
+    ${kinova_gripper_2f140_URDF})
 
 
 # Bota-specific URDF (only if WITH_BOTA_SENSOR)
@@ -159,11 +160,27 @@ if(WITH_BOTA_SENSOR_GENA)
     DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
   )
 
+  set(GENERATED_URDF_BOTA_GENA_GRIPPER "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_gripper.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_GENA_GRIPPER}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=none gripper:="robotiq_2f_85"
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
+  )
+
+  set(GENERATED_URDF_BOTA_GENA_GRIPPER_2F140 "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_gena_gripper_2f140.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_GENA_GRIPPER_2F140}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_GENA_GRIPPER_2F140} -i ${KINOVA_XACRO_PATH} dof:=7 vision:=false bota:=true bota_version:=gena end_effector:=none gripper:="robotiq_2f_140"
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES} ${LOCAL_BOTA_XACRO_TEMPLATE}
+  )
+
   set(GENERATED_URDF_BOTA_GENA_FILES
       ${GENERATED_URDF_BOTA_GENA}
       ${GENERATED_URDF_BOTA_GENA_DS4}
       ${GENERATED_URDF_BOTA_GENA_PLATE}
-      ${GENERATED_URDF_BOTA_GENA_SCREW})
+      ${GENERATED_URDF_BOTA_GENA_SCREW}
+      ${GENERATED_URDF_BOTA_GENA_GRIPPER}
+      ${GENERATED_URDF_BOTA_GENA_GRIPPER_2F140})
 endif()
 
 # Custom target for generating URDF(s)

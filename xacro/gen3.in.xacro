@@ -29,8 +29,14 @@
   <xacro:arg name="bota" default="true" />
   <xacro:arg name="bota_version" default="gen0" />
 
-  <!-- import main macro -->
-  <xacro:include filename="$(find kortex_description)/robots/kortex_robot.xacro" />
+  <!-- Load the arm directly so we can control what gets attached after the arm -->
+  <xacro:include filename="$(find kortex_description)/arms/gen3/7dof/urdf/gen3_macro.xacro" />
+  <xacro:if value="$(eval gripper == 'robotiq_2f_85')">
+    <xacro:include filename="$(find kortex_description)/grippers/robotiq_2f_85/urdf/robotiq_2f_85_macro.xacro" />
+  </xacro:if>
+  <xacro:if value="$(eval gripper == 'robotiq_2f_140')">
+    <xacro:include filename="$(find kortex_description)/grippers/robotiq_2f_140/urdf/robotiq_2f_140_macro.xacro" />
+  </xacro:if>
 
   <!-- convert to property to use substitution in function -->
   <xacro:property name="initial_positions_file" default="$(arg initial_positions_file)" />
@@ -38,9 +44,8 @@
   <!-- create link fixed to the "world" -->
   <link name="world" />
 
-  <xacro:load_robot
+  <xacro:load_arm
     parent="world"
-    arm="$(arg arm)"
     gripper="$(arg gripper)"
     gripper_joint_name="$(arg gripper_joint_name)"
     gripper_max_velocity="$(arg gripper_max_velocity)"
@@ -61,7 +66,29 @@
     sim_gazebo="$(arg sim_gazebo)"
     sim_isaac="$(arg sim_isaac)">
     <origin xyz="0 0 0" rpy="0 0 0" />
-  </xacro:load_robot>
+  </xacro:load_arm>
+
+  <xacro:if value="$(eval gripper == '')">
+    <link name="$(arg prefix)tool_frame"/>
+    <joint name="$(arg prefix)tool_frame_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="$(arg prefix)end_effector_link" />
+      <child link="$(arg prefix)tool_frame" />
+      <axis xyz="0 0 0" />
+    </joint>
+  </xacro:if>
+
+  <xacro:unless value="$(eval gripper == '')">
+    <xacro:load_gripper
+      parent="$(arg prefix)end_effector_link"
+      prefix="$(arg prefix)"
+      use_fake_hardware="$(arg use_fake_hardware)"
+      fake_sensor_commands="$(arg fake_sensor_commands)"
+      sim_gazebo="$(arg sim_gazebo)"
+      sim_isaac="$(arg sim_isaac)"
+      com_port="/dev/ttyUSB0"
+      use_internal_bus_gripper_comm="$(arg use_internal_bus_gripper_comm)" />
+  </xacro:unless>
 
   <xacro:if value="$(arg sim_gazebo)">
     <gazebo reference="world">
