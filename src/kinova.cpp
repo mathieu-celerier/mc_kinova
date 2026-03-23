@@ -26,6 +26,7 @@ inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor, K
 struct GripperSpec
 {
   std::string actuatedJoint;
+  std::vector<std::string> refJoints;
   std::vector<std::string> collisionLinks;
 };
 
@@ -52,11 +53,15 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
 {
   static const GripperSpec robotiq2F85 = {
       "robotiq_85_left_knuckle_joint",
+      {"robotiq_85_left_knuckle_joint", "robotiq_85_right_knuckle_joint", "robotiq_85_left_inner_knuckle_joint",
+       "robotiq_85_right_inner_knuckle_joint", "robotiq_85_left_finger_tip_joint", "robotiq_85_right_finger_tip_joint"},
       {"robotiq_85_base_link",        "robotiq_85_left_knuckle_link",  "robotiq_85_right_knuckle_link",
        "robotiq_85_left_finger_link", "robotiq_85_right_finger_link",  "robotiq_85_left_finger_tip_link",
        "robotiq_85_right_finger_tip_link"}};
   static const GripperSpec robotiq2F140 = {
       "finger_joint",
+      {"finger_joint", "right_outer_knuckle_joint", "left_inner_knuckle_joint", "right_inner_knuckle_joint",
+       "left_inner_finger_joint", "right_inner_finger_joint"},
       {"robotiq_140_base_link", "left_outer_knuckle",      "right_outer_knuckle",    "left_outer_finger",
        "right_outer_finger",    "left_inner_knuckle",      "right_inner_knuckle",    "left_inner_finger",
        "right_inner_finger",    "left_inner_finger_pad",   "right_inner_finger_pad"}};
@@ -209,7 +214,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   if(hasGripper(gripper))
   {
     const auto & spec = gripperSpec(gripper);
-    _ref_joint_order.push_back(spec.actuatedJoint);
+    _ref_joint_order.insert(_ref_joint_order.end(), spec.refJoints.begin(), spec.refJoints.end());
     auto gripperSafety = mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1};
     _grippers = {{"gripper", {spec.actuatedJoint}, true, gripperSafety}};
   }
