@@ -22,15 +22,17 @@ motion:
   duration: 50
   stiffness: 10
   joints:
-    - name: joint_4
-      period: 10
-      percentLimits: 0.9
+    # - name: joint_4
+    #   period: 10
+    #   percentLimits: 0.9
     - name: joint_5
       period: 12.5
-      percentLimits: 1.0
+      percentLimits: 0.3
     - name: joint_6
       period: 15
-      percentLimits: 0.9
+      percentLimits: 0.3
     - name: joint_7
       period: 17.5
-      percentLimits: 1.0
+      percentLimits: 0.3
+
+Plugins: [RosForceSensor]
