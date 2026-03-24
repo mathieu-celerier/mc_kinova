@@ -183,7 +183,8 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
                                      ForceSensor force_sensor,
                                      EndEffector end_effector,
                                      bool camera,
-                                     Gripper gripper)
+                                     Gripper gripper,
+                                     bool mujoco)
 : mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(force_sensor, end_effector, camera, gripper))
 {
   const auto variant = kinovaVariant(force_sensor, end_effector, camera, gripper);
@@ -214,7 +215,14 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   if(hasGripper(gripper))
   {
     const auto & spec = gripperSpec(gripper);
-    _ref_joint_order.insert(_ref_joint_order.end(), spec.refJoints.begin(), spec.refJoints.end());
+    if(mujoco)
+    {
+      _ref_joint_order.insert(_ref_joint_order.end(), spec.refJoints.begin(), spec.refJoints.end());
+    }
+    else
+    {
+      _ref_joint_order.push_back(spec.actuatedJoint);
+    }
     auto gripperSafety = mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1};
     _grippers = {{"gripper", {spec.actuatedJoint}, true, gripperSafety}};
   }

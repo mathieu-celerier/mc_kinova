@@ -35,7 +35,8 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
                     ForceSensor force_sensor,
                     EndEffector end_effector = EndEffector::None,
                     bool camera = false,
-                    Gripper gripper = Gripper::None);
+                    Gripper gripper = Gripper::None,
+                    bool mujoco = false);
 };
 
 } // namespace mc_robots
