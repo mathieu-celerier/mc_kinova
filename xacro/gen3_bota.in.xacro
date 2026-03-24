@@ -253,7 +253,7 @@
 
     <xacro:if value="$(eval end_effector == 'none')">
       <joint name="FT_to_tool" type="fixed">
-        <parent link="FT_sensor_wrench" />
+        <parent link="FT_sensor_tool_frame" />
         <child link="tool" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>
@@ -261,7 +261,7 @@
   
     <xacro:if value="$(eval end_effector == 'ds4')">
       <joint name="FT_to_DS4_adapter" type="fixed">
-        <parent link="FT_sensor_wrench" />
+        <parent link="FT_sensor_tool_frame" />
         <child link="DS4_adapter" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>
@@ -281,7 +281,7 @@
    
     <xacro:if value="$(eval end_effector == 'plate')">
       <joint name="FT_to_plate" type="fixed">
-        <parent link="FT_sensor_wrench" />
+        <parent link="FT_sensor_tool_frame" />
         <child link="plate" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>
@@ -295,7 +295,7 @@
 
     <xacro:if value="$(eval end_effector == 'screw')">
       <joint name="FT_to_screw" type="fixed">
-        <parent link="FT_sensor_wrench" />
+        <parent link="FT_sensor_tool_frame" />
         <child link="screw" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>
