@@ -35,7 +35,7 @@
     </link>
 
     <joint name="${prefix}_mounting_to_imu" type="fixed">
-      <origin xyz="0.0197035899999985 0.00748612999999993 0.0077875000000011" rpy="0 0 1.57079632679" />
+      <origin xyz="0.0197035899999985 0.00748612999999993 0.0077875000000011" rpy="0 0 -1.57079632679" />
       <parent link="${prefix}_mounting" />
       <child link="${prefix}_imu" />
       <axis xyz="0 0 0" />
@@ -51,7 +51,7 @@
     </link>
 
     <joint name="${prefix}_mounting_to_wrench" type="fixed">
-      <origin xyz="0 0 0.0379800000000009" rpy="0 0 1.57079632679" />
+      <origin xyz="0 0 0.0379800000000009" rpy="0 0 -1.57079632679" />
       <parent link="${prefix}_mounting" />
       <child link="${prefix}_wrench" />
       <axis xyz="0 0 0" />
@@ -60,7 +60,7 @@
     <link name="${prefix}_tool_frame"/>
 
     <joint name="${prefix}_wrench_to_tool_frame" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 -1.57079632679" />
+      <origin xyz="0 0 0" rpy="0 0 1.57079632679" />
       <parent link="${prefix}_wrench" />
       <child link="${prefix}_tool_frame" />
       <axis xyz="0 0 0" />
