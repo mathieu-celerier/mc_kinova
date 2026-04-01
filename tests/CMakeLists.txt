@@ -10,6 +10,18 @@ if(TARGET KinovaRobotModule)
                    "$<TARGET_FILE_DIR:KinovaRobotModule>")
 endif()
 
+if(TARGET kinova)
+  set(ROBOT_MODULE_PARAMS "\"KinovaBotaScrew\"")
+  configure_file("${CMAKE_CURRENT_SOURCE_DIR}/loader.in.cpp"
+                 "${CMAKE_CURRENT_BINARY_DIR}/KinovaBotaScrew/loader.cpp")
+  add_executable(loader_KinovaBotaScrew
+                 "${CMAKE_CURRENT_BINARY_DIR}/KinovaBotaScrew/loader.cpp")
+  target_link_libraries(loader_KinovaBotaScrew PUBLIC mc_rtc::mc_rbdyn)
+  add_test(NAME loader_KinovaBotaScrew
+           COMMAND loader_KinovaBotaScrew
+                   "$<TARGET_FILE_DIR:kinova>")
+endif()
+
 if(EXISTS "${PROJECT_BINARY_DIR}/yaml/KinovaRobotModuleYAML.yaml")
   set(ROBOT_MODULE_PARAMS
       "\"json\", \"${PROJECT_BINARY_DIR}/yaml/KinovaRobotModuleYAML.yaml\"")
