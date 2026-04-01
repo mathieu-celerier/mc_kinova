@@ -58,6 +58,68 @@ set(KINOVA_CONVEX_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/convex")
 set(KINOVA_BOTA_GENA_XACRO_PATH
     "${CMAKE_CURRENT_BINARY_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
 configure_file(${LOCAL_BOTA_XACRO_TEMPLATE} ${KINOVA_BOTA_GENA_XACRO_PATH} @ONLY)
+
+set(KORTEX_GEN3_MACRO_PATH
+    "${KORTEX_DESCRIPTION_PATH}/arms/gen3/7dof/urdf/gen3_macro.xacro")
+file(READ "${KORTEX_GEN3_MACRO_PATH}" KORTEX_GEN3_MACRO_CONTENTS)
+string(REGEX MATCH "<xacro:macro[^\n]*name=\"load_arm\"[^\"]*params=\"([^\"]|\n|\r)*\""
+       KORTEX_LOAD_ARM_MACRO_DECL "${KORTEX_GEN3_MACRO_CONTENTS}")
+
+set(KORTEX_GRIPPER_MACRO_PATH
+    "${KORTEX_DESCRIPTION_PATH}/grippers/robotiq_2f_85/urdf/robotiq_2f_85_macro.xacro")
+file(READ "${KORTEX_GRIPPER_MACRO_PATH}" KORTEX_GRIPPER_MACRO_CONTENTS)
+string(REGEX MATCH "<xacro:macro[^\n]*name=\"load_gripper\"[^\"]*params=\"([^\"]|\n|\r)*\""
+       KORTEX_LOAD_GRIPPER_MACRO_DECL "${KORTEX_GRIPPER_MACRO_CONTENTS}")
+
+if(KORTEX_LOAD_ARM_MACRO_DECL MATCHES "[\r\n][ \t]*gripper([:= \t\r\n]|$)")
+  set(KINOVA_LOAD_ARM_GRIPPER_ARGS
+"    gripper=\"$(arg gripper)\"
+    gripper_joint_name=\"$(arg gripper_joint_name)\"
+    gripper_max_velocity=\"$(arg gripper_max_velocity)\"
+    gripper_max_force=\"$(arg gripper_max_force)\"")
+elseif(KORTEX_LOAD_ARM_MACRO_DECL MATCHES "[\r\n][ \t]*gripper_joint_name([:= \t\r\n]|$)")
+  set(KINOVA_LOAD_ARM_GRIPPER_ARGS
+"    gripper_joint_name=\"$(arg gripper_joint_name)\"
+    gripper_max_velocity=\"$(arg gripper_max_velocity)\"
+    gripper_max_force=\"$(arg gripper_max_force)\"")
+else()
+  set(KINOVA_LOAD_ARM_GRIPPER_ARGS "")
+endif()
+
+if(KORTEX_LOAD_ARM_MACRO_DECL MATCHES "[\r\n][ \t]*use_internal_bus_gripper_comm([:= \t\r\n]|$)")
+  set(KINOVA_LOAD_ARM_INTERNAL_BUS_ARG
+"    use_internal_bus_gripper_comm=\"$(arg use_internal_bus_gripper_comm)\"")
+else()
+  set(KINOVA_LOAD_ARM_INTERNAL_BUS_ARG "")
+endif()
+
+set(KINOVA_LOAD_GRIPPER_ARGS
+"      parent=\"@PARENT@\"
+      prefix=\"$(arg prefix)\"
+      use_fake_hardware=\"$(arg use_fake_hardware)\"
+      fake_sensor_commands=\"$(arg fake_sensor_commands)\"")
+if(KORTEX_LOAD_GRIPPER_MACRO_DECL MATCHES "[\r\n][ \t]*sim_gazebo([:= \t\r\n]|$)")
+  string(APPEND KINOVA_LOAD_GRIPPER_ARGS
+"\n      sim_gazebo=\"$(arg sim_gazebo)\"")
+endif()
+if(KORTEX_LOAD_GRIPPER_MACRO_DECL MATCHES "[\r\n][ \t]*sim_isaac([:= \t\r\n]|$)")
+  string(APPEND KINOVA_LOAD_GRIPPER_ARGS
+"\n      sim_isaac=\"$(arg sim_isaac)\"")
+endif()
+if(KORTEX_LOAD_GRIPPER_MACRO_DECL MATCHES "[\r\n][ \t]*com_port([:= \t\r\n]|$)")
+  string(APPEND KINOVA_LOAD_GRIPPER_ARGS
+"\n      com_port=\"/dev/ttyUSB0\"")
+endif()
+if(KORTEX_LOAD_GRIPPER_MACRO_DECL MATCHES "[\r\n][ \t]*use_internal_bus_gripper_comm([:= \t\r\n]|$)")
+  string(APPEND KINOVA_LOAD_GRIPPER_ARGS
+"\n      use_internal_bus_gripper_comm=\"$(arg use_internal_bus_gripper_comm)\"")
+endif()
+string(REPLACE "@PARENT@" "$(arg prefix)end_effector_link"
+       KINOVA_LOAD_GRIPPER_ARGS "${KINOVA_LOAD_GRIPPER_ARGS}")
+set(KINOVA_BOTA_LOAD_GRIPPER_ARGS "${KINOVA_LOAD_GRIPPER_ARGS}")
+string(REPLACE "parent=\"$(arg prefix)end_effector_link\"" "parent=\"tool\""
+       KINOVA_BOTA_LOAD_GRIPPER_ARGS "${KINOVA_BOTA_LOAD_GRIPPER_ARGS}")
+
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3.xacro")
 configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 

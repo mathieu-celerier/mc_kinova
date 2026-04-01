@@ -46,10 +46,7 @@
 
   <xacro:load_arm
     parent="world"
-    gripper="$(arg gripper)"
-    gripper_joint_name="$(arg gripper_joint_name)"
-    gripper_max_velocity="$(arg gripper_max_velocity)"
-    gripper_max_force="$(arg gripper_max_force)"
+@KINOVA_LOAD_ARM_GRIPPER_ARGS@
     dof="$(arg dof)"
     vision="$(arg vision)"
     robot_ip="$(arg robot_ip)"
@@ -59,7 +56,7 @@
     port_realtime="$(arg port_realtime)"
     session_inactivity_timeout_ms="$(arg session_inactivity_timeout_ms)"
     connection_inactivity_timeout_ms="$(arg connection_inactivity_timeout_ms)"
-    use_internal_bus_gripper_comm="$(arg use_internal_bus_gripper_comm)"
+@KINOVA_LOAD_ARM_INTERNAL_BUS_ARG@
     prefix="$(arg prefix)"
     use_fake_hardware="$(arg use_fake_hardware)"
     fake_sensor_commands="$(arg fake_sensor_commands)"
@@ -316,13 +313,7 @@
 
   <xacro:if value="$(eval gripper != '' and bota_version == 'gena')">
     <xacro:load_gripper
-      parent="tool"
-      prefix="$(arg prefix)"
-      use_fake_hardware="$(arg use_fake_hardware)"
-      fake_sensor_commands="$(arg fake_sensor_commands)"
-      sim_gazebo="$(arg sim_gazebo)"
-      sim_isaac="$(arg sim_isaac)"
-      com_port="/dev/ttyUSB0"
-      use_internal_bus_gripper_comm="$(arg use_internal_bus_gripper_comm)" />
+@KINOVA_BOTA_LOAD_GRIPPER_ARGS@
+      />
   </xacro:if>
   </robot>
