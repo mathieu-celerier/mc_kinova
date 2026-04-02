@@ -18,7 +18,8 @@ inline static bool hasBota(KinovaRobotModule::ForceSensor force_sensor)
   return force_sensor != KinovaRobotModule::ForceSensor::None;
 }
 
-inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor, KinovaRobotModule::EndEffector end_effector)
+inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor,
+                                  KinovaRobotModule::EndEffector end_effector)
 {
   return hasBota(force_sensor) && end_effector != KinovaRobotModule::EndEffector::None;
 }
@@ -55,16 +56,16 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
       "robotiq_85_left_knuckle_joint",
       {"robotiq_85_left_knuckle_joint", "robotiq_85_right_knuckle_joint", "robotiq_85_left_inner_knuckle_joint",
        "robotiq_85_right_inner_knuckle_joint", "robotiq_85_left_finger_tip_joint", "robotiq_85_right_finger_tip_joint"},
-      {"robotiq_85_base_link",        "robotiq_85_left_knuckle_link",  "robotiq_85_right_knuckle_link",
-       "robotiq_85_left_finger_link", "robotiq_85_right_finger_link",  "robotiq_85_left_finger_tip_link",
+      {"robotiq_85_base_link", "robotiq_85_left_knuckle_link", "robotiq_85_right_knuckle_link",
+       "robotiq_85_left_finger_link", "robotiq_85_right_finger_link", "robotiq_85_left_finger_tip_link",
        "robotiq_85_right_finger_tip_link"}};
   static const GripperSpec robotiq2F140 = {
       "finger_joint",
       {"finger_joint", "right_outer_knuckle_joint", "left_inner_knuckle_joint", "right_inner_knuckle_joint",
        "left_inner_finger_joint", "right_inner_finger_joint"},
-      {"robotiq_140_base_link", "left_outer_knuckle",      "right_outer_knuckle",    "left_outer_finger",
-       "right_outer_finger",    "left_inner_knuckle",      "right_inner_knuckle",    "left_inner_finger",
-       "right_inner_finger",    "left_inner_finger_pad",   "right_inner_finger_pad"}};
+      {"robotiq_140_base_link", "left_outer_knuckle", "right_outer_knuckle", "left_outer_finger", "right_outer_finger",
+       "left_inner_knuckle", "right_inner_knuckle", "left_inner_finger", "right_inner_finger", "left_inner_finger_pad",
+       "right_inner_finger_pad"}};
 
   switch(gripper)
   {
@@ -78,10 +79,11 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
   }
 }
 
-inline static std::string kinovaVariant(KinovaRobotModule::ForceSensor force_sensor,
-                                        KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
-                                        bool camera = false,
-                                        KinovaRobotModule::Gripper gripper = KinovaRobotModule::Gripper::None)
+inline static std::string kinovaVariant(
+    KinovaRobotModule::ForceSensor force_sensor,
+    KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
+    bool camera = false,
+    KinovaRobotModule::Gripper gripper = KinovaRobotModule::Gripper::None)
 {
   if(force_sensor == KinovaRobotModule::ForceSensor::BotaGen0)
   {
@@ -111,7 +113,8 @@ inline static std::string kinovaVariant(KinovaRobotModule::ForceSensor force_sen
   {
     if(hasGripper(gripper) && end_effector != KinovaRobotModule::EndEffector::None)
     {
-      throw std::invalid_argument("KinovaRobotModule Bota GenA variants support either an end effector or a gripper, not both");
+      throw std::invalid_argument(
+          "KinovaRobotModule Bota GenA variants support either an end effector or a gripper, not both");
     }
     const auto gripperSuffix = gripperVariantSuffix(gripper);
     if(end_effector == KinovaRobotModule::EndEffector::DS4)
@@ -172,7 +175,8 @@ inline static fs::path kinovaRsdfDir(const std::string & variant)
   const auto defaultDir = fs::path(KINOVA_RSDF_DIR) / "kinova_default";
   if(fs::exists(defaultDir))
   {
-    mc_rtc::log::warning("No RSDF directory exists for variant '{}', falling back to '{}'", variant, defaultDir.string());
+    mc_rtc::log::warning("No RSDF directory exists for variant '{}', falling back to '{}'", variant,
+                         defaultDir.string());
     return defaultDir;
   }
 
@@ -223,7 +227,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
     {
       _ref_joint_order.push_back(spec.actuatedJoint);
     }
-    auto gripperSafety = mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1};
+    auto gripperSafety = mc_rbdyn::RobotModule::Gripper::Safety{mujoco ? 0.5 : 0.99, 0.05, 0.05, 1};
     _grippers = {{"gripper", {spec.actuatedJoint}, true, gripperSafety}};
   }
 
@@ -409,11 +413,10 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   {
     for(const auto & link : gripperSpec(gripper).collisionLinks)
     {
-      _minimalSelfCollisions.insert(_minimalSelfCollisions.end(),
-                                    {{"base_link", link, i, s, d},
-                                     {"shoulder_link", link, i, s, d},
-                                     {"half_arm_1_link", link, i, s, d},
-                                     {"half_arm_2_link", link, i, s, d}});
+      _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", link, i, s, d},
+                                                                   {"shoulder_link", link, i, s, d},
+                                                                   {"half_arm_1_link", link, i, s, d},
+                                                                   {"half_arm_2_link", link, i, s, d}});
     }
   }
 
