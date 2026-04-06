@@ -36,7 +36,8 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
                     EndEffector end_effector = EndEffector::None,
                     bool camera = false,
                     Gripper gripper = Gripper::None,
-                    bool mujoco = false);
+                    bool mujoco = false,
+                    bool canonical = false);
 };
 
 } // namespace mc_robots

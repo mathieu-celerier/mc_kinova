@@ -7,19 +7,46 @@ extern "C"
 {
   ROBOT_MODULE_API void MC_RTC_ROBOT_MODULE(std::vector<std::string> & names)
   {
-    names = {"Kinova",          "KinovaBota",           "KinovaBotaDS4",       "KinovaBotaDS4Callib",
-             "KinovaBotaPlate", "KinovaBotaPlateCallib", "KinovaBotaScrew",   "KinovaBotaScrewCallib",
-             "KinovaBotaGenA",  "KinovaBotaGenADS4",    "KinovaBotaGenADS4Callib",
-             "KinovaBotaGenAPlate", "KinovaBotaGenAPlateCallib", "KinovaBotaGenAScrew",
+    names = {"Kinova",
+             "KinovaBota",
+             "KinovaBotaDS4",
+             "KinovaBotaDS4Callib",
+             "KinovaBotaPlate",
+             "KinovaBotaPlateCallib",
+             "KinovaBotaScrew",
+             "KinovaBotaScrewCallib",
+             "KinovaBotaGenA",
+             "KinovaBotaGenADS4",
+             "KinovaBotaGenADS4Callib",
+             "KinovaBotaGenAPlate",
+             "KinovaBotaGenAPlateCallib",
+             "KinovaBotaGenAScrew",
              "KinovaBotaGenAScrewCallib",
-             "KinovaBotaGenAGripper", "KinovaBotaGenARobotiq2F85", "KinovaBotaGenARobotiq2F140",
-             "KinovaBotaGenAGripperMuJoCo", "KinovaBotaGenARobotiq2F85MuJoCo", "KinovaBotaGenARobotiq2F140MuJoCo",
-             "KinovaCamera",    "KinovaCameraGripper",  "KinovaGripper",
-             "KinovaCameraRobotiq2F85", "KinovaRobotiq2F85",
-             "KinovaCameraRobotiq2F140", "KinovaRobotiq2F140",
-             "KinovaCameraGripperMuJoCo", "KinovaGripperMuJoCo",
-             "KinovaCameraRobotiq2F85MuJoCo", "KinovaRobotiq2F85MuJoCo",
-             "KinovaCameraRobotiq2F140MuJoCo", "KinovaRobotiq2F140MuJoCo"};
+             "KinovaBotaGenAGripper",
+             "KinovaBotaGenARobotiq2F85",
+             "KinovaBotaGenARobotiq2F140",
+             "KinovaBotaGenAGripperMuJoCo",
+             "KinovaBotaGenARobotiq2F85MuJoCo",
+             "KinovaBotaGenARobotiq2F140MuJoCo",
+             "KinovaCamera",
+             "KinovaCameraGripper",
+             "KinovaGripper",
+             "KinovaCameraRobotiq2F85",
+             "KinovaRobotiq2F85",
+             "KinovaCameraRobotiq2F140",
+             "KinovaRobotiq2F140",
+             "KinovaCameraGripperMuJoCo",
+             "KinovaGripperMuJoCo",
+             "KinovaCameraRobotiq2F85MuJoCo",
+             "KinovaRobotiq2F85MuJoCo",
+             "KinovaCameraRobotiq2F140MuJoCo",
+             "KinovaRobotiq2F140MuJoCo",
+             "KinovaBotaGenARobotiq2F85MuJoCoCanonical",
+             "KinovaBotaGenARobotiq2F140MuJoCoCanonical",
+             "KinovaCameraRobotiq2F85MuJoCoCanonical",
+             "KinovaRobotiq2F85MuJoCoCanonical",
+             "KinovaCameraRobotiq2F140MuJoCoCanonical",
+             "KinovaRobotiq2F140MuJoCoCanonical"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
   {
@@ -88,11 +115,23 @@ extern "C"
                                               mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F85, true);
     }
+    else if(n == "KinovaBotaGenARobotiq2F85MuJoCoCanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false,
+                                              mc_robots::KinovaRobotModule::Gripper::Robotiq2F85, true, true);
+    }
     else if(n == "KinovaBotaGenARobotiq2F140MuJoCo")
     {
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
                                               mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F140, true);
+    }
+    else if(n == "KinovaBotaGenARobotiq2F140MuJoCoCanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false,
+                                              mc_robots::KinovaRobotModule::Gripper::Robotiq2F140, true, true);
     }
     else if(n == "KinovaBotaGenADS4")
     {
@@ -147,11 +186,23 @@ extern "C"
                                               mc_robots::KinovaRobotModule::EndEffector::None, true,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F85, true);
     }
+    else if(n == "KinovaCameraRobotiq2F85MuJoCoCanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, true,
+                                              mc_robots::KinovaRobotModule::Gripper::Robotiq2F85, true, true);
+    }
     else if(n == "KinovaGripperMuJoCo" || n == "KinovaRobotiq2F85MuJoCo")
     {
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
                                               mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F85, true);
+    }
+    else if(n == "KinovaRobotiq2F85MuJoCoCanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false,
+                                              mc_robots::KinovaRobotModule::Gripper::Robotiq2F85, true, true);
     }
     else if(n == "KinovaCameraRobotiq2F140")
     {
@@ -171,11 +222,23 @@ extern "C"
                                               mc_robots::KinovaRobotModule::EndEffector::None, true,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F140, true);
     }
+    else if(n == "KinovaCameraRobotiq2F140MuJoCoCanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, true,
+                                              mc_robots::KinovaRobotModule::Gripper::Robotiq2F140, true, true);
+    }
     else if(n == "KinovaRobotiq2F140MuJoCo")
     {
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
                                               mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F140, true);
+    }
+    else if(n == "KinovaRobotiq2F140MuJoCoCanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false,
+                                              mc_robots::KinovaRobotModule::Gripper::Robotiq2F140, true, true);
     }
     else
     {
