@@ -69,8 +69,9 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
       {"robotiq_140_base_link", "left_outer_knuckle", "right_outer_knuckle", "left_outer_finger", "right_outer_finger",
        "left_inner_knuckle", "right_inner_knuckle", "left_inner_finger", "right_inner_finger", "left_inner_finger_pad",
        "right_inner_finger_pad"},
-      {"right_outer_knuckle", "right_outer_finger", "left_inner_knuckle", "left_inner_finger", "left_inner_finger_pad",
-       "right_inner_knuckle", "right_inner_finger", "right_inner_finger_pad"}};
+      {"left_outer_knuckle", "left_outer_finger", "left_inner_finger", "left_inner_finger_pad", "left_inner_knuckle",
+       "right_outer_knuckle", "right_outer_finger", "right_inner_finger", "right_inner_finger_pad",
+       "right_inner_knuckle"}};
 
   switch(gripper)
   {
@@ -290,7 +291,10 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
     const auto & spec = gripperSpec(gripper);
     if(mujoco)
     {
-      _ref_joint_order.insert(_ref_joint_order.end(), spec.refJoints.begin(), spec.refJoints.end());
+      // Match the RHPS1 MuJoCo pattern: keep the control-facing interface to the
+      // single active gripper DoF while allowing the canonical/full MuJoCo model
+      // to contain the internal closed-chain mechanism.
+      _ref_joint_order.push_back(spec.actuatedJoint);
     }
     else
     {
