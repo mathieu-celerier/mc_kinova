@@ -112,6 +112,11 @@ inline static std::string kinovaVariant(
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_screw'");
       return "kinova_bota_screw";
     }
+    else if(end_effector == KinovaRobotModule::EndEffector::Hook)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_hook'");
+      return "kinova_bota_hook";
+    }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
     return "kinova_bota";
   }
@@ -137,6 +142,11 @@ inline static std::string kinovaVariant(
     {
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_screw{}'", gripperSuffix);
       return "kinova_bota_gena_screw" + gripperSuffix;
+    }
+    else if(end_effector == KinovaRobotModule::EndEffector::Hook)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_hook{}'", gripperSuffix);
+      return "kinova_bota_gena_hook" + gripperSuffix;
     }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena{}'", gripperSuffix);
     return "kinova_bota_gena" + gripperSuffix;
@@ -491,6 +501,14 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
                                                                  {"shoulder_link", "screw", i, s, d},
                                                                  {"half_arm_1_link", "screw", i, s, d},
                                                                  {"half_arm_2_link", "screw", i, s, d}});
+  }
+
+  if(end_effector == EndEffector::Hook)
+  {
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "hook", i, s, d},
+                                                                 {"shoulder_link", "hook", i, s, d},
+                                                                 {"half_arm_1_link", "hook", i, s, d},
+                                                                 {"half_arm_2_link", "hook", i, s, d}});
   }
 
   if(hasGripper(gripper))

@@ -15,6 +15,8 @@ extern "C"
              "KinovaBotaPlateCallib",
              "KinovaBotaScrew",
              "KinovaBotaScrewCallib",
+             "KinovaBotaHook",
+             "KinovaBotaHookCallib",
              "KinovaBotaGenA",
              "KinovaBotaGenADS4",
              "KinovaBotaGenADS4Callib",
@@ -22,6 +24,8 @@ extern "C"
              "KinovaBotaGenAPlateCallib",
              "KinovaBotaGenAScrew",
              "KinovaBotaGenAScrewCallib",
+             "KinovaBotaGenAHook",
+             "KinovaBotaGenAHookCallib",
              "KinovaBotaGenAGripper",
              "KinovaBotaGenARobotiq2F85",
              "KinovaBotaGenARobotiq2F140",
@@ -78,6 +82,11 @@ extern "C"
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
                                               mc_robots::KinovaRobotModule::EndEffector::Screw);
     }
+    else if(n == "KinovaBotaHook")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::Hook);
+    }
     else if(n == "KinovaBotaDS4Callib")
     {
       return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
@@ -92,6 +101,11 @@ extern "C"
     {
       return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
                                               mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+    else if(n == "KinovaBotaHookCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::Hook);
     }
     else if(n == "KinovaBotaGenA")
     {
@@ -148,6 +162,11 @@ extern "C"
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
                                               mc_robots::KinovaRobotModule::EndEffector::Screw);
     }
+    else if(n == "KinovaBotaGenAHook")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::Hook);
+    }
     else if(n == "KinovaBotaGenADS4Callib")
     {
       return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
@@ -162,6 +181,11 @@ extern "C"
     {
       return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
                                               mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+    else if(n == "KinovaBotaGenAHookCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGenA,
+                                              mc_robots::KinovaRobotModule::EndEffector::Hook);
     }
     else if(n == "KinovaCamera")
     {
