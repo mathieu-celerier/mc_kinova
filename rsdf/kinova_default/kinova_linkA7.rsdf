@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="kinova_default">
+<robot name="kinova">
 
   <planar_surface name="Arm" link="end_effector_link">
     <origin rpy="-3.141592264175415 2.7535756430552283e-07 0.7853982448577881" xyz="-1.9440674070558828e-10 -4.968170319585852e-10 0.10679997503757477" />
