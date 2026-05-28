@@ -18,54 +18,28 @@ inline static bool supportsCallib(bool use_bota, KinovaRobotModule::EndEffector 
   return use_bota && end_effector != KinovaRobotModule::EndEffector::None;
 }
 
-inline static std::string kinovaVariant(
-    bool use_bota,
-    KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
-    bool camera = false,
-    bool gripper = false)
+KinovaRobotModule::KinovaRobotModule(const std::string & name, bool callib, bool fixed)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, name)
 {
-  if(use_bota)
-  {
-    if(end_effector == KinovaRobotModule::EndEffector::DS4)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4'");
-      return "kinova_bota_ds4";
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Plate)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_plate'");
-      return "kinova_bota_plate";
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Screw)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_screw'");
-      return "kinova_bota_screw";
-    }
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
-    return "kinova_bota";
-  }
-  if(camera)
-  {
-    if(gripper)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper'");
-      return "kinova_camera_gripper";
-    }
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera'");
-    return "kinova_camera";
-  }
-  if(gripper)
-  {
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper'");
-    return "kinova_gripper";
-  }
-  mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
-  return "kinova";
-}
 
-KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, EndEffector end_effector, bool camera, bool gripper)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(use_bota, end_effector, camera, gripper))
-{
+  bool gripper = name.find("gripper") != std::string::npos;
+  bool camera = name.find("camera") != std::string::npos;
+  bool use_bota = name.find("bota") != std::string::npos;
+
+  EndEffector end_effector = EndEffector::None;
+  if(name.find("ds4") != std::string::npos)
+  {
+    end_effector = EndEffector::DS4;
+  }
+  else if(name.find("plate") != std::string::npos)
+  {
+    end_effector = EndEffector::Plate;
+  }
+  else if(name.find("screw") != std::string::npos)
+  {
+    end_effector = EndEffector::Screw;
+  }
+
   if(callib && !supportsCallib(use_bota, end_effector))
   {
     throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant with a mounted end effector");
@@ -82,9 +56,9 @@ KinovaRobotModule::KinovaRobotModule(bool callib, bool use_bota, EndEffector end
   _real_urdf = urdf_path;
 
   // Makes all the basic initialization that can be done from an URDF file
-  init(rbd::parsers::from_urdf_file(urdf_path, true));
+  init(rbd::parsers::from_urdf_file(urdf_path, fixed));
 
-  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / kinovaVariant(use_bota, end_effector, camera, gripper);
+  rsdf_dir = fs::path(KINOVA_RSDF_DIR) / name;
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};

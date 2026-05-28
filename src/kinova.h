@@ -17,11 +17,7 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
     Screw
   };
 
-  KinovaRobotModule(bool callib,
-                    bool use_bota,
-                    EndEffector end_effector = EndEffector::None,
-                    bool camera = false,
-                    bool gripper = false);
+  KinovaRobotModule(const std::string & name, bool callib, bool fixed = true);
 };
 
 } // namespace mc_robots
