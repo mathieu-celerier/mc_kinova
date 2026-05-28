@@ -65,20 +65,26 @@ add_custom_command(
 
 set(GENERATED_URDF_FILES ${GENERATED_KINOVA_URDF})
 
-option(WITH_CAMERA "Enable build with camera" OFF)
-if(WITH_CAMERA)
-  set(GENERATED_URDF_CAMERA
-      "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera.urdf")
-  add_custom_command(
-    OUTPUT ${GENERATED_URDF_CAMERA}
-    COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA} -i ${KINOVA_XACRO_PATH} dof:=7
-            vision:=true bota:=false end_effector:=none
-    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
-  list(APPEND GENERATED_URDF_FILES ${GENERATED_URDF_CAMERA})
-endif()
+set(GENERATED_URDF_CAMERA "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera.urdf")
+add_custom_command(
+  OUTPUT ${GENERATED_URDF_CAMERA}
+  COMMAND ${XACRO} -o ${GENERATED_URDF_CAMERA} -i ${KINOVA_XACRO_PATH} dof:=7
+          vision:=true bota:=false end_effector:=none
+  DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
+list(APPEND GENERATED_URDF_FILES ${GENERATED_URDF_CAMERA})
 
-option(WITH_CAMERA_GRIPPER "Enable build with camera and gripper" OFF)
-if(WITH_CAMERA_GRIPPER)
+find_description_package(robotiq_description OPTIONAL)
+if(${robotiq_description_FOUND})
+  set(GENERATED_URDF_GRIPPER
+      "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_gripper.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_GRIPPER}
+    COMMAND
+      ${XACRO} -o ${GENERATED_URDF_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7
+      vision:=false gripper:="robotiq_2f_85" bota:=false end_effector:=none
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
+  list(APPEND GENERATED_URDF_FILES ${GENERATED_URDF_GRIPPER})
+
   set(GENERATED_URDF_CAMERA_GRIPPER
       "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_camera_gripper.urdf")
   add_custom_command(
@@ -89,19 +95,8 @@ if(WITH_CAMERA_GRIPPER)
       end_effector:=none
     DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
   list(APPEND GENERATED_URDF_FILES ${GENERATED_URDF_CAMERA_GRIPPER})
-endif()
-
-option(WITH_GRIPPER "Enable build with gripper" OFF)
-if(WITH_GRIPPER)
-  set(GENERATED_URDF_GRIPPER
-      "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_gripper.urdf")
-  add_custom_command(
-    OUTPUT ${GENERATED_URDF_GRIPPER}
-    COMMAND
-      ${XACRO} -o ${GENERATED_URDF_GRIPPER} -i ${KINOVA_XACRO_PATH} dof:=7
-      vision:=false gripper:="robotiq_2f_85" bota:=false end_effector:=none
-    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_XACRO_FILES})
-  list(APPEND GENERATED_URDF_FILES ${GENERATED_URDF_GRIPPER})
+else()
+  message(STATUS "Robotiq gripper support DISABLED")
 endif()
 
 # Bota-specific URDF (only if WITH_BOTA_SENSOR)
