@@ -25,53 +25,54 @@ extern "C"
     {
       return new mc_robots::KinovaRobotModule(false, false);
     }
-    else if(n == "KinovaBota")
-    {
-      return new mc_robots::KinovaRobotModule(false, true);
-    }
-    else if(n == "KinovaBotaDS4")
-    {
-      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
-    }
-    else if(n == "KinovaBotaPlate")
-    {
-      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
-    }
-    else if(n == "KinovaBotaScrew")
-    {
-      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
-    }
-    else if(n == "KinovaBotaDS4Callib")
-    {
-      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
-    }
-    else if(n == "KinovaBotaPlateCallib")
-    {
-      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
-    }
-    else if(n == "KinovaBotaScrewCallib")
-    {
-      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
-    }
-    else if(n == "KinovaCamera")
+
+    if(n == "KinovaCamera")
     {
       return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true,
                                               false);
     }
-    else if(n == "KinovaCameraGripper")
-    {
-      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true,
-                                              true);
-    }
-    else if(n == "KinovaGripper")
+    if(n == "KinovaGripper")
     {
       return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               true);
     }
-    else
+    if(n == "KinovaCameraGripper")
     {
-      mc_rtc::log::error("Kinova module cannot create an object of type {}", n);
-      return nullptr;
+      return new mc_robots::KinovaRobotModule(false, false, mc_robots::KinovaRobotModule::EndEffector::None, true,
+                                              true);
     }
+
+    if(n == "KinovaBota")
+    {
+      return new mc_robots::KinovaRobotModule(false, true);
+    }
+    if(n == "KinovaBotaDS4")
+    {
+      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
+    }
+    if(n == "KinovaBotaPlate")
+    {
+      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
+    }
+    if(n == "KinovaBotaScrew")
+    {
+      return new mc_robots::KinovaRobotModule(false, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+
+    if(n == "KinovaBotaDS4Callib")
+    {
+      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::DS4);
+    }
+    if(n == "KinovaBotaPlateCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Plate);
+    }
+    if(n == "KinovaBotaScrewCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, true, mc_robots::KinovaRobotModule::EndEffector::Screw);
+    }
+
+    mc_rtc::log::error("Kinova module cannot create an object of type {}", n);
+    return nullptr;
   }
 }
