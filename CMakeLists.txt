@@ -49,8 +49,6 @@ set(KINOVA_URDF_DIR
     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/urdf")
 set(KINOVA_RSDF_DIR
     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/rsdf")
-set(KINOVA_CONVEX_DIR
-    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/convex")
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3.xacro")
 configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 
@@ -160,12 +158,8 @@ add_custom_target(generate-kinova-urdf DEPENDS ${GENERATED_URDF_FILES})
 # Add source and install
 add_subdirectory(src)
 
-# Install generated URDF(s)
+# Install generated URDFs and RSDFs
 install(FILES ${GENERATED_URDF_FILES} DESTINATION ${KINOVA_URDF_DIR})
-
-# Install convex directory
-install(DIRECTORY convex/ DESTINATION ${KINOVA_CONVEX_DIR})
-# Install rsdf directory
 install(DIRECTORY rsdf/ DESTINATION ${KINOVA_RSDF_DIR})
 
 install(

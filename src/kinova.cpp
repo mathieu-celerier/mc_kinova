@@ -154,19 +154,6 @@ KinovaRobotModule::KinovaRobotModule(const std::string & name, bool callib, bool
   set_rotor_inertia("joint_6", (double)0.22 * power);
   set_rotor_inertia("joint_7", (double)0.22 * power);
 
-  // Automatically load the convex hulls associated to each body
-  fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";
-  mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath.string());
-
-  for(const auto & b : mb.bodies())
-  {
-    auto ch = convexPath / (b.name() + "-ch.txt");
-    if(fs::exists(ch))
-    {
-      _convexHull[b.name()] = {b.name(), ch.string()};
-    }
-  }
-
   // Add JointSensors for temperature/current logging
   for(size_t i = 0; i < _ref_joint_order.size(); ++i)
   {
