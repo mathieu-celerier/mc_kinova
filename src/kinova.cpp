@@ -201,10 +201,10 @@ KinovaRobotModule::KinovaRobotModule(const std::string & name, bool callib, bool
                                                                  {"shoulder_link", "FT_adapter", i, s, d},
                                                                  {"half_arm_1_link", "FT_adapter", i, s, d},
                                                                  {"half_arm_2_link", "FT_adapter", i, s, d},
-                                                                 {"base_link", "FT_sensor_mounting", i, s, d},
-                                                                 {"shoulder_link", "FT_sensor_mounting", i, s, d},
-                                                                 {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
-                                                                 {"half_arm_2_link", "FT_sensor_mounting", i, s, d}});
+                                                                 {"base_link", "FT_sensor_mounting_0", i, s, d},
+                                                                 {"shoulder_link", "FT_sensor_mounting_0", i, s, d},
+                                                                 {"half_arm_1_link", "FT_sensor_mounting_0", i, s, d},
+                                                                 {"half_arm_2_link", "FT_sensor_mounting_0", i, s, d}});
   }
 
   if(end_effector == EndEffector::DS4)
