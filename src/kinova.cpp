@@ -209,10 +209,10 @@ KinovaRobotModule::KinovaRobotModule(const std::string & name, bool callib, bool
 
   if(end_effector == EndEffector::DS4)
   {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "DS4_adapter", i, s, d},
-                                                                 {"shoulder_link", "DS4_adapter", i, s, d},
-                                                                 {"half_arm_1_link", "DS4_adapter", i, s, d},
-                                                                 {"half_arm_2_link", "DS4_adapter", i, s, d}});
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "DS4", i, s, d},
+                                                                 {"shoulder_link", "DS4", i, s, d},
+                                                                 {"half_arm_1_link", "DS4", i, s, d},
+                                                                 {"half_arm_2_link", "DS4", i, s, d}});
   }
 
   if(end_effector == EndEffector::Plate)
