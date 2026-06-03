@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<robot name="kinova">
+  <planar_surface name="Base" link="base_link">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <points>
+      <point xy="-0.0745 -0.0745" />
+      <point xy="0.0745 -0.0745" />
+      <point xy="0.0745 0.0745" />
+      <point xy="-0.0745 0.0745" />
+    </points>
+    <material name="plastic" />
+  </planar_surface>
+</robot>

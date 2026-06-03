@@ -1,0 +1,13 @@
+MainRobot: Kinova
+# Other variants:
+# MainRobot: KinovaCamera
+# MainRobot: KinovaGripper
+# MainRobot: KinovaCameraGripper
+# MainRobot: KinovaBota
+# MainRobot: KinovaBotaDS4
+# MainRobot: KinovaBotaDS4Callib
+# MainRobot: KinovaBotaPlate
+# MainRobot: KinovaBotaPlateCallib
+# MainRobot: KinovaBotaScrew
+# MainRobot: KinovaBotaScrewCallib
+Enabled: Posture
