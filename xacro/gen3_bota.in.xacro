@@ -177,10 +177,10 @@
     <xacro:if value="$(eval end_effector == 'plate')">
       <link name="plate">
         <inertial>
-          <origin xyz="-0.0001681638469675113 -0.0024779164507503317 0.059811455964133025" rpy="0 0 0" />
-          <mass value="0.0698" />
-          <inertia ixx="5.40350E-05" ixy="8.13203E-08" ixz="1.70226E-06" iyy="5.69809E-05"
-            iyz="1.05961E-06" izz="8.81951E-05" />
+          <origin xyz="-1.58E-05 -9.40E-02 1.58E-05" rpy="0 0 0" />
+          <mass value="0.1" />
+          <inertia ixx="5.58925E-04" iyy="1.45301E-04" izz="5.58925E-04"
+                  ixy="1.52637E-07" ixz="6.50849E-05" iyz="-1.52637E-07" />
         </inertial>
 
         <visual name="plate">
@@ -323,7 +323,7 @@
       <joint name="plate_to_racquet_frame" type="fixed">
         <parent link="plate" />
         <child link="racquet_frame" />
-        <origin xyz="0.0 0.0 0.125" rpy="-1.57079632679 0.0 0.0" />
+        <origin xyz="0.0 -0.125 0.0" rpy="0.0 0.78539816339 0.0" />
       </joint>
 
       <joint name="plate_to_tool" type="fixed">
