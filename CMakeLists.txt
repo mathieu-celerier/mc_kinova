@@ -39,7 +39,7 @@ set(LOCAL_BOTA_XACRO_TEMPLATE
     "${CMAKE_SOURCE_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
 
 # Bota sensor integration
-find_description_package(bota_driver QUIET)
+find_description_package(bota_driver OPTIONAL)
 if(${bota_driver_FOUND})
   message(STATUS "Bota sensor support ENABLED")
   set(WITH_BOTA_SENSOR_GEN0 ON)
