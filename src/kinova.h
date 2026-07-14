@@ -1,8 +1,10 @@
 #pragma once
 
 #include <mc_rbdyn/RobotModule.h>
-
 #include <mc_robots/api.h>
+
+#include <optional>
+#include <string>
 
 namespace mc_robots
 {
@@ -32,13 +34,24 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
     Robotiq2F140
   };
 
-  KinovaRobotModule(bool callib,
-                    ForceSensor force_sensor,
-                    EndEffector end_effector = EndEffector::None,
-                    bool camera = false,
-                    Gripper gripper = Gripper::None,
-                    bool mujoco = false,
-                    bool canonical = false);
+  /** Configuration struct for constructing a KinovaRobotModule.
+   *
+   * Using a config struct avoids a long positional argument list and makes
+   * call-sites self-documenting.  Every field has a sensible default so callers
+   * only need to set what differs from the baseline "plain Kinova" variant.
+   */
+  struct Config
+  {
+    ForceSensor force_sensor{ForceSensor::None};
+    EndEffector end_effector{EndEffector::None};
+    Gripper gripper{Gripper::None};
+    bool camera{false};
+    bool callib{false};
+    bool mujoco{false};
+    bool canonical{false};
+  };
+
+  explicit KinovaRobotModule(const Config & config);
 };
 
 } // namespace mc_robots

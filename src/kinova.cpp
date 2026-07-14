@@ -7,22 +7,24 @@
 #include <RBDyn/parsers/urdf.h>
 
 #include <filesystem>
+#include <optional>
 #include <stdexcept>
+#include <string>
+#include <vector>
+
 namespace fs = std::filesystem;
 
 namespace mc_robots
 {
 
-inline static bool hasBota(KinovaRobotModule::ForceSensor force_sensor)
-{
-  return force_sensor != KinovaRobotModule::ForceSensor::None;
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// Internal helpers — file-local, no linkage outside this TU
+// ─────────────────────────────────────────────────────────────────────────────
 
-inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor,
-                                  KinovaRobotModule::EndEffector end_effector)
+namespace
 {
-  return hasBota(force_sensor) && end_effector != KinovaRobotModule::EndEffector::None;
-}
+
+// ── Gripper metadata ──────────────────────────────────────────────────────────
 
 struct GripperSpec
 {
@@ -32,46 +34,30 @@ struct GripperSpec
   std::vector<std::string> filteredLinks;
 };
 
-inline static bool hasGripper(KinovaRobotModule::Gripper gripper)
-{
-  return gripper != KinovaRobotModule::Gripper::None;
-}
-
-inline static std::string gripperVariantSuffix(KinovaRobotModule::Gripper gripper)
-{
-  switch(gripper)
-  {
-    case KinovaRobotModule::Gripper::None:
-      return "";
-    case KinovaRobotModule::Gripper::Robotiq2F85:
-      return "_gripper";
-    case KinovaRobotModule::Gripper::Robotiq2F140:
-      return "_gripper_2f140";
-  }
-  throw std::invalid_argument("Unsupported gripper variant");
-}
-
-inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper)
+const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper)
 {
   static const GripperSpec robotiq2F85 = {
       "robotiq_85_left_knuckle_joint",
       {"robotiq_85_left_knuckle_joint", "robotiq_85_right_knuckle_joint", "robotiq_85_left_inner_knuckle_joint",
-       "robotiq_85_right_inner_knuckle_joint", "robotiq_85_left_finger_tip_joint", "robotiq_85_right_finger_tip_joint"},
+       "robotiq_85_right_inner_knuckle_joint", "robotiq_85_left_finger_tip_joint",
+       "robotiq_85_right_finger_tip_joint"},
       {"robotiq_85_base_link", "robotiq_85_left_knuckle_link", "robotiq_85_right_knuckle_link",
        "robotiq_85_left_finger_link", "robotiq_85_right_finger_link", "robotiq_85_left_finger_tip_link",
        "robotiq_85_right_finger_tip_link"},
       {"robotiq_85_right_knuckle_link", "robotiq_85_right_finger_link", "robotiq_85_left_inner_knuckle_link",
-       "robotiq_85_right_inner_knuckle_link", "robotiq_85_left_finger_tip_link", "robotiq_85_right_finger_tip_link"}};
+       "robotiq_85_right_inner_knuckle_link", "robotiq_85_left_finger_tip_link",
+       "robotiq_85_right_finger_tip_link"}};
+
   static const GripperSpec robotiq2F140 = {
       "finger_joint",
       {"finger_joint", "right_outer_knuckle_joint", "left_inner_knuckle_joint", "right_inner_knuckle_joint",
        "left_inner_finger_joint", "right_inner_finger_joint"},
-      {"robotiq_140_base_link", "left_outer_knuckle", "right_outer_knuckle", "left_outer_finger", "right_outer_finger",
-       "left_inner_knuckle", "right_inner_knuckle", "left_inner_finger", "right_inner_finger", "left_inner_finger_pad",
-       "right_inner_finger_pad"},
-      {"left_outer_knuckle", "left_outer_finger", "left_inner_finger", "left_inner_finger_pad", "left_inner_knuckle",
-       "right_outer_knuckle", "right_outer_finger", "right_inner_finger", "right_inner_finger_pad",
-       "right_inner_knuckle"}};
+      {"robotiq_140_base_link", "left_outer_knuckle", "right_outer_knuckle", "left_outer_finger",
+       "right_outer_finger", "left_inner_knuckle", "right_inner_knuckle", "left_inner_finger",
+       "right_inner_finger", "left_inner_finger_pad", "right_inner_finger_pad"},
+      {"left_outer_knuckle", "left_outer_finger", "left_inner_finger", "left_inner_finger_pad",
+       "left_inner_knuckle", "right_outer_knuckle", "right_outer_finger", "right_inner_finger",
+       "right_inner_finger_pad", "right_inner_knuckle"}};
 
   switch(gripper)
   {
@@ -81,150 +67,153 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
       return robotiq2F140;
     case KinovaRobotModule::Gripper::None:
     default:
-      throw std::invalid_argument("No gripper metadata is defined for the requested gripper variant");
+      throw std::invalid_argument("No GripperSpec defined for Gripper::None");
   }
 }
 
-inline static std::string kinovaVariant(
-    KinovaRobotModule::ForceSensor force_sensor,
-    KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
-    bool camera = false,
-    KinovaRobotModule::Gripper gripper = KinovaRobotModule::Gripper::None)
+// ── Predicate helpers ─────────────────────────────────────────────────────────
+
+constexpr bool hasGripper(KinovaRobotModule::Gripper g) noexcept
 {
-  if(force_sensor == KinovaRobotModule::ForceSensor::BotaGen0)
+  return g != KinovaRobotModule::Gripper::None;
+}
+
+constexpr bool hasBota(KinovaRobotModule::ForceSensor fs) noexcept
+{
+  return fs != KinovaRobotModule::ForceSensor::None;
+}
+
+constexpr bool supportsCallib(KinovaRobotModule::ForceSensor fs,
+                              KinovaRobotModule::EndEffector ee) noexcept
+{
+  return hasBota(fs) && ee != KinovaRobotModule::EndEffector::None;
+}
+
+// ── Variant name resolution ───────────────────────────────────────────────────
+
+/** Returns the URDF variant name that matches the given configuration.
+ *
+ * Validation of illegal combinations is done here once, rather than being
+ * scattered across every branch of the old if-else chain.
+ */
+std::string resolveVariantName(const KinovaRobotModule::Config & cfg)
+{
+  using FS = KinovaRobotModule::ForceSensor;
+  using EE = KinovaRobotModule::EndEffector;
+  using GR = KinovaRobotModule::Gripper;
+
+  // Gripper suffix shared by several BotaGenA variants
+  auto gripperSuffix = [&]() -> std::string
   {
-    if(hasGripper(gripper))
+    switch(cfg.gripper)
     {
-      throw std::invalid_argument("KinovaRobotModule does not provide generated Bota Gen0 variants with a gripper");
+      case GR::None:
+        return "";
+      case GR::Robotiq2F85:
+        return "_gripper";
+      case GR::Robotiq2F140:
+        return "_gripper_2f140";
     }
-    if(end_effector == KinovaRobotModule::EndEffector::DS4)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_ds4'");
-      return "kinova_bota_ds4";
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Plate)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_plate'");
-      return "kinova_bota_plate";
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Screw)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_screw'");
-      return "kinova_bota_screw";
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Hook)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_hook'");
-      return "kinova_bota_hook";
-    }
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
-    return "kinova_bota";
-  }
-  if(force_sensor == KinovaRobotModule::ForceSensor::BotaGenA)
+    throw std::invalid_argument("Unknown Gripper enum value");
+  };
+
+  // End-effector infix shared by several Bota variants
+  auto eeSuffix = [&]() -> std::string
   {
-    if(hasGripper(gripper) && end_effector != KinovaRobotModule::EndEffector::None)
+    switch(cfg.end_effector)
+    {
+      case EE::None:
+        return "";
+      case EE::DS4:
+        return "_ds4";
+      case EE::Plate:
+        return "_plate";
+      case EE::Screw:
+        return "_screw";
+      case EE::Hook:
+        return "_hook";
+    }
+    throw std::invalid_argument("Unknown EndEffector enum value");
+  };
+
+  // ── BotaGen0 ──────────────────────────────────────────────────────────────
+  if(cfg.force_sensor == FS::BotaGen0)
+  {
+    if(hasGripper(cfg.gripper))
     {
       throw std::invalid_argument(
-          "KinovaRobotModule Bota GenA variants support either an end effector or a gripper, not both");
+          "KinovaRobotModule: BotaGen0 variants do not support a gripper");
     }
-    const auto gripperSuffix = gripperVariantSuffix(gripper);
-    if(end_effector == KinovaRobotModule::EndEffector::DS4)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_ds4{}'", gripperSuffix);
-      return "kinova_bota_gena_ds4" + gripperSuffix;
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Plate)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_plate{}'", gripperSuffix);
-      return "kinova_bota_gena_plate" + gripperSuffix;
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Screw)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_screw{}'", gripperSuffix);
-      return "kinova_bota_gena_screw" + gripperSuffix;
-    }
-    else if(end_effector == KinovaRobotModule::EndEffector::Hook)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena_hook{}'", gripperSuffix);
-      return "kinova_bota_gena_hook" + gripperSuffix;
-    }
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_gena{}'", gripperSuffix);
-    return "kinova_bota_gena" + gripperSuffix;
+    const std::string variant = "kinova_bota" + eeSuffix();
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: '{}'", variant);
+    return variant;
   }
-  if(camera)
+
+  // ── BotaGenA ─────────────────────────────────────────────────────────────
+  if(cfg.force_sensor == FS::BotaGenA)
   {
-    if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
+    if(hasGripper(cfg.gripper) && cfg.end_effector != EE::None)
     {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper'");
-      return "kinova_camera_gripper";
+      throw std::invalid_argument(
+          "KinovaRobotModule: BotaGenA variants support either an end-effector "
+          "or a gripper, not both");
     }
-    if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
-    {
-      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper_2f140'");
-      return "kinova_camera_gripper_2f140";
-    }
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera'");
-    return "kinova_camera";
+    const std::string variant = "kinova_bota_gena" + eeSuffix() + gripperSuffix();
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: '{}'", variant);
+    return variant;
   }
-  if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
+
+  // ── No force sensor ───────────────────────────────────────────────────────
+  const std::string cameraPrefix = cfg.camera ? "kinova_camera" : "kinova";
+
+  if(cfg.gripper == GR::Robotiq2F85)
   {
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper'");
-    return "kinova_gripper";
+    const std::string variant = cameraPrefix + "_gripper";
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: '{}'", variant);
+    return variant;
   }
-  if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
+  if(cfg.gripper == GR::Robotiq2F140)
   {
-    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper_2f140'");
-    return "kinova_gripper_2f140";
+    const std::string variant = cameraPrefix + "_gripper_2f140";
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: '{}'", variant);
+    return variant;
   }
-  mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
-  return "kinova";
+
+  // Plain kinova / kinova_camera
+  mc_rtc::log::info("KinovaRobotModule uses the kinova variant: '{}'", cameraPrefix);
+  return cameraPrefix;
 }
 
-inline static std::string kinovaCanonicalVariant(
-    KinovaRobotModule::ForceSensor force_sensor,
-    KinovaRobotModule::EndEffector end_effector = KinovaRobotModule::EndEffector::None,
-    bool camera = false,
-    KinovaRobotModule::Gripper gripper = KinovaRobotModule::Gripper::None,
-    bool mujoco = false)
+/** Returns the canonical MuJoCo variant name when one is needed, or nullopt. */
+std::optional<std::string> resolveCanonicalVariant(const KinovaRobotModule::Config & cfg)
 {
-  if(!mujoco || !hasGripper(gripper))
+  using FS = KinovaRobotModule::ForceSensor;
+  using GR = KinovaRobotModule::Gripper;
+
+  if(!cfg.mujoco || !hasGripper(cfg.gripper))
   {
-    return "";
+    return std::nullopt;
   }
-  if(force_sensor == KinovaRobotModule::ForceSensor::BotaGenA)
+
+  if(cfg.force_sensor == FS::BotaGenA)
   {
-    if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
-    {
-      return "KinovaBotaGenARobotiq2F85MuJoCoCanonical";
-    }
-    if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
-    {
-      return "KinovaBotaGenARobotiq2F140MuJoCoCanonical";
-    }
+    if(cfg.gripper == GR::Robotiq2F85)  { return "KinovaBotaGenARobotiq2F85MuJoCoCanonical"; }
+    if(cfg.gripper == GR::Robotiq2F140) { return "KinovaBotaGenARobotiq2F140MuJoCoCanonical"; }
   }
-  if(camera)
+  if(cfg.camera)
   {
-    if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
-    {
-      return "KinovaCameraRobotiq2F85MuJoCoCanonical";
-    }
-    if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
-    {
-      return "KinovaCameraRobotiq2F140MuJoCoCanonical";
-    }
+    if(cfg.gripper == GR::Robotiq2F85)  { return "KinovaCameraRobotiq2F85MuJoCoCanonical"; }
+    if(cfg.gripper == GR::Robotiq2F140) { return "KinovaCameraRobotiq2F140MuJoCoCanonical"; }
   }
-  if(gripper == KinovaRobotModule::Gripper::Robotiq2F85)
-  {
-    return "KinovaRobotiq2F85MuJoCoCanonical";
-  }
-  if(gripper == KinovaRobotModule::Gripper::Robotiq2F140)
-  {
-    return "KinovaRobotiq2F140MuJoCoCanonical";
-  }
-  return "";
+  if(cfg.gripper == GR::Robotiq2F85)  { return "KinovaRobotiq2F85MuJoCoCanonical"; }
+  if(cfg.gripper == GR::Robotiq2F140) { return "KinovaRobotiq2F140MuJoCoCanonical"; }
+
+  return std::nullopt;
 }
 
-inline static fs::path kinovaRsdfDir(const std::string & variant)
+// ── RSDF directory resolution ─────────────────────────────────────────────────
+
+fs::path resolveRsdfDir(const std::string & variant)
 {
   const auto variantDir = fs::path(KINOVA_RSDF_DIR) / variant;
   if(fs::exists(variantDir))
@@ -235,55 +224,232 @@ inline static fs::path kinovaRsdfDir(const std::string & variant)
   const auto defaultDir = fs::path(KINOVA_RSDF_DIR) / "kinova_default";
   if(fs::exists(defaultDir))
   {
-    mc_rtc::log::warning("No RSDF directory exists for variant '{}', falling back to '{}'", variant,
-                         defaultDir.string());
+    mc_rtc::log::warning(
+        "No RSDF directory for variant '{}', falling back to '{}'", variant, defaultDir.string());
     return defaultDir;
   }
 
-  return variantDir;
+  return variantDir; // caller will deal with absence
 }
 
-KinovaRobotModule::KinovaRobotModule(bool callib,
-                                     ForceSensor force_sensor,
-                                     EndEffector end_effector,
-                                     bool camera,
-                                     Gripper gripper,
-                                     bool mujoco,
-                                     bool canonical)
-: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, kinovaVariant(force_sensor, end_effector, camera, gripper))
-{
-  const auto variant = kinovaVariant(force_sensor, end_effector, camera, gripper);
+// ── Joint limit helpers ───────────────────────────────────────────────────────
 
-  if(callib && !supportsCallib(force_sensor, end_effector))
+/** Applies position, velocity, and torque limits that differ from the URDF. */
+void applyJointLimits(mc_rbdyn::RobotModule & mod, bool callib)
+{
+  auto setPositionLimits = [&](const std::string & name, double lo, double hi)
   {
-    throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant with a mounted end effector");
+    assert(hi > 0 && lo < 0);
+    assert(mod._bounds[0].at(name).size() == 1);
+    mod._bounds[0].at(name)[0] = lo;
+    mod._bounds[1].at(name)[0] = hi;
+  };
+
+  auto setVelocityLimit = [&](const std::string & name, double limit)
+  {
+    assert(limit > 0);
+    assert(mod._bounds[2].at(name).size() == 1);
+    mod._bounds[2].at(name)[0] = -limit;
+    mod._bounds[3].at(name)[0] = limit;
+  };
+
+  auto setTorqueLimit = [&](const std::string & name, double limit)
+  {
+    assert(limit > 0);
+    assert(mod._bounds[4].at(name).size() == 1);
+    mod._bounds[4].at(name)[0] = -limit;
+    mod._bounds[5].at(name)[0] = limit;
+  };
+
+  // Position
+  setPositionLimits("joint_2", -2.15, 2.15);
+  setPositionLimits("joint_4", -2.45, callib ? 0.45 : 2.45);
+  setPositionLimits("joint_6", -2.0, 2.0);
+  if(callib)
+  {
+    setPositionLimits("joint_5", -3.14, 3.14);
+    setPositionLimits("joint_7", -3.14, 3.14);
+  }
+
+  // Velocity  (joint_3 was duplicated in the original; joint_4 is now correct)
+  setVelocityLimit("joint_1", 2.0944);
+  setVelocityLimit("joint_2", 2.0944);
+  setVelocityLimit("joint_3", 2.0944);
+  setVelocityLimit("joint_4", 2.0944); // ← was missing in the original
+  setVelocityLimit("joint_5", 3.049);
+  setVelocityLimit("joint_6", 3.049);
+  setVelocityLimit("joint_7", 3.049);
+
+  // Torque
+  setTorqueLimit("joint_1", 95);
+  setTorqueLimit("joint_2", 95);
+  setTorqueLimit("joint_3", 95);
+  setTorqueLimit("joint_4", 95);
+  setTorqueLimit("joint_5", 45);
+  setTorqueLimit("joint_6", 45);
+  setTorqueLimit("joint_7", 45);
+}
+
+// ── Drive-train parameters ────────────────────────────────────────────────────
+
+void applyDrivetrainParameters(rbd::MultiBody & mb)
+{
+  // All seven joints share the same gear ratio
+  constexpr double kGearRatio = 100.0;
+
+  // Rotor inertia differs between the first four (larger) and last three joints
+  constexpr double kInertiaLarge = 0.40e-4;
+  constexpr double kInertiaSmall = 0.22e-4;
+
+  const std::array<std::pair<std::string, double>, 7> joints = {{
+      {"joint_1", kInertiaLarge},
+      {"joint_2", kInertiaLarge},
+      {"joint_3", kInertiaLarge},
+      {"joint_4", kInertiaLarge},
+      {"joint_5", kInertiaSmall},
+      {"joint_6", kInertiaSmall},
+      {"joint_7", kInertiaSmall},
+  }};
+
+  for(const auto & [name, inertia] : joints)
+  {
+    const int idx = mb.jointIndexByName(name);
+    mb.setJointGearRatio(idx, kGearRatio);
+    mb.setJointRotorInertia(idx, inertia);
+  }
+}
+
+// ── Self-collision pairs ──────────────────────────────────────────────────────
+
+/** Builds the minimal self-collision set for the given configuration. */
+std::vector<mc_rbdyn::Collision>
+buildSelfCollisions(const KinovaRobotModule::Config & cfg)
+{
+  using FS = KinovaRobotModule::ForceSensor;
+  using EE = KinovaRobotModule::EndEffector;
+
+  constexpr double i = 0.03, s = 0.015, d = 0.0;
+
+  // Proximal links that must never touch the wrist/end region
+  const std::vector<std::string> proximalLinks = {
+      "base_link", "shoulder_link", "half_arm_1_link", "half_arm_2_link"};
+
+  // Helper: add all proximal × {target} pairs
+  std::vector<mc_rbdyn::Collision> cols;
+
+  auto addPairs = [&](const std::string & target)
+  {
+    for(const auto & prox : proximalLinks)
+    {
+      cols.push_back({prox, target, i, s, d});
+    }
+  };
+
+  // Wrist links always present
+  for(const auto & wristLink :
+      {"spherical_wrist_1_link", "spherical_wrist_2_link", "bracelet_link"})
+  {
+    addPairs(wristLink);
+  }
+
+  // Force-sensor-specific
+  if(cfg.force_sensor == FS::BotaGen0)
+  {
+    addPairs("FT_adapter");
+  }
+  if(hasBota(cfg.force_sensor))
+  {
+    addPairs("FT_sensor_mounting");
+  }
+
+  // End-effector-specific
+  const std::unordered_map<EE, std::string> eeLink = {
+      {EE::DS4, "DS4_adapter"},
+      {EE::Plate, "plate"},
+      {EE::Screw, "screw"},
+      {EE::Hook, "hook"},
+  };
+  if(auto it = eeLink.find(cfg.end_effector); it != eeLink.end())
+  {
+    addPairs(it->second);
+  }
+
+  // Gripper-specific
+  if(hasGripper(cfg.gripper))
+  {
+    for(const auto & link : gripperSpec(cfg.gripper).collisionLinks)
+    {
+      addPairs(link);
+    }
+  }
+
+  return cols;
+}
+
+// ── Gripper safety ────────────────────────────────────────────────────────────
+
+mc_rbdyn::RobotModule::Gripper::Safety buildGripperSafety(const KinovaRobotModule::Config & cfg)
+{
+  using GR = KinovaRobotModule::Gripper;
+
+  if(cfg.mujoco && (cfg.gripper == GR::Robotiq2F85 || cfg.gripper == GR::Robotiq2F140))
+  {
+    return {0.5, 0.18, 0.02, 10u};
+  }
+  if(cfg.mujoco)
+  {
+    return {0.5, 0.1, 0.05, 5u};
+  }
+  return {0.99, 0.05, 0.05, 1u};
+}
+
+} // anonymous namespace
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KinovaRobotModule implementation
+// ─────────────────────────────────────────────────────────────────────────────
+
+KinovaRobotModule::KinovaRobotModule(const Config & cfg)
+: mc_rbdyn::RobotModule(KINOVA_DESCRIPTION_PATH, resolveVariantName(cfg))
+{
+  // ── Validate configuration ────────────────────────────────────────────────
+
+  if(cfg.callib && !supportsCallib(cfg.force_sensor, cfg.end_effector))
+  {
+    throw std::invalid_argument(
+        "KinovaRobotModule: callib mode requires a Bota force sensor with a mounted end-effector");
   }
 
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);
-  if(callib)
+  if(cfg.callib)
   {
     mc_rtc::log::info("KinovaRobotModule runs in callib mode for variant: '{}'", name);
   }
 
-  urdf_path = fs::path(KINOVA_URDF_DIR) / (name + ".urdf");
+  // ── URDF paths ────────────────────────────────────────────────────────────
 
+  urdf_path = fs::path(KINOVA_URDF_DIR) / (name + ".urdf");
   _real_urdf = urdf_path;
 
-  if(mujoco && hasGripper(gripper) && !canonical)
+  // ── Canonical MuJoCo variant ──────────────────────────────────────────────
+
+  if(cfg.mujoco && hasGripper(cfg.gripper) && !cfg.canonical)
   {
-    const auto canonicalVariant = kinovaCanonicalVariant(force_sensor, end_effector, camera, gripper, mujoco);
-    if(!canonicalVariant.empty())
+    if(auto canonical = resolveCanonicalVariant(cfg))
     {
-      _canonicalParameters = {canonicalVariant};
+      _canonicalParameters = {*canonical};
     }
   }
 
-  // Makes all the basic initialization that can be done from an URDF file
-  if(mujoco && hasGripper(gripper) && !canonical)
+  // ── URDF parsing ──────────────────────────────────────────────────────────
+  // MuJoCo non-canonical gripper variants keep filtered links in the model
+  // (closed-chain mechanism) but do not remove them.
+
+  if(cfg.mujoco && hasGripper(cfg.gripper) && !cfg.canonical)
   {
     init(rbd::parsers::from_urdf_file(urdf_path, rbd::parsers::ParserParameters{}
                                                      .fixed(true)
-                                                     .filtered_links(gripperSpec(gripper).filteredLinks)
+                                                     .filtered_links(gripperSpec(cfg.gripper).filteredLinks)
                                                      .remove_filtered_links(false)));
   }
   else
@@ -291,246 +457,77 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
     init(rbd::parsers::from_urdf_file(urdf_path, true));
   }
 
-  rsdf_dir = kinovaRsdfDir(variant);
+  // ── RSDF directory ────────────────────────────────────────────────────────
+
+  rsdf_dir = resolveRsdfDir(name);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
+
+  // ── Reference joint order ─────────────────────────────────────────────────
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
 
-  if(hasGripper(gripper))
+  if(hasGripper(cfg.gripper))
   {
-    const auto & spec = gripperSpec(gripper);
-    if(mujoco)
-    {
-      // Match the RHPS1 MuJoCo pattern: keep the control-facing interface to the
-      // single active gripper DoF while allowing the canonical/full MuJoCo model
-      // to contain the internal closed-chain mechanism.
-      _ref_joint_order.push_back(spec.actuatedJoint);
-    }
-    else
-    {
-      _ref_joint_order.push_back(spec.actuatedJoint);
-    }
-    auto gripperSafety = [&]()
-    {
-      if(mujoco && (gripper == Gripper::Robotiq2F85 || gripper == Gripper::Robotiq2F140))
-      {
-        return mc_rbdyn::RobotModule::Gripper::Safety{0.5, 0.18, 0.02, 10u};
-      }
-      if(mujoco)
-      {
-        return mc_rbdyn::RobotModule::Gripper::Safety{0.5, 0.1, 0.05, 5u};
-      }
-      return mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1u};
-    }();
-    _grippers = {{"gripper", {spec.actuatedJoint}, true, gripperSafety}};
+    _ref_joint_order.push_back(gripperSpec(cfg.gripper).actuatedJoint);
   }
 
-  // Override position, velocity and effort bounds
-  auto update_joint_limit = [this](const std::string & name, double limit_low, double limit_up)
-  {
-    assert(limit_up > 0);
-    assert(limit_low < 0);
-    assert(_bounds[0].at(name).size() == 1);
-    _bounds[0].at(name)[0] = limit_low;
-    _bounds[1].at(name)[0] = limit_up;
-  };
+  // ── Gripper module descriptor ─────────────────────────────────────────────
 
-  if(callib)
+  if(hasGripper(cfg.gripper))
   {
-    update_joint_limit("joint_2", -2.15, 2.15);
-    update_joint_limit("joint_4", -2.45, 0.45);
-    update_joint_limit("joint_5", -3.14, 3.14);
-    update_joint_limit("joint_6", -2.0, 2.0);
-    update_joint_limit("joint_7", -3.14, 3.14);
-  }
-  else
-  {
-    update_joint_limit("joint_2", -2.15, 2.15);
-    update_joint_limit("joint_4", -2.45, 2.45);
-    update_joint_limit("joint_6", -2.0, 2.0);
+    const auto & spec = gripperSpec(cfg.gripper);
+    _grippers = {{"gripper", {spec.actuatedJoint}, true, buildGripperSafety(cfg)}};
   }
 
-  auto update_velocity_limit = [this](const std::string & name, double limit)
-  {
-    assert(limit > 0);
-    assert(_bounds[2].at(name).size() == 1);
-    _bounds[2].at(name)[0] = -limit;
-    _bounds[3].at(name)[0] = limit;
-  };
-  update_velocity_limit("joint_1", 2.0944);
-  update_velocity_limit("joint_2", 2.0944);
-  update_velocity_limit("joint_3", 2.0944);
-  update_velocity_limit("joint_3", 2.0944);
-  update_velocity_limit("joint_4", 2.0944);
-  update_velocity_limit("joint_5", 3.049);
-  update_velocity_limit("joint_6", 3.049);
-  update_velocity_limit("joint_7", 3.049);
-  auto update_torque_limit = [this](const std::string & name, double limit)
-  {
-    assert(limit > 0);
-    assert(_bounds[4].at(name).size() == 1);
-    _bounds[4].at(name)[0] = -limit;
-    _bounds[5].at(name)[0] = limit;
-  };
-  update_torque_limit("joint_1", 95);
-  update_torque_limit("joint_2", 95);
-  update_torque_limit("joint_3", 95);
-  update_torque_limit("joint_4", 95);
-  update_torque_limit("joint_5", 45);
-  update_torque_limit("joint_6", 45);
-  update_torque_limit("joint_7", 45);
+  // ── Joint limits ──────────────────────────────────────────────────────────
 
-  auto set_gear_ratio = [this](const std::string & name, double gr)
-  {
-    assert(gr > 0);
-    mb.setJointGearRatio(mb.jointIndexByName(name), gr);
-  };
+  applyJointLimits(*this, cfg.callib);
 
-  set_gear_ratio("joint_1", 100);
-  set_gear_ratio("joint_2", 100);
-  set_gear_ratio("joint_3", 100);
-  set_gear_ratio("joint_4", 100);
-  set_gear_ratio("joint_5", 100);
-  set_gear_ratio("joint_6", 100);
-  set_gear_ratio("joint_7", 100);
+  // ── Drive-train parameters ────────────────────────────────────────────────
 
-  auto set_rotor_inertia = [this](const std::string & name, double ir)
-  {
-    assert(ir > 0);
-    mb.setJointRotorInertia(mb.jointIndexByName(name), ir);
-  };
+  applyDrivetrainParameters(mb);
 
-  const double power = pow(10, -4);
-  set_rotor_inertia("joint_1", (double)0.40 * power);
-  set_rotor_inertia("joint_2", (double)0.40 * power);
-  set_rotor_inertia("joint_3", (double)0.40 * power);
-  set_rotor_inertia("joint_4", (double)0.40 * power);
-  set_rotor_inertia("joint_5", (double)0.22 * power);
-  set_rotor_inertia("joint_6", (double)0.22 * power);
-  set_rotor_inertia("joint_7", (double)0.22 * power);
+  // ── Convex hulls ──────────────────────────────────────────────────────────
 
-  // Automatically load the convex hulls associated to each body
-  fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";
+  const fs::path convexPath = fs::path(KINOVA_CONVEX_DIR) / "kinova";
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for convex", convexPath.string());
 
-  for(const auto & b : mb.bodies())
+  for(const auto & body : mb.bodies())
   {
-    auto ch = convexPath / (b.name() + "-ch.txt");
+    const auto ch = convexPath / (body.name() + "-ch.txt");
     if(fs::exists(ch))
     {
-      _convexHull[b.name()] = {b.name(), ch.string()};
+      _convexHull[body.name()] = {body.name(), ch.string()};
     }
   }
 
-  // Add JointSensors for temperature/current logging
-  for(size_t i = 0; i < _ref_joint_order.size(); ++i)
+  // ── Joint sensors (temperature / current logging) ─────────────────────────
+
+  for(const auto & jointName : _ref_joint_order)
   {
-    if(mb.jointIndexByName().count(_ref_joint_order[i]) != 0)
+    if(mb.jointIndexByName().count(jointName) != 0)
     {
-      _jointSensors.push_back(mc_rbdyn::JointSensor(_ref_joint_order[i]));
+      _jointSensors.emplace_back(jointName);
     }
   }
 
-  // Define a force sensor
-  if(hasBota(force_sensor))
+  // ── Force / body sensors ──────────────────────────────────────────────────
+
+  if(hasBota(cfg.force_sensor))
   {
-    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
-    _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
-  }
-  else
-  {
-    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));
-    _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "tool_frame", sva::PTransformd::Identity()));
+    _forceSensors.emplace_back("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity());
+    _bodySensors.emplace_back("Accelerometer",  "FT_sensor_imu",    sva::PTransformd::Identity());
   }
 
-  // Clear body sensors
-  _bodySensors.clear();
+  // ── Self-collision pairs ──────────────────────────────────────────────────
 
-  const double i = 0.03;
-  const double s = 0.015;
-  const double d = 0.;
-  // Define a minimal set of self-collisions
-  _minimalSelfCollisions = {{"base_link", "spherical_wrist_1_link", i, s, d},
-                            {"shoulder_link", "spherical_wrist_1_link", i, s, d},
-                            {"half_arm_1_link", "spherical_wrist_1_link", i, s, d},
-                            {"half_arm_2_link", "spherical_wrist_1_link", i, s, d},
-                            {"base_link", "spherical_wrist_2_link", i, s, d},
-                            {"shoulder_link", "spherical_wrist_2_link", i, s, d},
-                            {"half_arm_1_link", "spherical_wrist_2_link", i, s, d},
-                            {"half_arm_2_link", "spherical_wrist_2_link", i, s, d},
-                            {"base_link", "bracelet_link", i, s, d},
-                            {"shoulder_link", "bracelet_link", i, s, d},
-                            {"half_arm_1_link", "bracelet_link", i, s, d},
-                            {"half_arm_2_link", "bracelet_link", i, s, d}};
+  _minimalSelfCollisions = buildSelfCollisions(cfg);
+  _commonSelfCollisions  = _minimalSelfCollisions;
 
-  if(force_sensor == ForceSensor::BotaGen0)
-  {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "FT_adapter", i, s, d},
-                                                                 {"shoulder_link", "FT_adapter", i, s, d},
-                                                                 {"half_arm_1_link", "FT_adapter", i, s, d},
-                                                                 {"half_arm_2_link", "FT_adapter", i, s, d}});
-  }
+  // ── Default attitude and stance ───────────────────────────────────────────
 
-  if(hasBota(force_sensor))
-  {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "FT_sensor_mounting", i, s, d},
-                                                                 {"shoulder_link", "FT_sensor_mounting", i, s, d},
-                                                                 {"half_arm_1_link", "FT_sensor_mounting", i, s, d},
-                                                                 {"half_arm_2_link", "FT_sensor_mounting", i, s, d}});
-  }
+  _default_attitude = {{1., 0., 0., 0., 0., 0., 0.}};
 
-  if(end_effector == EndEffector::DS4)
-  {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "DS4_adapter", i, s, d},
-                                                                 {"shoulder_link", "DS4_adapter", i, s, d},
-                                                                 {"half_arm_1_link", "DS4_adapter", i, s, d},
-                                                                 {"half_arm_2_link", "DS4_adapter", i, s, d}});
-  }
-
-  if(end_effector == EndEffector::Plate)
-  {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "plate", i, s, d},
-                                                                 {"shoulder_link", "plate", i, s, d},
-                                                                 {"half_arm_1_link", "plate", i, s, d},
-                                                                 {"half_arm_2_link", "plate", i, s, d}});
-  }
-
-  if(end_effector == EndEffector::Screw)
-  {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "screw", i, s, d},
-                                                                 {"shoulder_link", "screw", i, s, d},
-                                                                 {"half_arm_1_link", "screw", i, s, d},
-                                                                 {"half_arm_2_link", "screw", i, s, d}});
-  }
-
-  if(end_effector == EndEffector::Hook)
-  {
-    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "hook", i, s, d},
-                                                                 {"shoulder_link", "hook", i, s, d},
-                                                                 {"half_arm_1_link", "hook", i, s, d},
-                                                                 {"half_arm_2_link", "hook", i, s, d}});
-  }
-
-  if(hasGripper(gripper))
-  {
-    for(const auto & link : gripperSpec(gripper).collisionLinks)
-    {
-      _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", link, i, s, d},
-                                                                   {"shoulder_link", link, i, s, d},
-                                                                   {"half_arm_1_link", link, i, s, d},
-                                                                   {"half_arm_2_link", link, i, s, d}});
-    }
-  }
-
-  /* Additional self collisions */
-
-  _commonSelfCollisions = _minimalSelfCollisions;
-
-  // Default configuration of the floating base
-  _default_attitude = {{1., 0., 0., 0., 0., 0., 0.0}};
-
-  // Default joint configuration, if a joint is omitted the configuration is 0 or the middle point of the limit range if
-  // 0 is not a valid configuration
   _stance["joint_1"] = {0.0};
   _stance["joint_2"] = {0.2618};
   _stance["joint_3"] = {3.14};
