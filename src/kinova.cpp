@@ -117,6 +117,11 @@ inline static std::string kinovaVariant(
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_hook'");
       return "kinova_bota_hook";
     }
+    else if(end_effector == KinovaRobotModule::EndEffector::PegPlate)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota_peg_plate'");
+      return "kinova_bota_peg_plate";
+    }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_bota'");
     return "kinova_bota";
   }
@@ -509,6 +514,14 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
                                                                  {"shoulder_link", "hook", i, s, d},
                                                                  {"half_arm_1_link", "hook", i, s, d},
                                                                  {"half_arm_2_link", "hook", i, s, d}});
+  }
+
+  if(end_effector == EndEffector::PegPlate)
+  {
+    _minimalSelfCollisions.insert(_minimalSelfCollisions.end(), {{"base_link", "peg_plate", i, s, d},
+                                                                 {"shoulder_link", "peg_plate", i, s, d},
+                                                                 {"half_arm_1_link", "peg_plate", i, s, d},
+                                                                 {"half_arm_2_link", "peg_plate", i, s, d}});
   }
 
   if(hasGripper(gripper))

@@ -261,6 +261,42 @@
       <link name="tool"></link>
     </xacro:if>
 
+    <!-- Custom robot-side hole plate / handle end piece (Peg_in_Hole_plate_Robot_Handle.stl,
+         a plate with holes - the human brings the peg) for collaborative peg-in-hole data
+         collection. Inertia computed from the mesh
+         (uniform density) for the measured mass of 0.585 kg (inertia scales linearly with
+         mass if it is ever re-measured). -->
+    <xacro:if value="$(eval end_effector == 'peg_plate')">
+      <link name="peg_plate">
+        <inertial>
+          <origin xyz="0.15876 0.0 -0.03947" rpy="0 0 0" />
+          <mass value="0.585" />
+          <inertia ixx="1.614914E-03" ixy="0.0" ixz="2.645104E-04"
+            iyy="6.872822E-03" iyz="0.0" izz="8.298984E-03" />
+        </inertial>
+
+        <visual name="peg_plate">
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <!-- Mesh is already in metres, so no scaling. -->
+            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/peg_plate.STL" scale="1 1 1" />
+          </geometry>
+          <material name="">
+            <color rgba="0.2 0.4 0.8 1" />
+          </material>
+        </visual>
+        <!-- Bounding-box collision (388 x 180 x 85 mm) for cheap self-collision checks. -->
+        <collision>
+          <origin xyz="0.194 0.0 -0.0125" rpy="0 0 0" />
+          <geometry>
+            <box size="0.388 0.180 0.085" />
+          </geometry>
+        </collision>
+      </link>
+
+      <link name="tool"></link>
+    </xacro:if>
+
     <xacro:if value="$(eval bota_version == 'gena')">
       <joint name="kinova_to_FT" type="fixed">
         <parent link="end_effector_link" />
@@ -356,6 +392,22 @@
 
       <joint name="hook_to_tool" type="fixed">
         <parent link="hook" />
+        <child link="tool" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      </joint>
+    </xacro:if>
+
+    <xacro:if value="$(eval end_effector == 'peg_plate')">
+      <!-- Plate is mounted rotated w.r.t. the FT frame: FT_x=plate_y, FT_y=plate_z,
+           FT_z=plate_x (rpy 0 -pi/2 -pi/2). -->
+      <joint name="FT_to_peg_plate" type="fixed">
+        <parent link="FT_sensor_tool_frame" />
+        <child link="peg_plate" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5707963267948966 -1.5707963267948966" />
+      </joint>
+
+      <joint name="peg_plate_to_tool" type="fixed">
+        <parent link="peg_plate" />
         <child link="tool" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>

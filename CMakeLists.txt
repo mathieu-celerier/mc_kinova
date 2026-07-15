@@ -281,10 +281,18 @@ if(WITH_BOTA_SENSOR_GEN0)
             dof:=7 vision:=false bota:=true end_effector:=hook
     DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_URDF_DEPENDS})
 
+  set(GENERATED_URDF_BOTA_PEG_PLATE
+      "${CMAKE_CURRENT_BINARY_DIR}/urdf/kinova_bota_peg_plate.urdf")
+  add_custom_command(
+    OUTPUT ${GENERATED_URDF_BOTA_PEG_PLATE}
+    COMMAND ${XACRO} -o ${GENERATED_URDF_BOTA_PEG_PLATE} -i ${KINOVA_XACRO_PATH}
+            dof:=7 vision:=false bota:=true end_effector:=peg_plate
+    DEPENDS ${KINOVA_XACRO_PATH} ${KINOVA_URDF_DEPENDS})
+
   set(GENERATED_URDF_BOTA_FILES
       ${GENERATED_URDF_BOTA} ${GENERATED_URDF_BOTA_DS4}
       ${GENERATED_URDF_BOTA_PLATE} ${GENERATED_URDF_BOTA_SCREW}
-      ${GENERATED_URDF_BOTA_HOOK})
+      ${GENERATED_URDF_BOTA_HOOK} ${GENERATED_URDF_BOTA_PEG_PLATE})
 endif()
 
 if(WITH_BOTA_SENSOR_GENA)

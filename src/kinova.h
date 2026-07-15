@@ -22,7 +22,8 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
     DS4,
     Plate,
     Screw,
-    Hook
+    Hook,
+    PegPlate
   };
 
   enum class Gripper
