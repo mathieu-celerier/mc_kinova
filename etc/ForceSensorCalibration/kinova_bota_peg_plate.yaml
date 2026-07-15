@@ -12,9 +12,9 @@ initial_posture:
     eval: 0.05
   target:
     joint_1: [0.0]
-    joint_2: [0.5]
+    joint_2: [0.2]
     joint_3: [3.14]
-    joint_4: [-1.7]
+    joint_4: [-1.6]
     joint_5: [0.0]
     joint_6: [0.1]
     joint_7: [1.57]
@@ -24,7 +24,7 @@ motion:
   joints:
     - name: joint_4
       period: 10
-      percentLimits: 0.6
+      percentLimits: 0.5
     - name: joint_5
       period: 12.5
       percentLimits: 1.0
