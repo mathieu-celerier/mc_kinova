@@ -14,7 +14,7 @@ initial_posture:
     joint_1: [0.0]
     joint_2: [0.5]
     joint_3: [3.14]
-    joint_4: [-2.1]
+    joint_4: [-1.7]
     joint_5: [0.0]
     joint_6: [0.1]
     joint_7: [1.57]
@@ -24,13 +24,13 @@ motion:
   joints:
     - name: joint_4
       period: 10
-      percentLimits: 0.9
+      percentLimits: 0.6
     - name: joint_5
       period: 12.5
       percentLimits: 1.0
     - name: joint_6
       period: 15
-      percentLimits: 0.9
+      percentLimits: 0.8
     - name: joint_7
       period: 17.5
       percentLimits: 1.0
