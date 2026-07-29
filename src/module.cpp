@@ -19,6 +19,8 @@ extern "C"
              "KinovaBotaHookCallib",
              "KinovaBotaPegPlate",
              "KinovaBotaPegPlateCallib",
+             "KinovaBotaPegPlateCamera",
+             "KinovaBotaPegPlateCameraCallib",
              "KinovaBotaGenA",
              "KinovaBotaGenADS4",
              "KinovaBotaGenADS4Callib",
@@ -118,6 +120,16 @@ extern "C"
     {
       return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
                                               mc_robots::KinovaRobotModule::EndEffector::PegPlate);
+    }
+    else if(n == "KinovaBotaPegPlateCamera")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::PegPlateCamera);
+    }
+    else if(n == "KinovaBotaPegPlateCameraCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
+                                              mc_robots::KinovaRobotModule::EndEffector::PegPlateCamera);
     }
     else if(n == "KinovaBotaGenA")
     {
