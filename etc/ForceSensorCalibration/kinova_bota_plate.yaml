@@ -24,7 +24,14 @@ motion:
   joints:
     - name: joint_4
       period: 10
-      percentLimits: 0.6
+      # Explicit asymmetric bounds instead of a symmetric percentLimits shrink: the collision
+      # risk with the plate mounted is only on the lower (more negative) side, near the
+      # initial posture below. Keep that side conservative (same as the previous
+      # percentLimits: 0.6 window) but use the full safe range on the upper side, which was
+      # being unnecessarily restricted too and was starving the calibration solver of pose
+      # diversity (joint_4 hard limits in callib mode: [-2.45, 0.45]).
+      lower: -1.87
+      upper: 0.45
     - name: joint_5
       period: 12.5
       percentLimits: 1.0

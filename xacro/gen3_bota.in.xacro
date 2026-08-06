@@ -192,10 +192,13 @@
             <color rgba="0.6902 0.61176 0.52941 1" />
           </material>
         </visual>
+        <!-- Bounding-box collision (170 x 70 x 234 mm), computed from the plate.STL mesh
+             bounding box after applying the same visual origin rotation, since the mesh's
+             true footprint is much larger than a small placeholder shape. -->
         <collision>
-          <origin xyz="0 0 0.015" rpy="0 0 0" />
+          <origin xyz="0.0 0.0 0.102" rpy="0 0 0" />
           <geometry>
-            <cylinder radius="0.0075" length="0.03" />
+            <box size="0.170 0.070 0.234" />
           </geometry>
         </collision>
       </link>
