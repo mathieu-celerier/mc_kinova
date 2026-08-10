@@ -442,14 +442,6 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
     _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "FT_sensor_wrench", sva::PTransformd::Identity()));
     _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "FT_sensor_imu", sva::PTransformd::Identity()));
   }
-  else
-  {
-    _forceSensors.push_back(mc_rbdyn::ForceSensor("EEForceSensor", "tool_frame", sva::PTransformd::Identity()));
-    _bodySensors.push_back(mc_rbdyn::BodySensor("Accelerometer", "tool_frame", sva::PTransformd::Identity()));
-  }
-
-  // Clear body sensors
-  _bodySensors.clear();
 
   const double i = 0.03;
   const double s = 0.015;
