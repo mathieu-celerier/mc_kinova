@@ -7,6 +7,24 @@ ObserverPipelines:
 SingularityThreshold: 0.08
 forceSensors:
   - EEForceSensor
+# Use the Bota's built-in IMU rather than the robot kinematics as the source of the
+# acceleration/angular velocity of the sensor's parent body (see the calibration controller's
+# README.md, "Using an IMU"). "Accelerometer" is the mc_rbdyn::BodySensor declared by the Kinova
+# robot module on the FT_sensor_imu link. It is filled by the mc_ros_imu_sensor plugin on the
+# real robot, and by mc_mujoco from the Accelerometer_accelerometer/Accelerometer_gyro sensors
+# in simulation. Both publish raw sensor_msgs/Imu-style specific force, hence gravityIncluded.
+imu:
+  enabled: true
+  bodySensor: Accelerometer
+  gravityIncluded: true
+  angularAccelerationFromGyro: true
+  staleTimeout: 0.05
+# Offline zero-phase Savitzky-Golay smoothing of the recorded series before the fit. Skipped
+# automatically in staticPoses mode, where per-pose averaging plays the same role.
+filter:
+  enabled: true
+  halfWindow: 25
+  polyOrder: 2
 initial_posture:
   completion:
     eval: 0.05
@@ -21,6 +39,19 @@ initial_posture:
 motion:
   duration: 50
   stiffness: 10
+  # continuous: the historical behaviour, joints follow their cosine and every tick is logged.
+  # The CalibrateStatic FSM state overrides this to staticPoses, which samples the same cosines
+  # at `poses` phases and holds still at each one; the parameters below only apply there.
+  mode: continuous
+  poses: 12
+  settleTime: 0.5
+  dwellTime: 1.0
+  velocityThreshold: 0.01   # rad/s, "the robot has stopped moving" -- this alone decides settling
+  # rad; diagnostic only, not a settling condition. The posture task has no integral action, so
+  # under gravity the arm rests slightly off its commanded waypoint; that is logged, not waited on.
+  positionTolerance: 0.01
+  minTransitTime: 0.2       # s, wait this long after commanding before looking for stillness
+  settleTimeout: 5.0        # give up on a robot that never stops moving and record it anyway
   joints:
     - name: joint_4
       period: 10
