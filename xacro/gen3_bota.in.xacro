@@ -176,29 +176,36 @@
 
     <xacro:if value="$(eval end_effector == 'plate')">
       <link name="plate">
+        <!-- Measured mass 0.226 kg (Bambu Studio estimate for the printed part).
+             Over the 183.2 cm^3 mesh volume that is 1233 kg/m^3, i.e. essentially
+             solid PLA, so the inertia below is computed from the mesh at uniform
+             density. Expressed in the link frame, like the visual/collision below. -->
         <inertial>
-          <origin xyz="-1.58E-05 -9.40E-02 1.58E-05" rpy="0 0 0" />
-          <mass value="0.1" />
-          <inertia ixx="5.58925E-04" iyy="1.45301E-04" izz="5.58925E-04"
-                  ixy="1.52637E-07" ixz="6.50849E-05" iyz="-1.52637E-07" />
+          <origin xyz="1.81E-05 -2.51566E-02 9.55300E-02" rpy="0 0 0" />
+          <mass value="0.226" />
+          <inertia ixx="1.124629E-03" iyy="1.382903E-03" izz="3.658632E-04"
+                  ixy="-1.032380E-07" ixz="4.014063E-07" iyz="1.500394E-04" />
         </inertial>
 
+        <!-- plate.STL is authored in metres, in the link frame rotated +90 deg about
+             Z, hence scale 1 and the yaw below. The blade is a 5 mm slab offset to
+             one side: its striking face is the plane y = -0.035 in the link frame. -->
         <visual name="plate">
-          <origin xyz="0.0 0.0 0.0" rpy="-1.57079632679 0 0.78539816339" />
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 -1.5707963267948966" />
           <geometry>
-            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/plate.STL" scale="0.001 0.001 0.001"/>
+            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/plate.STL" scale="1 1 1"/>
           </geometry>
           <material name="">
             <color rgba="0.6902 0.61176 0.52941 1" />
           </material>
         </visual>
-        <!-- Bounding-box collision (170 x 70 x 234 mm), computed from the plate.STL mesh
-             bounding box after applying the same visual origin rotation, since the mesh's
-             true footprint is much larger than a small placeholder shape. -->
+        <!-- Bounding-box collision (170 x 70 x 233.4 mm) over the whole part, taken
+             from the plate.STL bounding box in the link frame. Only used for arm
+             self-collision pairs, so the hub envelope rather than the blade. -->
         <collision>
-          <origin xyz="0.0 0.0 0.102" rpy="0 0 0" />
+          <origin xyz="0.0 0.0 0.11172" rpy="0 0 0" />
           <geometry>
-            <box size="0.170 0.070 0.234" />
+            <box size="0.170 0.070 0.2334" />
           </geometry>
         </collision>
       </link>
@@ -359,10 +366,13 @@
 
       <link name="racquet_frame"></link>
 
+      <!-- Ball-balancing reference frame: origin on the blade mid-plane (the blade
+           spans y -0.035..-0.030 in the plate frame), +Z along the striking face
+           normal (-Y of the plate frame). -->
       <joint name="plate_to_racquet_frame" type="fixed">
         <parent link="plate" />
         <child link="racquet_frame" />
-        <origin xyz="0.0 -0.125 0.0" rpy="0.0 0.78539816339 0.0" />
+        <origin xyz="0.0 -0.0325 0.125" rpy="1.5707963267948966 0.0 0.0" />
       </joint>
 
       <joint name="plate_to_tool" type="fixed">
