@@ -19,9 +19,12 @@ inline static bool hasBota(KinovaRobotModule::ForceSensor force_sensor)
 }
 
 inline static bool supportsCallib(KinovaRobotModule::ForceSensor force_sensor,
-                                  KinovaRobotModule::EndEffector end_effector)
+                                  KinovaRobotModule::EndEffector /*end_effector*/)
 {
-  return hasBota(force_sensor) && end_effector != KinovaRobotModule::EndEffector::None;
+  // A bare sensor is a legitimate calibration target: the only body distal to the sensor frame is
+  // then the sensor's own moving half, so the fit measures that mass directly instead of inferring
+  // it as the difference between two much larger numbers.
+  return hasBota(force_sensor);
 }
 
 struct GripperSpec
@@ -266,7 +269,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
 
   if(callib && !supportsCallib(force_sensor, end_effector))
   {
-    throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant with a mounted end effector");
+    throw std::invalid_argument("KinovaRobotModule callib mode requires a Bota variant");
   }
 
   mc_rtc::log::success("KinovaRobotModule loaded with name: {}", name);

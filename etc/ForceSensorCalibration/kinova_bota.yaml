@@ -1,0 +1,85 @@
+ObserverPipelines:
+  - name: "KinovaEncoderPipeline"
+    observers:
+      - type: Encoder
+        config:
+          velocity: encoderVelocities
+# Drop measurements taken near a limb-jacobian singularity. Disabled (0): the conditioning of the
+# arm's jacobian has no bearing on the quality of a wrench measurement, and rejecting whole regions
+# of the workspace removes exactly the orientations that separate the tool mass from the sensor's
+# force offset.
+SingularityThreshold: 0
+forceSensors:
+  - EEForceSensor
+# Use the Bota's built-in IMU rather than the robot kinematics as the source of the
+# acceleration/angular velocity of the sensor's parent body (see the calibration controller's
+# README.md, "Using an IMU"). "Accelerometer" is the mc_rbdyn::BodySensor declared by the Kinova
+# robot module on the FT_sensor_imu link. It is filled by the mc_ros_imu_sensor plugin on the
+# real robot, and by mc_mujoco from the Accelerometer_accelerometer/Accelerometer_gyro sensors
+# in simulation. Both publish raw sensor_msgs/Imu-style specific force, hence gravityIncluded.
+imu:
+  enabled: true
+  bodySensor: Accelerometer
+  gravityIncluded: true
+  angularAccelerationFromGyro: true
+  staleTimeout: 0.05
+# Offline zero-phase Savitzky-Golay smoothing of the recorded series before the fit. Skipped
+# automatically in staticPoses mode, where per-pose averaging plays the same role.
+filter:
+  enabled: true
+  halfWindow: 25
+  polyOrder: 2
+initial_posture:
+  completion:
+    eval: 0.05
+  target:
+    joint_1: [0.0]
+    joint_2: [0.5]
+    joint_3: [3.14]
+    joint_4: [-1.7]
+    joint_5: [0.0]
+    joint_6: [0.1]
+    joint_7: [1.57]
+motion:
+  duration: 50
+  stiffness: 10
+  # continuous: the historical behaviour, joints follow their cosine (`duration` and the per-joint
+  # `period` below apply to this mode only) and every tick is logged. The CalibrateStatic FSM
+  # state overrides this to staticPoses, which spreads `poses` waypoints over each joint's range
+  # and holds still at each one; the parameters below only apply there.
+  #
+  # Deliberately identical to kinova_bota_plate.yaml: this variant exists to measure the mass of the
+  # sensor's own moving half (FT_sensor_wrench, the only body distal to the sensor frame when
+  # nothing is mounted), and that number is only comparable to the plate's run if the two runs
+  # differ in the tool and nothing else.
+  mode: continuous
+  poses: 12
+  settleTime: 0.5
+  dwellTime: 1.0
+  velocityThreshold: 0.01   # rad/s, "the robot has stopped moving" -- this alone decides settling
+  # rad; diagnostic only, not a settling condition. The posture task has no integral action, so
+  # under gravity the arm rests slightly off its commanded waypoint; that is logged, not waited on.
+  positionTolerance: 0.01
+  minTransitTime: 0.2       # s, wait this long after commanding before looking for stillness
+  # Give up on a robot that never stops moving and record it anyway. At stiffness 10 this arm
+  # needs a bit over 5s to converge on a waypoint, so 5.0 fires on most poses and lets the tail of
+  # the motion leak into the averaging window.
+  settleTimeout: 8.0
+  joints:
+    - name: joint_4
+      period: 10
+      # Same window as kinova_bota_plate.yaml. The full callib range on the lower side (-2.45) folds
+      # the forearm back far enough to self-collide -- that limit is about the arm, not the tool, so
+      # removing the end effector does not buy any room. This window is proven on hardware and
+      # keeps the run directly comparable to the plate's.
+      lower: -1.87
+      upper: 0.45
+    - name: joint_5
+      period: 12.5
+      percentLimits: 1.0
+    - name: joint_6
+      period: 15
+      percentLimits: 0.8
+    - name: joint_7
+      period: 17.5
+      percentLimits: 1.0

@@ -9,6 +9,7 @@ extern "C"
   {
     names = {"Kinova",
              "KinovaBota",
+             "KinovaBotaCallib",
              "KinovaBotaDS4",
              "KinovaBotaDS4Callib",
              "KinovaBotaPlate",
@@ -90,6 +91,10 @@ extern "C"
     {
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0,
                                               mc_robots::KinovaRobotModule::EndEffector::Hook);
+    }
+    else if(n == "KinovaBotaCallib")
+    {
+      return new mc_robots::KinovaRobotModule(true, mc_robots::KinovaRobotModule::ForceSensor::BotaGen0);
     }
     else if(n == "KinovaBotaDS4Callib")
     {
