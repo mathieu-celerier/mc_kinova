@@ -4,9 +4,31 @@ ObserverPipelines:
       - type: Encoder
         config:
           velocity: encoderVelocities
-SingularityThreshold: 0.08
+# Drop measurements taken near a limb-jacobian singularity. Disabled (0): the conditioning of the
+# arm's jacobian has no bearing on the quality of a wrench measurement, and rejecting whole regions
+# of the workspace removes exactly the orientations that separate the tool mass from the sensor's
+# force offset.
+SingularityThreshold: 0
 forceSensors:
   - EEForceSensor
+# Use the Bota's built-in IMU rather than the robot kinematics as the source of the
+# acceleration/angular velocity of the sensor's parent body (see the calibration controller's
+# README.md, "Using an IMU"). "Accelerometer" is the mc_rbdyn::BodySensor declared by the Kinova
+# robot module on the FT_sensor_imu link. It is filled by the mc_ros_imu_sensor plugin on the
+# real robot, and by mc_mujoco from the Accelerometer_accelerometer/Accelerometer_gyro sensors
+# in simulation. Both publish raw sensor_msgs/Imu-style specific force, hence gravityIncluded.
+imu:
+  enabled: true
+  bodySensor: Accelerometer
+  gravityIncluded: true
+  angularAccelerationFromGyro: true
+  staleTimeout: 0.05
+# Offline zero-phase Savitzky-Golay smoothing of the recorded series before the fit. Skipped
+# automatically in staticPoses mode, where per-pose averaging plays the same role.
+filter:
+  enabled: true
+  halfWindow: 25
+  polyOrder: 2
 initial_posture:
   completion:
     eval: 0.05
@@ -21,6 +43,27 @@ initial_posture:
 motion:
   duration: 50
   stiffness: 10
+  # continuous: the historical behaviour, joints follow their cosine (`duration` and the per-joint
+  # `period` below apply to this mode only) and every tick is logged. The CalibrateStatic FSM
+  # state overrides this to staticPoses, which spreads `poses` waypoints over each joint's range
+  # and holds still at each one; the parameters below only apply there.
+  #
+  # These are kept deliberately identical to kinova_bota_peg_plate_camera.yaml: this variant is
+  # used as the short-lever-arm reference against which the camera plate's runs are compared, and
+  # that comparison is only meaningful if the two runs differ in the tool and nothing else.
+  mode: continuous
+  poses: 12
+  settleTime: 0.5
+  dwellTime: 1.0
+  velocityThreshold: 0.01   # rad/s, "the robot has stopped moving" -- this alone decides settling
+  # rad; diagnostic only, not a settling condition. The posture task has no integral action, so
+  # under gravity the arm rests slightly off its commanded waypoint; that is logged, not waited on.
+  positionTolerance: 0.01
+  minTransitTime: 0.2       # s, wait this long after commanding before looking for stillness
+  # Give up on a robot that never stops moving and record it anyway. At stiffness 10 this arm
+  # needs a bit over 5s to converge on a waypoint, so 5.0 fires on most poses and lets the tail of
+  # the motion leak into the averaging window.
+  settleTimeout: 8.0
   joints:
     - name: joint_4
       period: 10

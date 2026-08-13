@@ -4,7 +4,12 @@ ObserverPipelines:
       - type: Encoder
         config:
           velocity: encoderVelocities
-SingularityThreshold: 0.08
+# Drop measurements taken near a limb-jacobian singularity. Disabled (0): the conditioning of the
+# arm's jacobian has no bearing on the quality of a wrench measurement, and with 0.08 it rejected
+# 7 of the 12 static poses of a 12-pose run -- including every pose where gravity pointed along -y
+# in the sensor frame, which is exactly what separates the tool mass from the force offset. The
+# solver then converged happily on 5 poses with a badly conditioned problem.
+SingularityThreshold: 0
 forceSensors:
   - EEForceSensor
 # Use the Bota's built-in IMU rather than the robot kinematics as the source of the
@@ -39,9 +44,10 @@ initial_posture:
 motion:
   duration: 50
   stiffness: 10
-  # continuous: the historical behaviour, joints follow their cosine and every tick is logged.
-  # The CalibrateStatic FSM state overrides this to staticPoses, which samples the same cosines
-  # at `poses` phases and holds still at each one; the parameters below only apply there.
+  # continuous: the historical behaviour, joints follow their cosine (`duration` and the per-joint
+  # `period` below apply to this mode only) and every tick is logged. The CalibrateStatic FSM
+  # state overrides this to staticPoses, which spreads `poses` waypoints over each joint's range
+  # and holds still at each one; the parameters below only apply there.
   mode: continuous
   poses: 12
   settleTime: 0.5
@@ -51,7 +57,10 @@ motion:
   # under gravity the arm rests slightly off its commanded waypoint; that is logged, not waited on.
   positionTolerance: 0.01
   minTransitTime: 0.2       # s, wait this long after commanding before looking for stillness
-  settleTimeout: 5.0        # give up on a robot that never stops moving and record it anyway
+  # Give up on a robot that never stops moving and record it anyway. At stiffness 10 this arm
+  # needs a bit over 5s to converge on a waypoint, so the previous 5.0 fired on most poses and let
+  # the tail of the motion leak into the averaging window.
+  settleTimeout: 8.0
   joints:
     - name: joint_4
       period: 10
