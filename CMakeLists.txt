@@ -55,6 +55,7 @@ set(WITH_BOTA_SENSOR_GENA ON)
 set(KINOVA_URDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/urdf")
 set(KINOVA_RSDF_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/rsdf")
 set(KINOVA_CONVEX_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/convex")
+set(KINOVA_CALIB_DIR "${CMAKE_INSTALL_PREFIX}/share/mc_kinova/calib")
 set(KINOVA_BOTA_GENA_XACRO_PATH
     "${CMAKE_CURRENT_BINARY_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
 configure_file(${LOCAL_BOTA_XACRO_TEMPLATE} ${KINOVA_BOTA_GENA_XACRO_PATH}
@@ -413,6 +414,10 @@ endif()
 install(DIRECTORY convex DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
 # Install rsdf directory
 install(DIRECTORY rsdf DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
+# Install the force-sensor calibrations. kortex_description installs no calib directory of
+# its own, so without this the files only exist where the GUI's "Save calibration" button
+# wrote them, and a fresh install prefix loses them silently. See calib/README.md.
+install(DIRECTORY calib DESTINATION ${CMAKE_INSTALL_DATADIR}/mc_kinova)
 
 # Tests
 if(BUILD_TESTING)

@@ -7,6 +7,7 @@
 #include <RBDyn/parsers/urdf.h>
 
 #include <filesystem>
+#include <fstream>
 #include <stdexcept>
 namespace fs = std::filesystem;
 
@@ -256,6 +257,54 @@ inline static fs::path kinovaRsdfDir(const std::string & variant)
   return variantDir;
 }
 
+// First line of a calib file: the payload mass. Only used to make log messages informative.
+inline static std::string calibMass(const fs::path & file)
+{
+  std::ifstream in(file);
+  std::string mass;
+  return std::getline(in, mass) ? mass : "unreadable";
+}
+
+inline static fs::path kinovaCalibDir(const std::string & variant, const fs::path & defaultDir)
+{
+  // mc_rtc defaults calib_dir to <RobotModule::path>/calib/<variant>, i.e. inside
+  // kortex_description -- which installs no calib directory and tracks none in git, so the
+  // files only ever exist where the calibration GUI's "Save calibration" button put them,
+  // and a fresh install prefix loses them. mc_rtc only warns when the file is missing, so
+  // that loss is silent. Prefer the copies this package ships, per variant, so a freshly
+  // saved calibration still wins until someone copies it back here. See calib/README.md.
+  const auto variantDir = fs::path(KINOVA_CALIB_DIR) / variant;
+  const auto shipped = variantDir / "calib_data.EEForceSensor";
+  const auto saved = defaultDir / "calib_data.EEForceSensor";
+  if(fs::exists(saved))
+  {
+    // A saved calibration wins, but never quietly. A calib file records no provenance, so one
+    // written by a CalibrateStatic run in *simulation* is indistinguishable from one measured on
+    // the robot while being wrong by the whole force gain and by whatever the model does not
+    // carry. That has already happened here -- see calib/README.md.
+    if(fs::exists(shipped) && calibMass(saved) != calibMass(shipped))
+    {
+      mc_rtc::log::warning("Force-sensor calibration for variant '{}' disagrees with the one shipped by mc_kinova: "
+                           "saved '{}' has mass {}, shipped '{}' has mass {}. The saved file is being used. If it came "
+                           "from a run in simulation, delete it so the shipped one takes over.",
+                           variant, saved.string(), calibMass(saved), shipped.string(), calibMass(shipped));
+    }
+    return defaultDir;
+  }
+
+  if(fs::exists(variantDir / "calib_data.EEForceSensor"))
+  {
+    mc_rtc::log::info("Using the calibration shipped with mc_kinova for variant '{}': '{}'", variant,
+                      variantDir.string());
+    return variantDir;
+  }
+
+  mc_rtc::log::warning("No force-sensor calibration found for variant '{}', in either '{}' or '{}'. The wrench will "
+                       "be reported without gravity compensation.",
+                       variant, defaultDir.string(), variantDir.string());
+  return defaultDir;
+}
+
 KinovaRobotModule::KinovaRobotModule(bool callib,
                                      ForceSensor force_sensor,
                                      EndEffector end_effector,
@@ -306,6 +355,12 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
 
   rsdf_dir = kinovaRsdfDir(variant);
   mc_rtc::log::success("KinovaRobotModule using path \"{}\" for rsdf", rsdf_dir);
+
+  if(hasBota(force_sensor))
+  {
+    calib_dir = kinovaCalibDir(variant, calib_dir);
+    mc_rtc::log::success("KinovaRobotModule using path \"{}\" for the force-sensor calibration", calib_dir);
+  }
 
   _ref_joint_order = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
 
