@@ -25,9 +25,22 @@ imu:
   staleTimeout: 0.05
 # Offline zero-phase Savitzky-Golay smoothing of the recorded series before the fit. Skipped
 # automatically in staticPoses mode, where per-pose averaging plays the same role.
+#
+# halfWindow is sized for *this* motion, not for control: at the 1 ms timestep, 250 spans 0.5 s,
+# i.e. 501 samples per output point (~20x noise reduction), while the fastest thing the fit has
+# to follow is joint_4's 10 s cosine -- the window is 1/20th of that period, so the order-2 fit
+# tracks it with negligible attenuation. This is what lets the calibration treat the raw Bota
+# wrench (and the IMU-derived a_p/omega_p/alpha_p) as if it came from a filtered sensor; alpha_p
+# is the channel that gains most, being an SG derivative of the gyro.
+#
+# The cost is 0.5 s of unusable data at each end of the series (2*250 of the ~50000 samples of a
+# 50 s run, marked keep = false). Note this is an *offline*, centered-window pass, only possible
+# because the whole motion is recorded before the fit runs: nothing here says the F/T sensor
+# needs comparable filtering during real robot runs, where an online filter of this width would
+# cost 0.5 s of phase lag.
 filter:
   enabled: true
-  halfWindow: 25
+  halfWindow: 250
   polyOrder: 2
 initial_posture:
   completion:
