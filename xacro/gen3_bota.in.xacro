@@ -309,16 +309,16 @@
 
     <!-- Robot-side hole plate with a camera mount (Peg_in_Hole_plate_Camera_Robot_Handle.stl)
          for collaborative peg-in-hole data collection. Same handle plate as 'peg_plate' plus a
-         camera mount rising in +z. Inertia computed from the mesh (uniform density) for the
-         measured mass of 0.695 kg of the modelled piece; the 70 g camera itself is NOT modelled
-         here (add it with a camera frame later). Inertia scales linearly with mass. -->
+         camera mount rising in +z. Inertia computed from the mesh (uniform density), scaled to
+         the weighed mass of 0.700 kg of the printed piece (was the 0.695 kg CAD estimate;
+         inertia scales linearly with mass). The camera itself is a separate link below. -->
     <xacro:if value="$(eval end_effector == 'peg_plate_camera')">
       <link name="peg_plate_camera">
         <inertial>
           <origin xyz="0.14773 -0.00055 -0.01102" rpy="0 0 0" />
-          <mass value="0.695" />
-          <inertia ixx="5.539339E-03" ixy="-2.306877E-05" ixz="2.316990E-03"
-            iyy="1.262038E-02" iyz="8.946139E-05" izz="1.025269E-02" />
+          <mass value="0.700" />
+          <inertia ixx="5.579190E-03" ixy="-2.323473E-05" ixz="2.333659E-03"
+            iyy="1.271117E-02" iyz="9.010500E-05" izz="1.032645E-02" />
         </inertial>
 
         <visual name="peg_plate_camera">
@@ -338,6 +338,24 @@
             <box size="0.398 0.180 0.290" />
           </geometry>
         </collision>
+      </link>
+
+      <!-- The camera bolted to the top of the mount. It is not part of the printed mesh, so it
+           gets its own link. Mass 0.075 kg weighed on a scale; position derived from the couple
+           channel of the 12-pose calibration run (the force channel only sees the total mass, so
+           the couple is the only observable that locates it). It lands at the top of the camera
+           mount, inside the collision box above, which is an independent check on the fit.
+           Leaving it out biased the calibration by 75 g and, more importantly, put the tool CoM
+           2 cm off, which is why the camera variant's couple residual used to be 5x the plain
+           plate's. Its own inertia is a placeholder: at 0.239 m from the plate CoM the
+           parallel-axis term is 4.3e-3 kg.m^2, some 400x the camera's own, so the shape it is
+           given here does not matter. -->
+      <link name="camera">
+        <inertial>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <mass value="0.075" />
+          <inertia ixx="1.0E-05" ixy="0.0" ixz="0.0" iyy="1.0E-05" iyz="0.0" izz="1.0E-05" />
+        </inertial>
       </link>
 
       <link name="tool"></link>
@@ -468,6 +486,12 @@
         <parent link="FT_sensor_tool_frame" />
         <child link="peg_plate_camera" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5707963267948966 -1.5707963267948966" />
+      </joint>
+
+      <joint name="peg_plate_camera_to_camera" type="fixed">
+        <parent link="peg_plate_camera" />
+        <child link="camera" />
+        <origin xyz="0.1882 -0.0270 0.2233" rpy="0.0 0.0 0.0" />
       </joint>
 
       <joint name="peg_plate_camera_to_tool" type="fixed">
