@@ -422,11 +422,13 @@
 
       <!-- Ball-balancing reference frame: origin on the blade mid-plane (the blade
            spans y -0.035..-0.030 in the plate frame), +Z along the striking face
-           normal (-Y of the plate frame). -->
+           normal (+Y of the plate frame, i.e. the y = -0.030 face). That is the face
+           pointing up at the q0 balancing stance; -Y points at the ground, and a ball
+           reset placed along it spawns underneath the blade. -->
       <joint name="plate_to_racquet_frame" type="fixed">
         <parent link="plate" />
         <child link="racquet_frame" />
-        <origin xyz="0.0 -0.0325 0.125" rpy="1.5707963267948966 0.0 0.0" />
+        <origin xyz="0.0 -0.0325 0.125" rpy="-1.5707963267948966 0.0 0.0" />
       </joint>
 
       <joint name="plate_to_tool" type="fixed">
