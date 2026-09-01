@@ -85,7 +85,7 @@
       <visual name="adapter">
         <origin xyz="0 0 0.0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/adapter.STL" />
+          <mesh filename="file://@CMAKE_CURRENT_SOURCE_DIR@/meshes/adapter.STL" />
         </geometry>
         <material name="">
           <color rgba="0.6902 0.61176 0.52941 1" />
@@ -98,7 +98,7 @@
         </geometry>
       </collision>
     </link>
-    
+
     <xacro:if value="$(eval end_effector == 'none')">
       <link name="tool"></link>
     </xacro:if>
@@ -115,7 +115,7 @@
         <visual name="ds4_adapter">
           <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
           <geometry>
-            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/DS4_adapter.STL" />
+            <mesh filename="file://@CMAKE_CURRENT_SOURCE_DIR@/meshes/DS4_adapter.STL" />
           </geometry>
           <material name="">
             <color rgba="0.6902 0.61176 0.52941 1" />
@@ -156,7 +156,7 @@
 
       <link name="tool"></link>
     </xacro:if>
-    
+
     <xacro:if value="$(eval end_effector == 'plate')">
       <link name="plate">
         <inertial>
@@ -169,7 +169,7 @@
         <visual name="plate">
           <origin xyz="0.0 0.0 0.0" rpy="-1.57079632679 0 0.78539816339" />
           <geometry>
-            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/plate.STL" scale="0.001 0.001 0.001"/>
+            <mesh filename="file://@CMAKE_CURRENT_SOURCE_DIR@/meshes/plate.STL" scale="0.001 0.001 0.001"/>
           </geometry>
           <material name="">
             <color rgba="0.6902 0.61176 0.52941 1" />
@@ -198,7 +198,7 @@
         <visual name="screw">
           <origin xyz="0.0 0.0 0.0" rpy="-1.57079632679 0 0" />
           <geometry>
-            <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/screw.STL" scale="0.001 0.001 0.001" />
+            <mesh filename="file://@CMAKE_CURRENT_SOURCE_DIR@/meshes/screw.STL" scale="0.001 0.001 0.001" />
           </geometry>
           <material name="">
             <color rgba="0.6902 0.61176 0.52941 1" />
@@ -234,7 +234,7 @@
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>
     </xacro:if>
-  
+
     <xacro:if value="$(eval end_effector == 'ds4')">
       <joint name="FT_to_DS4_adapter" type="fixed">
         <parent link="FT_sensor_wrench" />
@@ -254,7 +254,7 @@
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       </joint>
     </xacro:if>
-   
+
     <xacro:if value="$(eval end_effector == 'plate')">
       <joint name="FT_to_plate" type="fixed">
         <parent link="FT_sensor_wrench" />
