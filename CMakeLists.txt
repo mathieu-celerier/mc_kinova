@@ -27,6 +27,8 @@ find_package(mc_rtc REQUIRED)
 
 find_description_package(kortex_description)
 
+find_description_package(robotiq_hande_description)
+
 # Find program xacro
 find_program(XACRO xacro REQUIRED)
 
@@ -35,6 +37,8 @@ file(GLOB_RECURSE LOCAL_KINOVA_XACRO_FILES CONFIGURE_DEPENDS
      "${CMAKE_SOURCE_DIR}/xacro/*")
 file(GLOB_RECURSE KINOVA_XACRO_FILES CONFIGURE_DEPENDS
      "${KORTEX_DESCRIPTION_PATH}/*.xacro")
+file(GLOB_RECURSE HANDE_XACRO_FILES CONFIGURE_DEPENDS
+     "${ROBOTIQ_HANDE_DESCRIPTION_PATH}/*.xacro")
 set(LOCAL_BOTA_XACRO_TEMPLATE
     "${CMAKE_SOURCE_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
 
@@ -148,7 +152,8 @@ file(WRITE "${KINOVA_URDF_RECONFIGURE_STAMP}"
      "${KINOVA_URDF_GENERATION_TOKEN}\n")
 set(KINOVA_URDF_DEPENDS
     ${KINOVA_URDF_RECONFIGURE_STAMP} ${LOCAL_KINOVA_XACRO_FILES}
-    ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES})
+    ${KINOVA_XACRO_FILES} ${BOTA_XACRO_FILES}
+    ${HANDE_XACRO_FILES})
 
 function(add_kinova_urdf output_name)
   set(options)
@@ -229,10 +234,33 @@ add_kinova_urdf(
   END_EFFECTOR
   none)
 
+add_kinova_urdf(
+  kinova_hande
+  VISION
+  false
+  GRIPPER
+  "robotiq_hande"
+  BOTA
+  false
+  END_EFFECTOR
+  none)
+
+add_kinova_urdf(
+  kinova_camera_hande
+  VISION
+  true
+  GRIPPER
+  "robotiq_hande"
+  BOTA
+  false
+  END_EFFECTOR
+  none)
+
 set(GENERATED_URDF_FILES
     ${kinova_URDF} ${kinova_camera_URDF} ${kinova_camera_gripper_URDF}
     ${kinova_gripper_URDF} ${kinova_camera_gripper_2f140_URDF}
-    ${kinova_gripper_2f140_URDF})
+    ${kinova_gripper_2f140_URDF}
+    ${kinova_hande_URDF} ${kinova_camera_hande_URDF})
 
 # Bota-specific URDF (only if WITH_BOTA_SENSOR)
 if(WITH_BOTA_SENSOR_GEN0 OR WITH_BOTA_SENSOR_GENA)

@@ -51,6 +51,8 @@ inline static std::string gripperVariantSuffix(KinovaRobotModule::Gripper grippe
       return "_gripper";
     case KinovaRobotModule::Gripper::Robotiq2F140:
       return "_gripper_2f140";
+    case KinovaRobotModule::Gripper::RobotiqHandE:
+      return "_hande"; // Generates kinova_hande.urdf / kinova_camera_hande.urdf
   }
   throw std::invalid_argument("Unsupported gripper variant");
 }
@@ -76,6 +78,11 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
       {"left_outer_knuckle", "left_outer_finger", "left_inner_finger", "left_inner_finger_pad", "left_inner_knuckle",
        "right_outer_knuckle", "right_outer_finger", "right_inner_finger", "right_inner_finger_pad",
        "right_inner_knuckle"}};
+  static const GripperSpec robotiqHandE = {
+      "robotiq_hande_left_finger_joint", // Main actuated prismatic joint (0.0 to 0.025m)
+      {"robotiq_hande_left_finger_joint", "robotiq_hande_right_finger_joint"}, // Reference joints
+      {"robotiq_hande_link", "robotiq_hande_left_finger", "robotiq_hande_right_finger"}, // Collision geometries
+      {"robotiq_hande_right_finger"}};
 
   switch(gripper)
   {
@@ -83,6 +90,8 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
       return robotiq2F85;
     case KinovaRobotModule::Gripper::Robotiq2F140:
       return robotiq2F140;
+    case KinovaRobotModule::Gripper::RobotiqHandE:
+      return robotiqHandE;
     case KinovaRobotModule::Gripper::None:
     default:
       throw std::invalid_argument("No gripper metadata is defined for the requested gripper variant");
@@ -177,6 +186,11 @@ inline static std::string kinovaVariant(
       mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_gripper_2f140'");
       return "kinova_camera_gripper_2f140";
     }
+    if(gripper == KinovaRobotModule::Gripper::RobotiqHandE)
+    {
+      mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera_hande'");
+      return "kinova_camera_hande";
+    }
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_camera'");
     return "kinova_camera";
   }
@@ -189,6 +203,11 @@ inline static std::string kinovaVariant(
   {
     mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_gripper_2f140'");
     return "kinova_gripper_2f140";
+  }
+  if(gripper == KinovaRobotModule::Gripper::RobotiqHandE)
+  {
+    mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova_hande'");
+    return "kinova_hande";
   }
   mc_rtc::log::info("KinovaRobotModule uses the kinova variant: 'kinova'");
   return "kinova";

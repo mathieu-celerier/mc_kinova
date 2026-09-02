@@ -31,7 +31,8 @@ struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
   {
     None,
     Robotiq2F85,
-    Robotiq2F140
+    Robotiq2F140,
+    RobotiqHandE
   };
 
   KinovaRobotModule(bool callib,

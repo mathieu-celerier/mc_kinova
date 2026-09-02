@@ -44,6 +44,8 @@ extern "C"
              "KinovaRobotiq2F85",
              "KinovaCameraRobotiq2F140",
              "KinovaRobotiq2F140",
+             "KinovaRobotiqHandE",
+             "KinovaCameraRobotiqHandE",
              "KinovaCameraGripperMuJoCo",
              "KinovaGripperMuJoCo",
              "KinovaCameraRobotiq2F85MuJoCo",
@@ -268,6 +270,18 @@ extern "C"
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
                                               mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               mc_robots::KinovaRobotModule::Gripper::Robotiq2F140);
+    }
+    else if(n == "KinovaCameraRobotiqHandE")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, true, 
+                                              mc_robots::KinovaRobotModule::Gripper::RobotiqHandE);
+    }
+    else if(n == "KinovaRobotiqHandE")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false,
+                                              mc_robots::KinovaRobotModule::Gripper::RobotiqHandE);
     }
     else if(n == "KinovaCameraRobotiq2F140MuJoCo")
     {

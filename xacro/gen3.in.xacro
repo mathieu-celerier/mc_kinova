@@ -28,6 +28,14 @@
   <xacro:arg name="end_effector" default="none" />
   <xacro:arg name="bota" default="true" />
   <xacro:arg name="bota_version" default="gen0" />
+  <!-- Driver args for Robotiq Hand-E -->
+  <xacro:arg name="tty_port" default="/dev/ttyUSB0" />
+  <xacro:arg name="baudrate" default="115200" />
+  <xacro:arg name="parity" default="N" />
+  <xacro:arg name="data_bits" default="8" />
+  <xacro:arg name="stop_bit" default="1" />
+  <xacro:arg name="slave_id" default="9" />
+  <!-- <xacro:arg name="hande_use_fake_hardware" default="true" /> -->
 
   <!-- Load the arm directly so we can control what gets attached after the arm -->
   <xacro:include filename="$(find kortex_description)/arms/gen3/7dof/urdf/gen3_macro.xacro" />
@@ -36,6 +44,9 @@
   </xacro:if>
   <xacro:if value="$(eval gripper == 'robotiq_2f_140')">
     <xacro:include filename="$(find kortex_description)/grippers/robotiq_2f_140/urdf/robotiq_2f_140_macro.xacro" />
+  </xacro:if>
+  <xacro:if value="$(eval gripper == 'robotiq_hande')">
+    <xacro:include filename="$(find robotiq_hande_description)/urdf/robotiq_hande_gripper.xacro" />
   </xacro:if>
 
   <!-- convert to property to use substitution in function -->
@@ -75,11 +86,27 @@
     </joint>
   </xacro:if>
 
-  <xacro:unless value="$(eval gripper == '')">
+  <xacro:if value="$(eval gripper == 'robotiq_2f_85' or gripper == 'robotiq_2f_140')">
     <xacro:load_gripper
-@KINOVA_LOAD_GRIPPER_ARGS@
+  @KINOVA_LOAD_GRIPPER_ARGS@
       />
-  </xacro:unless>
+  </xacro:if>
+
+  <xacro:if value="$(eval gripper == 'robotiq_hande')">
+    <xacro:robotiq_hande_gripper
+      name="robotiq_hande_gripper"
+      parent="$(arg prefix)end_effector_link"
+      prefix="$(arg prefix)"
+      grip_pos_min="0.0"
+      grip_pos_max="0.025"
+      tty_port="$(arg tty_port)"
+      baudrate="$(arg baudrate)"
+      parity="$(arg parity)"
+      data_bits="$(arg data_bits)"
+      stop_bit="$(arg stop_bit)"
+      slave_id="$(arg slave_id)"
+      use_fake_hardware="$(arg use_fake_hardware)" />
+  </xacro:if>
 
   <xacro:if value="$(arg sim_gazebo)">
     <gazebo reference="world">
