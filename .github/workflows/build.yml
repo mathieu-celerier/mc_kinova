@@ -31,7 +31,7 @@ jobs:
           set -e
           set -x
           curl -1sLf 'https://dl.cloudsmith.io/public/mc-rtc/head/setup.deb.sh' | sudo -E bash
-          sudo apt install -y -qq libmc-rtc-dev ros-${ROS_DISTRO}-mc-rtc-plugin
+          sudo apt install -y -qq libmc-rtc-dev
       - name: Build and test
         uses: jrl-umi3218/github-actions/build-cmake-project@master
         with:
