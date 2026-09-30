@@ -82,7 +82,8 @@ inline static const GripperSpec & gripperSpec(KinovaRobotModule::Gripper gripper
       "robotiq_hande_left_finger_joint", // Main actuated prismatic joint (0.0 to 0.025m)
       {"robotiq_hande_left_finger_joint", "robotiq_hande_right_finger_joint"}, // Reference joints
       {"robotiq_hande_link", "robotiq_hande_left_finger", "robotiq_hande_right_finger"}, // Collision geometries
-      {"robotiq_hande_right_finger"}};
+      // Both fingers are fixed in the control model, the gripper is driven through the canonical model only
+      {"robotiq_hande_left_finger", "robotiq_hande_right_finger"}};
 
   switch(gripper)
   {
@@ -220,6 +221,10 @@ inline static std::string kinovaCanonicalVariant(
     KinovaRobotModule::Gripper gripper = KinovaRobotModule::Gripper::None,
     bool mujoco = false)
 {
+  if(gripper == KinovaRobotModule::Gripper::RobotiqHandE && !mujoco)
+  {
+    return camera ? "KinovaCameraRobotiqHandECanonical" : "KinovaRobotiqHandECanonical";
+  }
   if(!mujoco || !hasGripper(gripper))
   {
     return "";
@@ -350,7 +355,11 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
 
   _real_urdf = urdf_path;
 
-  if(mujoco && hasGripper(gripper) && !canonical)
+  // Like the MuJoCo variants, the Hand-E has a control model (the gripper's filtered links are fixed, so the
+  // gripper is not part of the QP) and a canonical model (full URDF) on which mc_rtc drives the gripper
+  const bool controlModel = hasGripper(gripper) && (mujoco || gripper == Gripper::RobotiqHandE) && !canonical;
+
+  if(controlModel)
   {
     const auto canonicalVariant = kinovaCanonicalVariant(force_sensor, end_effector, camera, gripper, mujoco);
     if(!canonicalVariant.empty())
@@ -360,7 +369,7 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
   }
 
   // Makes all the basic initialization that can be done from an URDF file
-  if(mujoco && hasGripper(gripper) && !canonical)
+  if(controlModel)
   {
     init(rbd::parsers::from_urdf_file(urdf_path, rbd::parsers::ParserParameters{}
                                                      .fixed(true)

@@ -57,7 +57,9 @@ extern "C"
              "KinovaCameraRobotiq2F85MuJoCoCanonical",
              "KinovaRobotiq2F85MuJoCoCanonical",
              "KinovaCameraRobotiq2F140MuJoCoCanonical",
-             "KinovaRobotiq2F140MuJoCoCanonical"};
+             "KinovaRobotiq2F140MuJoCoCanonical",
+             "KinovaRobotiqHandECanonical",
+             "KinovaCameraRobotiqHandECanonical"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
   {
@@ -282,6 +284,18 @@ extern "C"
       return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
                                               mc_robots::KinovaRobotModule::EndEffector::None, false,
                                               mc_robots::KinovaRobotModule::Gripper::RobotiqHandE);
+    }
+    else if(n == "KinovaCameraRobotiqHandECanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, true,
+                                              mc_robots::KinovaRobotModule::Gripper::RobotiqHandE, false, true);
+    }
+    else if(n == "KinovaRobotiqHandECanonical")
+    {
+      return new mc_robots::KinovaRobotModule(false, mc_robots::KinovaRobotModule::ForceSensor::None,
+                                              mc_robots::KinovaRobotModule::EndEffector::None, false,
+                                              mc_robots::KinovaRobotModule::Gripper::RobotiqHandE, false, true);
     }
     else if(n == "KinovaCameraRobotiq2F140MuJoCo")
     {
