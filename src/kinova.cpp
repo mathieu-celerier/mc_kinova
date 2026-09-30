@@ -409,7 +409,10 @@ KinovaRobotModule::KinovaRobotModule(bool callib,
       }
       return mc_rbdyn::RobotModule::Gripper::Safety{0.99, 0.05, 0.05, 1u};
     }();
-    _grippers = {{"gripper", {spec.actuatedJoint}, true, gripperSafety}};
+    // The Robotiq 2F grippers are open at their lower limit (knuckle angle 0),
+    // the Hand-E fingers are together (closed) at their lower limit
+    const bool reverseLimits = gripper != Gripper::RobotiqHandE;
+    _grippers = {{"gripper", {spec.actuatedJoint}, reverseLimits, gripperSafety}};
   }
 
   // Override position, velocity and effort bounds
