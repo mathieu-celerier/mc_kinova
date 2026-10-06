@@ -9,19 +9,39 @@ namespace mc_robots
 
 struct MC_ROBOTS_DLLAPI KinovaRobotModule : public mc_rbdyn::RobotModule
 {
+  enum class ForceSensor
+  {
+    None,
+    BotaGen0,
+    BotaGenA
+  };
+
   enum class EndEffector
   {
     None,
     DS4,
     Plate,
-    Screw
+    Screw,
+    Hook,
+    PegPlate,
+    PegPlateCamera
+  };
+
+  enum class Gripper
+  {
+    None,
+    Robotiq2F85,
+    Robotiq2F140,
+    RobotiqHandE
   };
 
   KinovaRobotModule(bool callib,
-                    bool use_bota,
+                    ForceSensor force_sensor,
                     EndEffector end_effector = EndEffector::None,
                     bool camera = false,
-                    bool gripper = false);
+                    Gripper gripper = Gripper::None,
+                    bool mujoco = false,
+                    bool canonical = false);
 };
 
 } // namespace mc_robots

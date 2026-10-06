@@ -61,9 +61,10 @@ motion:
   # state overrides this to staticPoses, which spreads `poses` waypoints over each joint's range
   # and holds still at each one; the parameters below only apply there.
   #
-  # These are kept deliberately identical to kinova_bota_peg_plate_camera.yaml: this variant is
-  # used as the short-lever-arm reference against which the camera plate's runs are compared, and
-  # that comparison is only meaningful if the two runs differ in the tool and nothing else.
+  # Deliberately identical to kinova_bota_plate.yaml: this variant exists to measure the mass of the
+  # sensor's own moving half (FT_sensor_wrench, the only body distal to the sensor frame when
+  # nothing is mounted), and that number is only comparable to the plate's run if the two runs
+  # differ in the tool and nothing else.
   mode: continuous
   poses: 12
   settleTime: 0.5
@@ -80,12 +81,10 @@ motion:
   joints:
     - name: joint_4
       period: 10
-      # Explicit asymmetric bounds instead of a symmetric percentLimits shrink: the collision
-      # risk with the plate mounted is only on the lower (more negative) side, near the
-      # initial posture below. Keep that side conservative (same as the previous
-      # percentLimits: 0.6 window) but use the full safe range on the upper side, which was
-      # being unnecessarily restricted too and was starving the calibration solver of pose
-      # diversity (joint_4 hard limits in callib mode: [-2.45, 0.45]).
+      # Same window as kinova_bota_plate.yaml. The full callib range on the lower side (-2.45) folds
+      # the forearm back far enough to self-collide -- that limit is about the arm, not the tool, so
+      # removing the end effector does not buy any room. This window is proven on hardware and
+      # keeps the run directly comparable to the plate's.
       lower: -1.87
       upper: 0.45
     - name: joint_5

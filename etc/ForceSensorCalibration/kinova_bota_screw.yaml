@@ -4,7 +4,11 @@ ObserverPipelines:
       - type: Encoder
         config:
           velocity: encoderVelocities
-SingularityThreshold: 0.08
+# Drop measurements taken near a limb-jacobian singularity. Disabled (0): the conditioning of the
+# arm's jacobian has no bearing on the quality of a wrench measurement, and rejecting whole regions
+# of the workspace removes exactly the orientations that separate the tool mass from the sensor's
+# force offset.
+SingularityThreshold: 0
 forceSensors:
   - EEForceSensor
 initial_posture:
