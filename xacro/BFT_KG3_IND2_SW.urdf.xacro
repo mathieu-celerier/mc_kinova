@@ -11,7 +11,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 -1.57079632679" />
         <geometry>
-          <mesh filename="file://@CMAKE_SOURCE_DIR@/meshes/BFT_KG3_IND2_SW/mounting.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="file://@CMAKE_CURRENT_SOURCE_DIR@/meshes/BFT_KG3_IND2_SW/mounting.stl" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="">
           <color rgba="0.6902 0.61176 0.52941 1" />

@@ -34,13 +34,13 @@ find_program(XACRO xacro REQUIRED)
 
 # Glob XACRO files for dependency tracking
 file(GLOB_RECURSE LOCAL_KINOVA_XACRO_FILES CONFIGURE_DEPENDS
-     "${CMAKE_SOURCE_DIR}/xacro/*")
+     "${CMAKE_CURRENT_SOURCE_DIR}/xacro/*")
 file(GLOB_RECURSE KINOVA_XACRO_FILES CONFIGURE_DEPENDS
      "${KORTEX_DESCRIPTION_PATH}/*.xacro")
 file(GLOB_RECURSE HANDE_XACRO_FILES CONFIGURE_DEPENDS
      "${ROBOTIQ_HANDE_DESCRIPTION_PATH}/*.xacro")
 set(LOCAL_BOTA_XACRO_TEMPLATE
-    "${CMAKE_SOURCE_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
+    "${CMAKE_CURRENT_SOURCE_DIR}/xacro/BFT_KG3_IND2_SW.urdf.xacro")
 
 # Bota sensor integration
 find_description_package(bota_driver QUIET)
@@ -140,7 +140,7 @@ string(REPLACE "parent=\"$(arg prefix)end_effector_link\"" "parent=\"tool\""
                KINOVA_BOTA_LOAD_GRIPPER_ARGS "${KINOVA_BOTA_LOAD_GRIPPER_ARGS}")
 
 set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3.xacro")
-configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xacro/gen3.in.xacro ${KINOVA_XACRO_PATH})
 
 # force-mc_kinova in the superbuild removes the configure stamp and reruns
 # CMake. Refresh this file on each configure so all URDF custom commands can be
@@ -266,7 +266,7 @@ set(GENERATED_URDF_FILES
 if(WITH_BOTA_SENSOR_GEN0 OR WITH_BOTA_SENSOR_GENA)
   # Configure the composite xacro file (template-based)
   set(KINOVA_XACRO_PATH "${CMAKE_CURRENT_BINARY_DIR}/xacro/gen3_bota.xacro")
-  configure_file(${CMAKE_SOURCE_DIR}/xacro/gen3_bota.in.xacro
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xacro/gen3_bota.in.xacro
                  ${KINOVA_XACRO_PATH})
 endif()
 
